@@ -5,14 +5,22 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
-import {BrowserRouter} from 'react-router-dom';
 import './css/sb-admin-2.css';
 import './css/sb-admin-2.min.css';
+import {createStore,applyMiddleware} from 'redux';
+import thunk from 'redux-thunk'
+import combineReducers from './Component/store/CombinedReducer'
+import {Provider} from 'react-redux'
+import {BrowserRouter,Route,Redirect,Switch} from 'react-router-dom'
+
+const store = createStore(combineReducers,applyMiddleware(thunk))
 
 ReactDOM.render(
+  <Provider store={store}>
   <BrowserRouter>
     <App />
-  </BrowserRouter>,
+  </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
 
