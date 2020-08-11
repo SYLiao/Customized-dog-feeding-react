@@ -96,6 +96,12 @@ class Sidebar extends Component{
                         <span>Your dogs</span></Link>
                     </li>
 
+                    <li class="nav-item">
+                    <Link class="nav-link" to="/dietpage">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Your diets</span></Link>
+                    </li>
+
                     <hr class="sidebar-divider d-none d-md-block"/>
 
                     <div class="text-center d-none d-md-inline">

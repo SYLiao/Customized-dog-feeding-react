@@ -80,9 +80,7 @@ class Dogs extends Component{
                                 console.log(dog)
                                 return(
                                     <tr>
-                                    <Link to={"/dogupdate/" + dog.dogId}>
-                                    <td>{dog.name}</td>
-                                    </Link>
+                                    <td> <Link to={"/dogupdate/" + dog.dogId}> <div>{dog.name}</div> </Link></td>
                                     <td>{dog.age}</td>
                                     <td>{dog.feedingFrequency}</td>
                                     <td>{dog.gender}</td>
