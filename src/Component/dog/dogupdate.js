@@ -63,7 +63,7 @@ class DogUpdate extends Component{
     submitDog = event => {
         event.preventDefault();
         fetch("http://localhost:8081/mer/customer//update/dog/" + this.state.dogId, {
-          method: "post",
+          method: "put",
           headers: {
             "Content-Type": "application/json"
           },

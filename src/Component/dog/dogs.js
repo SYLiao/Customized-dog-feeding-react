@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import { connect } from "react-redux";
 import {Link} from 'react-router-dom';
+import * as Action from "../store/Actions";
 
 class Dogs extends Component{
     state = {
@@ -13,10 +15,12 @@ class Dogs extends Component{
     }
 
     getDogs = () => {
-        fetch("http://localhost:8081/mer/customer/get/all_dog", {
+        var jwt = this.props.token;
+        fetch("http://localhost:8081/user/get_dogs", {
             method: "get",
             headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              'Authorization': "Bearer "+jwt
             }
           })
             .then(res => {
@@ -68,6 +72,7 @@ class Dogs extends Component{
                             <th>treatFrequency</th>
                             <th>weight</th>
                             <th>breed</th>
+                            <th><Link to="/dogcreate">create new dog</Link></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,7 +87,8 @@ class Dogs extends Component{
                                     <td>{dog.merModelEveryDay}</td>
                                     <td>{dog.treatFrequency}</td>
                                     <td>{dog.weight}</td>
-                                    <th>{dog.breedName}</th>
+                                    <td>{dog.breedName}</td>
+                                    <td></td>
                                     </tr>
                                 )
                             })}   
@@ -96,4 +102,10 @@ class Dogs extends Component{
         }
     }
 }
-export default Dogs;
+const mapStateToProps = state => ({
+    isAuth: state.AuthReducer.isAuthenticated,
+    user: state.AuthReducer.user,
+    token: state.AuthReducer.token,
+  });
+
+export default connect(mapStateToProps,Action)(Dogs);

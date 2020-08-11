@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Sidebar from '../sidebar';
 import Topbar from '../topbar';
+import * as Action from "../store/Actions";
+import { connect } from "react-redux";
 
 class DogCreate extends Component{
     state = {
@@ -28,11 +30,13 @@ class DogCreate extends Component{
     };
 
     submitDog = event => {
+        var jwt = this.props.token;
         event.preventDefault();
         fetch("http://localhost:8081/mer/customer/create/dog", {
           method: "post",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'Authorization': "Bearer "+jwt
           },
           body: JSON.stringify({
             name: this.state.name,
@@ -200,4 +204,10 @@ class DogCreate extends Component{
         );
     }
 }
-export default DogCreate;
+const mapStateToProps = state => ({
+    isAuth: state.AuthReducer.isAuthenticated,
+    user: state.AuthReducer.user,
+    token: state.AuthReducer.token,
+  });
+
+export default connect(mapStateToProps,Action)(DogCreate);
