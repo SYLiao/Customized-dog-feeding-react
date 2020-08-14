@@ -7,6 +7,8 @@ import DogPage from './Component/dog/dogpage';
 import DogCreate from './Component/dog/dogcreate';
 import DogUpdate from './Component/dog/dogupdate';
 
+import Test from './Component/diet/test';
+
 import DietPage from './Component/diet/dietpage';
 import DietCreate from './Component/diet/dietcreate';
 import DietUpdate from './Component/diet/dietupdate';
@@ -33,6 +35,7 @@ class App extends Component{
             <Route path="/dietupdate/:id" exact component={DietUpdate}></Route>
             <Route path="/ingredientpage" exact component={IngredientPage}></Route>
 
+            <Route path="/test" exact component={Test}></Route>
           
             <Route path="/not-found" exact component={NotFound}></Route>
             <Redirect to ="/not-found" />
