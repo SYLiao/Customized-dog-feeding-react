@@ -1,281 +1,416 @@
 import React, { Component } from 'react';
 import Sidebar from '../sidebar';
 import Topbar from '../topbar';
+import { Form, Input, Button, Col, Row, Space, Divider, PageHeader, Option, Select} from 'antd';
+import { MinusCircleOutlined, PlusOutlined, EyeOutlined} from '@ant-design/icons';
+import $ from 'jquery';
+import OverlapComponent from './OverLap';
+import axios from 'axios';
+// import '../setting/axiosSetting';
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 },
+  },
+};
+const formItemLayoutWithOutLabel = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 20, offset: 4 },
+  },
+};
 
 class DietUpdate extends Component {
-  state = {
-    dietId: this.props.match.params.id,
-    dietName: "",
-    recipes: [],
-    recipeTypes: [],
-    recipe_dict: {},
-    age: "0",
-    activeLevel: "1",
-    bodyCondition: "1",
-    lifePhase: "1",
-    weight: ""
-  }
+    state = {
+        diet: {},
+        recipes: {},
+        dietId: this.props.match.params.id,
+        recipesByType: {},
+        dietName: "",
+        recipeTypes: [],
+        currentRecipe: {},
+        num: 3,
+    }
 
-  componentDidMount() {
-    this.getDiet();
-    this.getRecipe();
-    this.getRecipeTypes();
-  }
-
-  handleInputChange = event => {
-    this.setState({
-      ...this.state,
-      [event.target.name]: event.target.value
-    });
-    console.log(this.state)
-  };
-
-  getDiet = () => {
-    fetch("http://localhost:8081/formula/get/diet/" + this.state.dietId, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json"
+    async componentDidMount(){
+      try{
+        let res = await this.getRecipes();
+        let res3 = await this.getDiet();
+        let res2 = await this.getRecipeTypes();
+      } catch(err){
+        alert(err);
       }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;    
-      })
-      .then(resJson => {
-        console.log(resJson)
-        var recipe_dict = new Map();        
-        console.log();
-        this.state.recipeTypes.forEach(recipe_type => {
-          recipe_dict[recipe_type.id] = [];
-        })
+    }
 
-        resJson.data.recipes.forEach(recipe => {
-          var recipeTypeId = recipe.recipeType.id;
-          recipe_dict[recipeTypeId].push(recipe);
-        });
-
-        this.setState({
-          dietName: resJson.data.dietName,
-          name: resJson.data.recipeName,
-          recipe_dict: recipe_dict,
-          compositePrice: resJson.data.compositePrice,
-          kcalPerKg: resJson.data.kcalPerKg,
-          kcalPerCup: resJson.data.kcalPerCup,
-        })
-      })
-      .catch(error => {
-        console.log(error)
-      });
-  }
-
-  submitDiet = event => {
-    event.preventDefault();
-    fetch("http://localhost:8081/formula/update/diet" + this.state.dietId, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        recipeName: this.state.recipeName,
-        age: this.state.age,
-      })
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(
-        resJson => {
-          console.log(resJson)
-        })
-      .catch(error => {
-        console.log(error)
+    handleInputChange = event => {
         this.setState({
           ...this.state,
-          isSubmitting: false,
-          errorMessage: error.message || error.statusText
+          [event.target.name]: event.target.value
         });
-      });
-  };
-
-  getRecipe = () => {
-    fetch("http://localhost:8081/formula/get/all_recipe", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
+      };
+    
+      submitDiet = event => {
+        console.log(this.state.name);
+        console.log('Received values of form:', event);
+        let IDs = [];
+        let ratios = [];
+        for(let i = 0; i < this.state.recipeTypes.length; i++){
+          let typeName = this.state.recipeTypes[i].name;
+          if(event[typeName] != undefined && event[typeName].length != 0){
+            for(let j = 0; j < event[typeName].length; j++){
+              IDs.push(this.state.recipes[typeName][event[typeName][j]['recipe']].recipe.id);
+              ratios.push(event[typeName][j]['ratio']);
+            }
+          }
         }
-        throw res;
-      })
-      .then(resJson => {
-        console.log(resJson)
-        this.setState({
-          recipes: resJson.data
+        console.log(ratios);
+        // this.setState({
+        //   recipeIDs: IDs,
+        //   recipeRatios: ratios,
+        // });
+        fetch("http://localhost:8081/formula/update/diet/" + this.state.dietId, {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            dietName: this.state.dietName,
+            recipeIDs: IDs,
+            recipeRatios: ratios,
+          })
         })
-      })
-      .catch(error => {
-        console.log(error)
+          .then(res => {
+            if (res.ok) {
+              return res.json();
+            }
+            throw res;
+          })  
+          .then(
+            resJson => {
+              console.log(resJson)
+          })
+          .catch(error => {
+              console.log(error)
+            this.setState({
+              ...this.state,
+              isSubmitting: false,
+              errorMessage: error.message || error.statusText
+            });
+          });
+      };
+    
+      getDiet(){
+        return new Promise((resolve, reject) => {
+        axios.get("http://localhost:8081/formula/get/all_recipe_by_diet/" + this.state.dietId)
+            .then(resJson => {
+            let recipesByType = resJson.data.data.recipesByType;
+            this.state.recipeTypes.map(type => {
+              if (recipesByType[type.name] === undefined)
+                recipesByType[type.name] = [];
+            })
+            this.setState({
+              dietName: resJson.data.data.dietName,
+              recipesByType: recipesByType,
+            });
+            resolve(resJson.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+          })
+      };
+    
+      getRecipeTypes() {
+        return new Promise((resolve, reject) => {
+        axios.get("http://localhost:8081/formula/get/all_recipe_type")
+            .then(resJson => {
+              this.setState({
+                recipeTypes: resJson.data.data
+              })
+              this.initDiet();
+              resolve(resJson.data.data)
+            })
+            .catch(error => {
+              reject(error);
+            });
+          })
+      }
+    
+      getRecipes() {
+        return new Promise((resolve, reject) => {
+          axios.get("http://localhost:8081/formula/get/all_recipe_by_type")
+            .then(resJson => {
+                this.setState({
+                  recipes: resJson.data.data
+                })
+                resolve(resJson.data.data);
+            })
+            .catch(error => {
+                reject(error);
+            });
+        })
+    }
+
+  handleRecipeChange = (type, event, index) => {
+    if(event.target.value != ""){
+      let i = event.target.value;
+      let diet = this.state.diet;
+      diet[type][index].recipe = this.state.recipes[type][i].recipe;
+      this.setState({
+        ...this.state,
+        currentRecipe: this.state.recipes[type][i].recipe,
+        diet: diet,
       });
+    }
   }
 
-  getRecipeTypes = () => {
-    fetch("http://localhost:8081/formula/get/all_recipe_type", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(resJson => {
-        console.log(resJson)
-        this.setState({
-          recipeTypes: resJson.data
-        })
-      })
-      .catch(error => {
-        console.log(error)
+  handleRatioChange = (type, event, index) => {
+    if(event.target.value != ""){
+      let ratio = event.target.value;
+      let diet = this.state.diet;
+      diet[type][index].recipeRatio = ratio;
+      this.setState({
+        ...this.state,
+        diet: diet,
       });
+    }
+  }
+
+  initDiet = () => {
+    let diet = {};
+    for(let i = 0; i < this.state.recipeTypes.length; i++){
+      let recipeType = this.state.recipeTypes[i];
+      diet[recipeType.name] = [];
+      let recipeInType = this.state.recipesByType[recipeType.name];
+      if(recipeInType != undefined){
+        for(let j = 0; j < recipeInType.length; j++){
+          diet[recipeType.name].push({
+            recipe: recipeInType[j].recipe,
+            recipeRatio: recipeInType[j].recipeRatio,
+          });
+        }
+      }
+    }
+    this.setState({
+      ...this.state,
+      diet: diet,
+    })
   }
 
   render() {
+    const onFinish = values => {
+      console.log(this.state.name);
+      console.log('Received values of form:', values);
+    };
+    let leftWindow = <OverlapComponent topDistance={140} diet={this.state.diet} types={this.state.recipeTypes}>
+            <div>
+              <div>
+                <span>{this.state.currentRecipe.name}</span>
+              </div>
+              <div>
+                <span>{this.state.currentRecipe.moisture}</span>
+              </div>
+              <div>
+              <span>{this.state.currentRecipe.price}</span>
+              </div>
+            </div>
+          </OverlapComponent> ;
+
+    const { Option } = Select;
+
+    const children = [];
+    for (let i = 10; i < 36; i++) {
+      children.push(<Option key={"dog" + i}>{"dog" + i}</Option>);
+    }
+
     return (
       <div id="wrapper">
         <Sidebar></Sidebar>
         <div id="content-wrapper" class="d-flex flex-column">
-          <div id="content">
-            <Topbar></Topbar>
-            <form onSubmit={this.submitDiet}>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Your diet's name:</span>
-                </div>
-                <input type="text" class="form-control" placeholder="diet's name" aria-label="Username" aria-describedby="basic-addon1"
-                  name="name" id="name" value={this.state.dietName} onChange={this.handleInputChange} />
-              </div>
+          <Topbar></Topbar>
+          <div class="container-fluid">
+            <div className="site-page-header-ghost-wrapper">
+              <PageHeader
+                ghost={false}
+                onBack={() => window.history.back()}
+                title="Update Recipe"
+                subTitle="view and edit saved recipe"
+                extra={[
+                  <Button>Edit</Button>,
+                  <Button type="primary"> Submit</Button>,
+                ]}
+              >
+              </PageHeader>
+            </div>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Your diet's age:</span>
-                </div>
-                <input type="text" class="form-control" placeholder="diet's name" aria-label="Username" aria-describedby="basic-addon1"
-                  name="age" id="age" value={this.state.age} onChange={this.handleInputChange} />
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">diet's gender:</label>
-                </div>
-                <select class="custom-select" name="gender" id="inputGroupSelect01" value={this.state.gender} onChange={this.handleInputChange}>
-                  <option selected>Choose...</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              <h1 class="h3 mb-0 text-gray-800"></h1>
+            </div>
 
-              <label for="basic-url">Your diet's Recipe</label>
+            <Form name="dynamic_form_item" onFinish={this.submitDiet}>
 
-              <ul>
-                {this.state.recipe_dict.forEach((value, index) => {
+              <Row gutter={[8, 16]}>
+                <div style={{ marginBottom: 8, marginLeft: 8, width: "100%" }}>
+
+                  <Space direction="vertical" span={24}>
+                    <Input addonBefore="Your diet's name:" defaultValue="diet's name" type="text" name="dietName"
+                      value={this.state.dietName} onChange={this.handleInputChange} style={{ width: '345%' }} span={24} />
+                    <Select
+                      addonbefore="Your diet's name:"
+                      mode="multiple"
+                      style={{ width: '345%' }}
+                      placeholder="Please select"
+                      defaultValue={['dog1', 'dog12']}
+                      onChange={() => {
+
+                      }}
+                    >
+                      {children}
+                    </Select>
+                  </Space>
+                </div>
+
+                {/* <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Your diet's name:</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="diet's name" aria-label="diet's name" aria-describedby="basic-addon1"
+                    name="dietName" value={this.state.dietName} onChange={this.handleInputChange} style={{ width: '30%' }} />
+                </div> */}
+
+                {[0, 1].map((count) => {
+                  var recipeTypes = this.state.recipeTypes;
                   return (
-                    <div class="card shadow mb-4">
-                      <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                        <h6 class="m-0 font-weight-bold text-primary">{value.name}</h6>
-                      </a>
-                      <div class="collapse show" id="collapseCardExample" >
-                        <div class="card-body">
-                          This is a collapsable card example using Bootstrap's built in collapse functionality. <strong>Click on the card header</strong> to see the card body collapse and expand!
-                        </div>
-                      </div>
+                    <Col span={8}>
+                      {recipeTypes.map((type, index) => {
+                        let typeName = type.name;
+                        if (index % 2 === count) {
+                          return (
+                            <Col span={24}>
+                              <div class="card">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                  <h5 class="m-0 font-weight-bold text-primary">{typeName} recipes</h5>
+                                  <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                                <Form.List name={typeName}>
+                                  {(fields, { add, remove }) => {
+                                    var i = 0;
+                                    if (Object.keys(this.state.recipesByType).length != 0 && this.state.recipesByType[typeName] != undefined && fields.length < this.state.recipesByType[typeName].length) {
+                                      var currentTypeRecipes = this.state.recipesByType[typeName];
+                                      currentTypeRecipes.map((recipe) => {
+                                        add({ "recipe": recipe.index, "ratio": recipe.recipeRatio }, 0);
+                                      })
+                                    }
+                                    return (
+                                      <div class="card-body">
+                                        {fields.map((field, index) => (
+                                          <Row span={11} gutter={[8, 0]}>
+                                            <Col span={11}>
+                                              <Form.Item
+                                                {...field} name={[field.name, 'recipe']} fieldKey={[field.fieldKey, 'recipe']} required={true}
+                                              >
+                                                <select class="custom-select" name="recipe" id={typeName} style={{ width: '100%' }} onChange={(event) => {this.handleRecipeChange(typeName, event, index)}}>
+                                                  <option value=""></option>
+                                                  {this.state.recipes[typeName].map((recipe) => {
+                                                    return (
+                                                      <option value={recipe.index}>{recipe.recipe.name}</option>
+                                                    );
+                                                  })}
+                                                </select>
+                                              </Form.Item>
+                                            </Col>
+                                            <Col span={10}>
+                                              <Form.Item
+                                                {...field} name={[field.name, "ratio"]} fieldKey={[field.fieldKey, "ratio"]}
+                                                required={true}
+                                              >
+                                                <input type="text" class="form-control" placeholder="ratio" aria-label="ratio" aria-describedby="basic-addon1"
+                                                  name="ratio" style={{ width: '100%' }} onChange={(event) => {this.handleRatioChange(typeName, event, index)}}/>
+                                              </Form.Item>
+                                            </Col>
+                                            <Col span={1}>
+                                              <MinusCircleOutlined
+                                                className="dynamic-delete-button" style={{ margin: '0 8px' }}
+                                                onClick={() => {
+                                                  remove(field.name);
+                                                    if (field.name < this.state.recipesByType[typeName].length) {
+                                                      let newRecipes = this.state.recipesByType;
+                                                      newRecipes[typeName].splice(field.name, 1);
+                                                      this.setState({
+                                                        recipesByType: newRecipes
+                                                      });
+                                                    }
+                                                  if (field.name < this.state.diet[typeName].length) {
+                                                    let newDiet = this.state.diet;
+                                                    newDiet[typeName].splice(field.name, 1);
+                                                    this.setState({
+                                                      diet: newDiet
+                                                    });
+                                                  }
+                                                  console.log(this.state.diet);
+                                                  console.log(this.state.recipesByType);
+                                                }
+                                                }
+                                              />
+                                            </Col>
+                                            <Col span={1}>
+                                              <EyeOutlined style={{ margin: '0 8px' }}
+                                                onClick={() => {
 
-                      <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                          <label class="input-group-text" for="inputGroupSelect01">diet's recipe:</label>
-                        </div>
-                        <select class="custom-select" name="recipeName" id="recipeName" onChange={this.handleInputChange}>
-                          {this.state.recipes.map(recipe => {
-                            return (
-                              <option value={recipe.name}>{recipe.name}</option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
+                                                }
+                                                }
+                                              />
+                                            </Col>
+                                          </Row>
+                                        ))}
+                                        <Form.Item>
+                                          <Button type="dashed" onClick={() => { 
+                                            add();
+                                            let diet = this.state.diet;
+                                            diet[typeName].push({
+                                              recipe: {},
+                                              recipeRatio: 0,
+                                            });
+                                            this.setState({
+                                              ...this.state,
+                                              diet: diet,
+                                            });
+                                          }} style={{ width: '100%' }}>
+                                            <PlusOutlined /> Add field
+                                      </Button>
+                                        </Form.Item>
+                                      </div>
+                                    );
+                                  }}
+                                </Form.List>
+                              </div>
+                            </Col>
+                          );
+                        }
+                      })}
+                    </Col>
                   )
-                })}
-
-
-              </ul>
-
-              <label for="basic-url">Your diet's life</label>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">active level:</label>
-                </div>
-                <select class="custom-select" name="activeLevel" id="inputGroupSelect01" value={this.state.activeLevel} onChange={this.handleInputChange}>
-                  <option selected>Choose...</option>
-                  <option value="1">Sport/Working diets</option>
-                  <option value="2">Active</option>
-                  <option value="3">Moderate Active</option>
-                  <option value="4">Inactive/Lethargic</option>
-                </select>
-              </div>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">life phase:</label>
-                </div>
-                <select class="custom-select" name="lifePhase" id="inputGroupSelect01" value={this.state.lifePhase} onChange={this.handleInputChange}>
-                  <option selected>Choose...</option>
-                  <option value="1">Pregnant</option>
-                  <option value="2">Nursing/Lactating</option>
-                  <option value="3">Spayed</option>
-                  <option value="4">Neutered</option>
-                  <option value="5">Not Neutered</option>
-                </select>
-              </div>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">body condition:</label>
-                </div>
-                <select class="custom-select" name="bodyCondition" id="inputGroupSelect01" value={this.state.bodyCondition} onChange={this.handleInputChange}>
-                  <option selected>Choose...</option>
-                  <option value="1">Grossly obesity (>45%)</option>
-                  <option value="2">Overweight (15-45%)</option>
-                  <option value="3">Ideal Body Condition</option>
-                  <option value="4">Thin (-10-40%)</option>
-                  <option value="5">Emaciated lean (-> 40%)</option>
-                </select>
-              </div>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Your diet's weight:</span>
-                </div>
-                <input type="text" class="form-control" placeholder="diet's weight" aria-label="Username" aria-describedby="basic-addon1"
-                  name="weight" id="weight" value={this.state.weight} onChange={this.handleInputChange} />
-              </div>
-
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Notes:</span>
-                </div>
-                <textarea class="form-control" aria-label="With textarea"></textarea>
-              </div>
-
-              <input type="submit" value="submit" />
-            </form>
+                })
+                }
+                <Col span={8}>
+                  <Divider orientation="left">Preview</Divider>
+                </Col>
+              </Row>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" plain="true">Submit</Button>
+              </Form.Item>
+            </Form>
+            {leftWindow}
           </div>
         </div>
       </div>

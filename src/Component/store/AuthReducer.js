@@ -1,4 +1,5 @@
 import { act } from 'react-dom/test-utils'
+import axios from 'axios';
 
 const LOGIN = 'LOGIN'
 const LOGOUT = 'LOGOUT'
@@ -12,6 +13,7 @@ export default (state = init ,action) => {
     switch(action.type){
         case LOGIN:
             localStorage.setItem("user", action.payload.user);
+            localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
                 isAuth:true,
@@ -20,6 +22,7 @@ export default (state = init ,action) => {
             }
         case LOGOUT:
             localStorage.setItem("user", "");
+            localStorage.setItem("token", "");
             return {
                 ...state,
                 isAuth:false,

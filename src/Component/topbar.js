@@ -5,42 +5,58 @@ import * as Action from "./store/Actions";
 
 class Topbar extends Component{
 
+    handleClick = () => {
+        this.props.dispatch(Action.login("1",  "2"))
+    }
+
     render(){
-        let user = this.props.user;
+        let user = localStorage.getItem("user");
         return(
         <div>
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <ul class="navbar-nav ml-auto">
+            <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <ul className="navbar-nav ml-auto">
                     {
-                        user ? <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         <span class="mr-2 d-none d-lg-inline text-gray-600 small">{user}</span>
-                            <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"/>
+                        user ? <li className="nav-item dropdown no-arrow">
+                        <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <span className="mr-2 d-none d-lg-inline text-gray-600 small">{user}</span>
+                            <img className="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"/>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a className="dropdown-item" href="#">
+                            <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             Profile
                             </a>
-                            <a class="dropdown-item" href="#">
-                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                            <a className="dropdown-item" href="#">
+                            <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             Settings
                             </a>
-                            <a class="dropdown-item" href="#">
-                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                            <a className="dropdown-item" href="#">
+                            <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                             Activity Log
                             </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            <div className="dropdown-divider"></div>
+                            <Link className="dropdown-item" to="/login">
+                            <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
-                            </a>
+                            </Link>
                         </div>
                         </li> :
                         <div>
-                        <Link to="/register" class="btn btn-info btn-lg" role="button" color="inherit" aria-pressed="true">Register</Link>
-                        <Link to="/login" class="btn btn-info btn-lg" role="button" color="inherit" aria-pressed="true">Login</Link>
+                        <Link to="/register" className="btn btn-info btn-lg" role="button" color="inherit" aria-pressed="true">Register</Link>
+                        <Link to="/login" className="btn btn-info btn-lg" role="button" color="inherit" aria-pressed="true">Login</Link>
                         </div>
+                    }
+                    {
+                        user ? 
+                        <li>
+                            <Link className="dropdown-item" to="/login" onClick={this.handleClick}>
+                                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </Link>
+                        </li> :
+                        <li>
+
+                        </li>
                     }
 
                 </ul>

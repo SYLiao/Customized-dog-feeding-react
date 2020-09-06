@@ -8,6 +8,9 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import './css/sb-admin-2.css';
 import './css/sb-admin-2.min.css';
 import './css/air-panel.css';
+
+import 'jquery';
+
 import {createStore,applyMiddleware} from 'redux';
 import thunk from 'redux-thunk'
 import combineReducers from './Component/store/CombinedReducer'

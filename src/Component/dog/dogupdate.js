@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import Sidebar from '../sidebar';
 import Topbar from '../topbar';
+import '../setting/axiosSetting';
+import axios from 'axios';
+import { Collapse, Button, PageHeader, Descriptions } from 'antd';
+import { Link } from 'react-router-dom';
+
+const { Panel } = Collapse;
 
 class DogUpdate extends Component{
     state = {
@@ -13,12 +19,18 @@ class DogUpdate extends Component{
         activeLevel: "1",
         bodyCondition: "1",
         lifePhase: "1",
-        weight: ""
+        weight: "",
+        diets: [],
+    }
+
+    callback(key) {
+        console.log(key);
     }
 
     componentDidMount(){
         this.getDog();
         this.getBreeds();
+        this.getDiets();
     }
 
     handleInputChange = event => {
@@ -26,7 +38,6 @@ class DogUpdate extends Component{
           ...this.state,
           [event.target.name]: event.target.value
         });
-        console.log(this.state)
     };
 
     getDog = () =>{
@@ -60,61 +71,30 @@ class DogUpdate extends Component{
             });
     }
 
-    submitDog = event => {
+      submitDog = event => {
         event.preventDefault();
-        fetch("http://localhost:8081/mer/customer//update/dog/" + this.state.dogId, {
-          method: "put",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            name: this.state.name,
-            breedName: this.state.breedName,
-            age: this.state.age,
-            gender: this.state.gender,
-            lifePhaseId: this.state.lifePhase,
-            activeLevelId: this.state.activeLevel,
-            bodyConditionId: this.state.bodyCondition,
-            weight: this.state.weight
-          })
+        axios.put("http://localhost:8081/mer/customer/update/dog/" + this.state.dogId, {
+          name: this.state.name,
+          breedName: this.state.breedName,
+          age: this.state.age,
+          gender: this.state.gender,
+          lifePhaseId: this.state.lifePhase,
+          activeLevelId: this.state.activeLevel,
+          bodyConditionId: this.state.bodyCondition,
+          weight: this.state.weight
+          
         })
           .then(res => {
-            if (res.ok) {
-              return res.json();
-            }
-            throw res;
+            console.log(res);
           })  
-          .then(
-            resJson => {
-              console.log(resJson)
-          })
-          .catch(error => {
-              console.log(error)
-            this.setState({
-              ...this.state,
-              isSubmitting: false,
-              errorMessage: error.message || error.statusText
-            });
-          });
       };
 
-    getBreeds = () => {
-        fetch("http://localhost:8081/mer/customer/get/all_breed", {
-            method: "get",
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
-            .then(res => {
-              if (res.ok) {
-                return res.json();
-              }
-              throw res;
-            })  
+      getBreeds = () => {
+        axios.get("http://localhost:8081/mer/customer/get/all_breed")
             .then(resJson => {
                 console.log(resJson)
                 this.setState({
-                    breeds: resJson.data
+                    breeds: resJson.data.data
                 })
             })
             .catch(error => {
@@ -122,7 +102,28 @@ class DogUpdate extends Component{
             });
     }
 
+    getDiets(){
+        axios.get("http://localhost:8081/mer/customer/get/dietsByDog/" + this.state.dogId)
+            .then(resJson => {
+                this.setState({
+                    diets: resJson.data.data
+                })
+                console.log(this.state.diets);
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+
     render(){
+        let name = "No diet."
+        let text = "No diet."
+        if(Object.keys(this.state.diets).length != 0){
+            name = this.state.diets[0].name;
+            text = ` kcalPerCup: ${this.state.diets[0].kcalPerCup}
+                     kcalPerKg: ${this.state.diets[0].kcalPerKg}
+                     compositePrice: ${this.state.diets[0].compositePrice} `;
+        }
         return(
             <div id="wrapper">
                 <Sidebar></Sidebar>
@@ -223,6 +224,34 @@ class DogUpdate extends Component{
                                 <span class="input-group-text">Notes:</span>
                             </div>
                             <textarea class="form-control" aria-label="With textarea"></textarea>
+                            </div>
+                            
+                            <div className="site-page-header-ghost-wrapper">
+                                <PageHeader
+                                ghost={false}
+                                title="Diets"
+                                subTitle="当前食谱"
+                                extra={[
+                                    <Button key="2">
+                                        <Link to={'/diet_choose/' + this.state.dogId}>
+                                        选择其他食谱
+                                        </Link>
+                                    </Button>,
+                                    <Button key="1" type="primary">
+                                        <Link to={'/dietcreate/' + this.state.dogId}>创建你自己的食谱</Link>
+                                    </Button>,
+                                ]}
+                                >
+                                    {Object.keys(this.state.diets).length != 0 ? 
+                                    <Collapse defaultActiveKey={['1']} onChange={this.callback}>
+                                        <Panel header={name} key={1} >
+                                            <p style={{ whiteSpace: 'pre-line' }}>{text}</p>
+                                        </Panel>
+                                    </Collapse>
+                                    :
+                                    <p>请选择一个食谱或创建一个食谱。</p>
+                                    }
+                                </PageHeader>
                             </div>
 
                             <input type="submit" value="submit" />

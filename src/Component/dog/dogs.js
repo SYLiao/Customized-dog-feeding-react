@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { connect } from "react-redux";
 import {Link} from 'react-router-dom';
 import * as Action from "../store/Actions";
+import axios from 'axios';
+import '../setting/axiosSetting';
 
 class Dogs extends Component{
     state = {
@@ -15,25 +17,12 @@ class Dogs extends Component{
     }
 
     getDogs = () => {
-        var jwt = this.props.token;
-        fetch("http://localhost:8081/user/get_dogs", {
-            method: "get",
-            headers: {
-              "Content-Type": "application/json",
-              'Authorization': "Bearer "+jwt
-            }
-          })
-            .then(res => {
-              if (res.ok) {
-                return res.json();
-              }
-              throw res;
-            })  
+        axios.get("http://localhost:8081/user/get_dogs")
             .then(resJson => {
                 console.log(resJson)
                 this.setState({
-                    dogs: resJson.data,
-                    resultCode: resJson.resultCode,
+                    dogs: resJson.data.data,
+                    resultCode: resJson.data.resultCode,
                     flag: 1
                 })
             })
