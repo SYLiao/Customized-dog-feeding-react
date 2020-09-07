@@ -5,6 +5,7 @@ import { Form, Input, Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import $ from 'jquery';
 import OverlapComponent from './OverLap';
+import "antd/dist/antd.css";
 
 const formItemLayout = {
   labelCol: {
@@ -31,20 +32,13 @@ class DietCreate extends Component{
         recipeTypes: [],
         isMouseOn: false,
         currentRecipe: {},
+        diet: {},
+        recipeIDs: []
     }
 
     componentDidMount(){
         this.getRecipeTypes();
         this.getRecipes();
-    }
-
-    onMouseOver =()=>{
-      this.setState({ isMouseOn: true });
-      console.log("1234");
-    }
-     
-    onMouseOut =()=>{
-      this.setState({ isMouseOn: false });
     }
 
     handleInputChange = event => {
@@ -55,7 +49,23 @@ class DietCreate extends Component{
     };
 
     submitDiet = event => {
-        event.preventDefault();
+        console.log(this.state.name);
+        console.log('Received values of form:', event);
+        let IDs = [];
+        let ratios = [];
+        for(let i = 0; i < this.state.recipeTypes.length; i++){
+          let typeName = this.state.recipeTypes[i].name;
+          if(event[typeName] != undefined && event[typeName].length != 0){
+            for(let j = 0; j < event[typeName].length; j++){
+              IDs.push(this.state.recipes[typeName][event[typeName][j]['recipe']].recipe.id);
+              ratios.push(event[typeName][j]['ratio']);
+            }
+          }
+        }
+        this.setState({
+          recipeIDs: IDs,
+          recipeRatios: ratios,
+        });
         fetch("http://localhost:8081/formula/create/diet", {
           method: "post",
           headers: {
@@ -63,7 +73,7 @@ class DietCreate extends Component{
           },
           body: JSON.stringify({
             dietName: this.state.name,
-            recipes: this.state.recipes,
+            recipeIDs: this.state.recipeIDs,
             recipeRatios: this.state.recipeRatios,
           })
         })
@@ -105,6 +115,7 @@ class DietCreate extends Component{
                 this.setState({
                   recipeTypes: resJson.data
                 })
+                this.initDiet();
             })
             .catch(error => {
                 console.log(error)
@@ -135,20 +146,66 @@ class DietCreate extends Component{
           });
   }
 
-  handleRecipeChange = (type, event) => {
-    let index = event.target.value.split(',')[1];
+  initDiet = () => {
+    let diet = {};
+    for(let i = 0; i < this.state.recipeTypes.length; i++){
+      let recipeType = this.state.recipeTypes[i];
+      diet[recipeType.name] = [];
+    }
     this.setState({
       ...this.state,
-      currentRecipe: this.state.recipes[type][index],
-    });
+      diet: diet,
+    })
+    console.log(this.state.diet);
+  }
+
+  handleRecipeChange = (type, event, index) => {
+    if(event.target.value != ""){
+      let i = event.target.value;
+      let diet = this.state.diet;
+      if(diet[type].length == index){
+        diet[type].push({
+          recipe: this.state.recipes[type][i].recipe,
+          recipeRatio: 0,
+        });
+      }
+      else{
+        diet[type][index].recipe = this.state.recipes[type][i].recipe;
+      }
+      this.setState({
+        ...this.state,
+        currentRecipe: this.state.recipes[type][i].recipe,
+        diet: diet,
+      });
+    }
+    console.log(this.state.diet);
+  }
+
+  handleRatioChange = (type, event, index) => {
+    if(event.target.value != ""){
+      let ratio = event.target.value;
+      let diet = this.state.diet;
+      diet[type][index].recipeRatio = ratio;
+      this.setState({
+        ...this.state,
+        diet: diet,
+      });
+    }
+    console.log(this.state.diet);
   }
 
     render(){
         const onFinish = values => {
           console.log(this.state.name);
-          console.log('Received values of form:', values);
+          for(let i = 0; i < this.state.recipeTypes.length; i++){
+            let typeName = this.state.recipeTypes[i].name;
+            console.log(typeName);
+            if(values[typeName] != undefined && values[typeName].length != 0){
+              console.log(this.state.recipes[typeName][values[typeName][0]['recipe']].recipe.id);
+            }
+          }
         };
-         let leftWindow = <OverlapComponent topDistance={140}>
+         let leftWindow = <OverlapComponent topDistance={140} diet={this.state.diet} types={this.state.recipeTypes}>
             <div>
               <div>
                 <span>{this.state.currentRecipe.name}</span>
@@ -171,7 +228,7 @@ class DietCreate extends Component{
                         <div>
                           <h3>recipe</h3>
                           {/* <span onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>test</span> */}
-                          <Form name="dynamic_form_item" onFinish={onFinish}>
+                          <Form name="dynamic_form_item" onFinish={this.submitDiet}>
                             <div class="input-group mb-3">
                               <div class="input-group-prepend">
                                   <span class="input-group-text" id="basic-addon1">Your diet's name:</span>
@@ -186,7 +243,6 @@ class DietCreate extends Component{
                                 <h3>{typeName} recipes</h3>
                                 <Form.List name={typeName}>
                                 {(fields, { add, remove }) => {
-                                  let i = -1;
                                   return (
                                     <div>
                                       {fields.map((field, index) => (
@@ -194,27 +250,33 @@ class DietCreate extends Component{
                                           <Form.Item
                                             {...field} name={[field.name, 'recipe']} fieldKey={[field.fieldKey, 'recipe']} required={true}
                                           >
-                                            <select class="custom-select" name="recipe" id={typeName} style={{ width: '30%' }} onChange={(event) => {this.handleRecipeChange(typeName, event)}} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+                                            <select class="custom-select" name="recipe" id={typeName} style={{ width: '30%' }} onChange={(event) => {this.handleRecipeChange(typeName, event, index)}}>
                                                 <option value=""></option>
-                                                {this.state.recipes[typeName].map(recipe => {
-                                                    i += 1;
+                                                {this.state.recipes[typeName].map((recipe) => {
                                                     return(
-                                                        <option value={[recipe.id, i]}>{recipe.name}</option>
+                                                        <option value={recipe.index}>{recipe.recipe.name}</option>
                                                     );
                                                 })}
                                             </select>
                                           </Form.Item>
                                           <Form.Item
-                                            {...field} validateTrigger={['onChange', 'onBlur']} name={[field.name, "recipe's ratio"]} fieldKey={[field.fieldKey, "recipe's ratio"]}
+                                            {...field} validateTrigger={['onChange', 'onBlur']} name={[field.name, "ratio"]} fieldKey={[field.fieldKey, "ratio"]}
                                             required={true}
                                           >
                                             <input type="text" class="form-control" placeholder="recipe's ratio" aria-label="recipe's ratio" aria-describedby="basic-addon1"
-                                              name="name" style={{ width: '30%' }}/>
+                                              name="name" style={{ width: '30%' }} onChange={(event) => {this.handleRatioChange(typeName, event, index)}}/>
                                           </Form.Item>
                                             <MinusCircleOutlined
                                               className="dynamic-delete-button" style={{ margin: '0 8px' }}
                                               onClick={() => {
                                                 remove(field.name);
+                                                if (field.name < this.state.diet[typeName].length) {
+                                                  let newDiet = this.state.diet;
+                                                  newDiet[typeName].splice(field.name);
+                                                  this.setState({
+                                                    diet: newDiet
+                                                  });
+                                                }
                                               }}
                                             />
                                         </Form.Item>
