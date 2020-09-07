@@ -11,6 +11,8 @@ import DietChoose from './Component/diet/dietChoose';
 import DietPage from './Component/diet/dietpage';
 import DietCreate from './Component/diet/dietcreate';
 import DietUpdate from './Component/diet/dietupdate';
+import RecipePage from './Component/recipe/recipepage';
+import RecipeUpdate from './Component/recipe/recipeupdate';
 import IngredientPage from './Component/ingredient/ingredientpage';
 import DietDiagram from './Component/diet/dietdiagram';
 import NotFound from './Component/notFound';
@@ -36,11 +38,9 @@ class App extends Component{
             <Route path="/dietpage" exact component={DietPage}></Route>
             <Route path="/dietcreate/:id" exact component={DietCreate}></Route>
             <Route path="/dietupdate/:id" exact component={DietUpdate}></Route>
+            <Route path="/recipepage" exact component={RecipePage}></Route>
+            <Route path="/recipeupdate/:id" exact component={RecipeUpdate}></Route>
             <Route path="/ingredientpage" exact component={IngredientPage}></Route>
-
-            <Route path="/test" exact component={DietDiagram}></Route>
-            {/* <Route path="/test2" exact component={test2}></Route> */}
-          
             <Route path="/not-found" exact component={NotFound}></Route>
             <Redirect to ="/not-found" />
           </Switch>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Sidebar from '../sidebar';
 import Topbar from '../topbar';
-import { Form, Input, Button, Col, Row, Space, Divider, PageHeader, Option, Select} from 'antd';
-import { MinusCircleOutlined, PlusOutlined, EyeOutlined} from '@ant-design/icons';
+import { Form, Input, Button, Col, Row, Space, Divider, PageHeader, Option, Select, Alert } from 'antd';
+import { MinusCircleOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
 import $ from 'jquery';
 import OverlapComponent from './OverLap';
 import axios from 'axios';
@@ -59,20 +59,16 @@ class DietUpdate extends Component {
         console.log('Received values of form:', event);
         let IDs = [];
         let ratios = [];
-        for(let i = 0; i < this.state.recipeTypes.length; i++){
+        for (let i = 0; i < this.state.recipeTypes.length; i++) {
           let typeName = this.state.recipeTypes[i].name;
-          if(event[typeName] != undefined && event[typeName].length != 0){
-            for(let j = 0; j < event[typeName].length; j++){
+          if (event[typeName] != undefined && event[typeName].length != 0) {
+            for (let j = 0; j < event[typeName].length; j++) {
               IDs.push(this.state.recipes[typeName][event[typeName][j]['recipe']].recipe.id);
               ratios.push(event[typeName][j]['ratio']);
             }
           }
         }
-        console.log(ratios);
-        // this.setState({
-        //   recipeIDs: IDs,
-        //   recipeRatios: ratios,
-        // });
+
         fetch("http://localhost:8081/formula/update/diet/" + this.state.dietId, {
           method: "put",
           headers: {
@@ -93,6 +89,17 @@ class DietUpdate extends Component {
           .then(
             resJson => {
               console.log(resJson)
+              if (resJson.resultCode >= 300) {
+                return (
+                  <Alert
+                    message="Error"
+                    description="This is an error message about copywriting."
+                    type="error"
+                    showIcon
+                    closable
+                  />
+                )
+              }
           })
           .catch(error => {
               console.log(error)
@@ -104,7 +111,7 @@ class DietUpdate extends Component {
           });
       };
     
-      getDiet(){
+      getDiet() {
         return new Promise((resolve, reject) => {
         axios.get("http://localhost:8081/formula/get/all_recipe_by_diet/" + this.state.dietId)
             .then(resJson => {
@@ -158,7 +165,7 @@ class DietUpdate extends Component {
     }
 
   handleRecipeChange = (type, event, index) => {
-    if(event.target.value != ""){
+    if(event.target.value != "") {
       let i = event.target.value;
       let diet = this.state.diet;
       diet[type][index].recipe = this.state.recipes[type][i].recipe;
@@ -171,7 +178,7 @@ class DietUpdate extends Component {
   }
 
   handleRatioChange = (type, event, index) => {
-    if(event.target.value != ""){
+    if (event.target.value != "") {
       let ratio = event.target.value;
       let diet = this.state.diet;
       diet[type][index].recipeRatio = ratio;
@@ -184,12 +191,12 @@ class DietUpdate extends Component {
 
   initDiet = () => {
     let diet = {};
-    for(let i = 0; i < this.state.recipeTypes.length; i++){
+    for (let i = 0; i < this.state.recipeTypes.length; i++) {
       let recipeType = this.state.recipeTypes[i];
       diet[recipeType.name] = [];
       let recipeInType = this.state.recipesByType[recipeType.name];
-      if(recipeInType != undefined){
-        for(let j = 0; j < recipeInType.length; j++){
+      if (recipeInType != undefined) {
+        for (let j = 0; j < recipeInType.length; j++) {
           diet[recipeType.name].push({
             recipe: recipeInType[j].recipe,
             recipeRatio: recipeInType[j].recipeRatio,
@@ -220,7 +227,7 @@ class DietUpdate extends Component {
               <span>{this.state.currentRecipe.price}</span>
               </div>
             </div>
-          </OverlapComponent> ;
+          </OverlapComponent>;
 
     const { Option } = Select;
 
@@ -317,7 +324,7 @@ class DietUpdate extends Component {
                                           <Row span={11} gutter={[8, 0]}>
                                             <Col span={11}>
                                               <Form.Item
-                                                {...field} name={[field.name, 'recipe']} fieldKey={[field.fieldKey, 'recipe']} required={true}
+                                                {...field} name={[field.name, 'recipe']} fieldKey={[field.fieldKey, 'recipe']} required={true} rules={[{ required: true, message: 'Missing recipe' }]}
                                               >
                                                 <select class="custom-select" name="recipe" id={typeName} style={{ width: '100%' }} onChange={(event) => {this.handleRecipeChange(typeName, event, index)}}>
                                                   <option value=""></option>
@@ -331,7 +338,7 @@ class DietUpdate extends Component {
                                             </Col>
                                             <Col span={10}>
                                               <Form.Item
-                                                {...field} name={[field.name, "ratio"]} fieldKey={[field.fieldKey, "ratio"]}
+                                                {...field} name={[field.name, "ratio"]} fieldKey={[field.fieldKey, "ratio"]} rules={[{ required: true, message: 'Missing ratio' }]}
                                                 required={true}
                                               >
                                                 <input type="text" class="form-control" placeholder="ratio" aria-label="ratio" aria-describedby="basic-addon1"
@@ -357,8 +364,6 @@ class DietUpdate extends Component {
                                                       diet: newDiet
                                                     });
                                                   }
-                                                  console.log(this.state.diet);
-                                                  console.log(this.state.recipesByType);
                                                 }
                                                 }
                                               />
@@ -366,8 +371,11 @@ class DietUpdate extends Component {
                                             <Col span={1}>
                                               <EyeOutlined style={{ margin: '0 8px' }}
                                                 onClick={() => {
-
-                                                }
+                                                  alert(Object.entries(field));
+                                                  var newRecipes = this.state.recipesByType;
+                                                  let targetId = newRecipes[typeName].splice(field.name)[0].recipe.id;
+                                                  //window.location.replace("/recipeupdate/" + targetId);
+                                                  }
                                                 }
                                               />
                                             </Col>
