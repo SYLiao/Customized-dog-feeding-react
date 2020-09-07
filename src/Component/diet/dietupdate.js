@@ -4,8 +4,9 @@ import Topbar from '../topbar';
 import { Form, Input, Button, Col, Row, Space, Divider, PageHeader, Option, Select, Alert } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
 import $ from 'jquery';
-import axios from 'axios';
 import OverlapComponent from './OverLap';
+import axios from 'axios';
+// import '../setting/axiosSetting';
 
 const formItemLayout = {
   labelCol: {
@@ -25,157 +26,149 @@ const formItemLayoutWithOutLabel = {
 };
 
 class DietUpdate extends Component {
-  state = {
-    diet: {},
-    recipes: {},
-    dietId: this.props.match.params.id,
-    recipesByType: {},
-    dietName: "",
-    recipeTypes: [],
-    currentRecipe: {},
-    num: 3,
-  }
-
-  async componentDidMount() {
-    try {
-      await this.getRecipes();
-      await this.getDiet();
-      await this.getRecipeTypes();
-    } catch (err) {
-      alert(err);
+    state = {
+        diet: {},
+        recipes: {},
+        dietId: this.props.match.params.id,
+        recipesByType: {},
+        dietName: "",
+        recipeTypes: [],
+        currentRecipe: {},
+        num: 3,
     }
-  }
 
-  handleInputChange = event => {
-    this.setState({
-      ...this.state,
-      [event.target.name]: event.target.value
-    });
-  };
-
-  submitDiet = event => {
-    console.log(this.state.name);
-    console.log('Received values of form:', event);
-    let IDs = [];
-    let ratios = [];
-    for (let i = 0; i < this.state.recipeTypes.length; i++) {
-      let typeName = this.state.recipeTypes[i].name;
-      if (event[typeName] != undefined && event[typeName].length != 0) {
-        for (let j = 0; j < event[typeName].length; j++) {
-          IDs.push(this.state.recipes[typeName][event[typeName][j]['recipe']].recipe.id);
-          ratios.push(event[typeName][j]['ratio']);
-        }
+    async componentDidMount(){
+      try{
+        let res = await this.getRecipes();
+        let res3 = await this.getDiet();
+        let res2 = await this.getRecipeTypes();
+      } catch(err){
+        alert(err);
       }
     }
 
-    fetch("http://localhost:8081/formula/update/diet/" + this.state.dietId, {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        dietName: this.state.dietName,
-        recipeIDs: IDs,
-        recipeRatios: ratios,
-      })
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(
-        resJson => {
-          console.log(resJson)
-          if (resJson.resultCode >= 300) {
-            return (
-              <Alert
-                message="Error"
-                description="This is an error message about copywriting."
-                type="error"
-                showIcon
-                closable
-              />
-            )
-          }
-        })
-      .catch(error => {
-        console.log(error)
+    handleInputChange = event => {
         this.setState({
           ...this.state,
-          isSubmitting: false,
-          errorMessage: error.message || error.statusText
+          [event.target.name]: event.target.value
         });
-      });
-  };
+      };
+    
+      submitDiet = event => {
+        console.log(this.state.name);
+        console.log('Received values of form:', event);
+        let IDs = [];
+        let ratios = [];
+        for (let i = 0; i < this.state.recipeTypes.length; i++) {
+          let typeName = this.state.recipeTypes[i].name;
+          if (event[typeName] != undefined && event[typeName].length != 0) {
+            for (let j = 0; j < event[typeName].length; j++) {
+              IDs.push(this.state.recipes[typeName][event[typeName][j]['recipe']].recipe.id);
+              ratios.push(event[typeName][j]['ratio']);
+            }
+          }
+        }
 
-  getDiet() {
-    return new Promise((resolve, reject) => {
-      axios.get("http://localhost:8081/formula/get/all_recipe_by_diet/" + this.state.dietId)
-        .then(resJson => {
-          let recipesByType = resJson.data.data.recipesByType;
-          this.state.recipeTypes.map(type => {
-            if (recipesByType[type.name] === undefined)
-              recipesByType[type.name] = [];
+        fetch("http://localhost:8081/formula/update/diet/" + this.state.dietId, {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            dietName: this.state.dietName,
+            recipeIDs: IDs,
+            recipeRatios: ratios,
           })
-          this.setState({
-            dietName: resJson.data.data.dietName,
-            recipesByType: recipesByType,
+        })
+          .then(res => {
+            if (res.ok) {
+              return res.json();
+            }
+            throw res;
+          })  
+          .then(
+            resJson => {
+              console.log(resJson)
+              if (resJson.resultCode >= 300) {
+                return (
+                  <Alert
+                    message="Error"
+                    description="This is an error message about copywriting."
+                    type="error"
+                    showIcon
+                    closable
+                  />
+                )
+              }
+          })
+          .catch(error => {
+              console.log(error)
+            this.setState({
+              ...this.state,
+              isSubmitting: false,
+              errorMessage: error.message || error.statusText
+            });
           });
-          resolve(resJson.data.data);
-        })
-        .catch(error => {
-          console.log(error);
-          reject(error);
-        });
-    })
-  };
-
-  getRecipeTypes() {
-    return new Promise((resolve, reject) => {
-      axios.get("http://localhost:8081/formula/get/all_recipe_type")
-        .then(resJson => {
-          this.setState({
-            recipeTypes: resJson.data.data
+      };
+    
+      getDiet() {
+        return new Promise((resolve, reject) => {
+        axios.get("http://localhost:8081/formula/get/all_recipe_by_diet/" + this.state.dietId)
+            .then(resJson => {
+            let recipesByType = resJson.data.data.recipesByType;
+            this.state.recipeTypes.map(type => {
+              if (recipesByType[type.name] === undefined)
+                recipesByType[type.name] = [];
+            })
+            this.setState({
+              dietName: resJson.data.data.dietName,
+              recipesByType: recipesByType,
+            });
+            resolve(resJson.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
           })
-          this.initDiet();
-          resolve(resJson.data.data)
-        })
-        .catch(error => {
-          reject(error);
-        });
-    })
-  }
-
-  getRecipes() {
-    return new Promise((resolve, reject) => {
-      axios.get("http://localhost:8081/formula/get/all_recipe_by_type")
-        .then(resJson => {
-          this.setState({
-            recipes: resJson.data.data
+      };
+    
+      getRecipeTypes() {
+        return new Promise((resolve, reject) => {
+        axios.get("http://localhost:8081/formula/get/all_recipe_type")
+            .then(resJson => {
+              this.setState({
+                recipeTypes: resJson.data.data
+              })
+              this.initDiet();
+              resolve(resJson.data.data)
+            })
+            .catch(error => {
+              reject(error);
+            });
           })
-          resolve(resJson.data.data);
+      }
+    
+      getRecipes() {
+        return new Promise((resolve, reject) => {
+          axios.get("http://localhost:8081/formula/get/all_recipe_by_type")
+            .then(resJson => {
+                this.setState({
+                  recipes: resJson.data.data
+                })
+                resolve(resJson.data.data);
+            })
+            .catch(error => {
+                reject(error);
+            });
         })
-        .catch(error => {
-          reject(error);
-        });
-    })
-  }
+    }
 
   handleRecipeChange = (type, event, index) => {
-    if (event.target.value != "") {
+    if(event.target.value != "") {
       let i = event.target.value;
       let diet = this.state.diet;
-      if (diet[type].length == index) {
-        diet[type].push({
-          recipe: this.state.recipes[type][i].recipe,
-          recipeRatio: 0,
-        });
-      }
-      else {
-        diet[type][index].recipe = this.state.recipes[type][i].recipe;
-      }
+      diet[type][index].recipe = this.state.recipes[type][i].recipe;
       this.setState({
         ...this.state,
         currentRecipe: this.state.recipes[type][i].recipe,
@@ -195,6 +188,7 @@ class DietUpdate extends Component {
       });
     }
   }
+
   initDiet = () => {
     let diet = {};
     for (let i = 0; i < this.state.recipeTypes.length; i++) {
@@ -215,24 +209,25 @@ class DietUpdate extends Component {
       diet: diet,
     })
   }
+
   render() {
     const onFinish = values => {
       console.log(this.state.name);
       console.log('Received values of form:', values);
     };
     let leftWindow = <OverlapComponent topDistance={140} diet={this.state.diet} types={this.state.recipeTypes}>
-      <div>
-        <div>
-          <span>{this.state.currentRecipe.name}</span>
-        </div>
-        <div>
-          <span>{this.state.currentRecipe.moisture}</span>
-        </div>
-        <div>
-          <span>{this.state.currentRecipe.price}</span>
-        </div>
-      </div>
-    </OverlapComponent>;
+            <div>
+              <div>
+                <span>{this.state.currentRecipe.name}</span>
+              </div>
+              <div>
+                <span>{this.state.currentRecipe.moisture}</span>
+              </div>
+              <div>
+              <span>{this.state.currentRecipe.price}</span>
+              </div>
+            </div>
+          </OverlapComponent>;
 
     const { Option } = Select;
 
@@ -241,7 +236,6 @@ class DietUpdate extends Component {
       children.push(<Option key={"dog" + i}>{"dog" + i}</Option>);
     }
 
-    console.log(this.state);
     return (
       <div id="wrapper">
         <Sidebar></Sidebar>
@@ -275,7 +269,7 @@ class DietUpdate extends Component {
                     <Input addonBefore="Your diet's name:" defaultValue="diet's name" type="text" name="dietName"
                       value={this.state.dietName} onChange={this.handleInputChange} style={{ width: '345%' }} span={24} />
                     <Select
-                      addonBefore="Your diet's name:"
+                      addonbefore="Your diet's name:"
                       mode="multiple"
                       style={{ width: '345%' }}
                       placeholder="Please select"
@@ -319,7 +313,6 @@ class DietUpdate extends Component {
                                   {(fields, { add, remove }) => {
                                     var i = 0;
                                     if (Object.keys(this.state.recipesByType).length != 0 && this.state.recipesByType[typeName] != undefined && fields.length < this.state.recipesByType[typeName].length) {
-                                      console.log(this.state.recipesByType[typeName]);
                                       var currentTypeRecipes = this.state.recipesByType[typeName];
                                       currentTypeRecipes.map((recipe) => {
                                         add({ "recipe": recipe.index, "ratio": recipe.recipeRatio }, 0);
@@ -333,7 +326,7 @@ class DietUpdate extends Component {
                                               <Form.Item
                                                 {...field} name={[field.name, 'recipe']} fieldKey={[field.fieldKey, 'recipe']} required={true} rules={[{ required: true, message: 'Missing recipe' }]}
                                               >
-                                                <select class="custom-select" name="recipe" id={typeName} style={{ width: '100%' }} onChange={(event) => { this.handleRecipeChange(typeName, event, index) }}>
+                                                <select class="custom-select" name="recipe" id={typeName} style={{ width: '100%' }} onChange={(event) => {this.handleRecipeChange(typeName, event, index)}}>
                                                   <option value=""></option>
                                                   {this.state.recipes[typeName].map((recipe) => {
                                                     return (
@@ -349,7 +342,7 @@ class DietUpdate extends Component {
                                                 required={true}
                                               >
                                                 <input type="text" class="form-control" placeholder="ratio" aria-label="ratio" aria-describedby="basic-addon1"
-                                                  name="ratio" style={{ width: '100%' }} onChange={(event) => { this.handleRatioChange(typeName, event, index) }} />
+                                                  name="ratio" style={{ width: '100%' }} onChange={(event) => {this.handleRatioChange(typeName, event, index)}}/>
                                               </Form.Item>
                                             </Col>
                                             <Col span={1}>
@@ -357,18 +350,16 @@ class DietUpdate extends Component {
                                                 className="dynamic-delete-button" style={{ margin: '0 8px' }}
                                                 onClick={() => {
                                                   remove(field.name);
-                                                  if (this.state.recipesByType[typeName] != undefined) {
                                                     if (field.name < this.state.recipesByType[typeName].length) {
                                                       let newRecipes = this.state.recipesByType;
-                                                      newRecipes[typeName].splice(field.name);
+                                                      newRecipes[typeName].splice(field.name, 1);
                                                       this.setState({
                                                         recipesByType: newRecipes
                                                       });
                                                     }
-                                                  }
                                                   if (field.name < this.state.diet[typeName].length) {
                                                     let newDiet = this.state.diet;
-                                                    newDiet[typeName].splice(field.name);
+                                                    newDiet[typeName].splice(field.name, 1);
                                                     this.setState({
                                                       diet: newDiet
                                                     });
@@ -380,18 +371,29 @@ class DietUpdate extends Component {
                                             <Col span={1}>
                                               <EyeOutlined style={{ margin: '0 8px' }}
                                                 onClick={() => {
-
                                                   alert(Object.entries(field));
                                                   var newRecipes = this.state.recipesByType;
                                                   let targetId = newRecipes[typeName].splice(field.name)[0].recipe.id;
                                                   //window.location.replace("/recipeupdate/" + targetId);
-                                                }}
+                                                  }
+                                                }
                                               />
                                             </Col>
                                           </Row>
                                         ))}
                                         <Form.Item>
-                                          <Button type="dashed" onClick={() => { add(); }} style={{ width: '100%' }}>
+                                          <Button type="dashed" onClick={() => { 
+                                            add();
+                                            let diet = this.state.diet;
+                                            diet[typeName].push({
+                                              recipe: {},
+                                              recipeRatio: 0,
+                                            });
+                                            this.setState({
+                                              ...this.state,
+                                              diet: diet,
+                                            });
+                                          }} style={{ width: '100%' }}>
                                             <PlusOutlined /> Add field
                                       </Button>
                                         </Form.Item>

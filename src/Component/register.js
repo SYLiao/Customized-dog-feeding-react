@@ -15,9 +15,9 @@ class Register extends Component{
         nickname: "",
         email: "",
         note: "",
-        role: "",
+        role: 3,
         roles: [],
-        registered: false
+        registered: 0
     }
 
     componentDidMount(){
@@ -57,13 +57,6 @@ class Register extends Component{
 
     handleFormSubmit = event => {
         const { login, logout } = this.props;
-
-          this.setState({
-            ...this.state,
-            isSubmitting: true,
-            errorMessage: null
-          });
-
           if(this.state.password == this.state.password2){
             fetch("http://localhost:8081/user/register", {
             method: "post",
@@ -87,8 +80,7 @@ class Register extends Component{
             })  
             .then(resJson => {
               this.setState({
-                  ...this.state,
-                  registered: true
+                  registered: 1
               })
             })
             .catch(error => {
@@ -106,9 +98,9 @@ class Register extends Component{
         };
 
     render(){
-        let user = this.props.user;
-        if(this.state.registered){
-            return <Redirect to="/home"></Redirect>
+      console.log(this.state.registered);
+        if(this.state.registered === 1){
+            return (<Redirect to="/home"></Redirect>);
         }
 
         return(

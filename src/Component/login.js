@@ -3,14 +3,15 @@ import Topbar from './topbar';
 import Sidebar from './sidebar';
 import * as Action from "./store/Actions";
 import { connect } from "react-redux";
-import { Redirect } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
+import {Redirect} from 'react-router-dom';
 
 class Login extends Component{
 
     state = {
         username: "",
-        password: ""
+        password: "",
+        redirect: 0,
     }
 
     frontLogin = (type, action) => {
@@ -56,7 +57,9 @@ class Login extends Component{
               console.log(resJson)
               const decoded = jwt_decode(resJson.data.token)
               login(decoded.sub, resJson.data.token);
-            //   window.location.reload();
+              this.setState({
+                redirect: 1
+              })
             })
             .catch(error => {
                 console.log(error)
@@ -71,8 +74,13 @@ class Login extends Component{
     render(){
         let user = this.props.user;
         console.log(user);
-        if(this.props.isAuth){
-            return <Redirect to="/home"></Redirect>
+        // if(localStorage.getItem("user") != ""){
+        //     return <Redirect to="/home"></Redirect>
+        // }
+        if(localStorage.getItem("user") != null){
+          return(
+            <Redirect to="/home"></Redirect>
+          );
         }
 
         return(

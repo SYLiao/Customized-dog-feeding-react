@@ -4,8 +4,8 @@ import { Modal, Tabs, Table, Space, Button, Popconfirm, message } from 'antd';
 import { EyeOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { map } from 'jquery';
-
 const { confirm } = Modal;
+import '../setting/axiosSetting';
 
 class Diets extends Component {
     state = {
@@ -100,24 +100,13 @@ class Diets extends Component {
     }
 
     getDiets = () => {
-        fetch("http://localhost:8081/formula/get/all_diet", {
-            method: "get",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                if (res.ok) {
-                    return res.json();
-                }
-                throw res;
-            })
+        axios.get("http://localhost:8081/user/get_diet_user/")
             .then(resJson => {
                 console.log(resJson)
                 resJson.data.map((diet) => { diet.key = diet.dietId })
                 this.setState({
-                    diets: resJson.data,
-                    resultCode: resJson.resultCode,
+                    diets: resJson.data.data,
+                    resultCode: resJson.data.resultCode,
                     flag: 1
                 })
             })

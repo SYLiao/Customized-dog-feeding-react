@@ -3,6 +3,8 @@ import Sidebar from '../sidebar';
 import Topbar from '../topbar';
 import * as Action from "../store/Actions";
 import { connect } from "react-redux";
+import axios from 'axios';
+import '../setting/axiosSetting';
 
 class DogCreate extends Component{
     state = {
@@ -26,19 +28,12 @@ class DogCreate extends Component{
           ...this.state,
           [event.target.name]: event.target.value
         });
-        console.log(this.state)
+        console.log(this.state);
     };
 
     submitDog = event => {
-        var jwt = this.props.token;
         event.preventDefault();
-        fetch("http://localhost:8081/mer/customer/create/dog", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': "Bearer "+jwt
-          },
-          body: JSON.stringify({
+        axios.post("http://localhost:8081/mer/customer/create/dog", {
             name: this.state.name,
             breedName: this.state.breedName,
             age: this.state.age,
@@ -47,45 +42,19 @@ class DogCreate extends Component{
             activeLevelId: this.state.activeLevel,
             bodyConditionId: this.state.bodyCondition,
             weight: this.state.weight
-          })
+          
         })
           .then(res => {
-            if (res.ok) {
-              return res.json();
-            }
-            throw res;
+            console.log(res);
           })  
-          .then(
-            resJson => {
-              console.log(resJson)
-          })
-          .catch(error => {
-              console.log(error)
-            this.setState({
-              ...this.state,
-              isSubmitting: false,
-              errorMessage: error.message || error.statusText
-            });
-          });
       };
 
     getBreeds = () => {
-        fetch("http://localhost:8081/mer/customer/get/all_breed", {
-            method: "get",
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
-            .then(res => {
-              if (res.ok) {
-                return res.json();
-              }
-              throw res;
-            })  
+        axios.get("http://localhost:8081/mer/customer/get/all_breed")
             .then(resJson => {
                 console.log(resJson)
                 this.setState({
-                    breeds: resJson.data
+                    breeds: resJson.data.data
                 })
             })
             .catch(error => {
@@ -185,7 +154,7 @@ class DogCreate extends Component{
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Your dog's weight:</span>
                             </div>
-                            <input type="text" class="form-control" placeholder="dog's weight" aria-label="Username" aria-describedby="basic-addon1"
+                            <input type="text" class="form-control" placeholder="dog's weight" aria-describedby="basic-addon1"
                             name="weight" id="weight" onChange={this.handleInputChange}/>
                             </div>
 
@@ -204,10 +173,5 @@ class DogCreate extends Component{
         );
     }
 }
-const mapStateToProps = state => ({
-    isAuth: state.AuthReducer.isAuthenticated,
-    user: state.AuthReducer.user,
-    token: state.AuthReducer.token,
-  });
 
-export default connect(mapStateToProps,Action)(DogCreate);
+export default DogCreate;
