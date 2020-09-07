@@ -4,8 +4,9 @@ import { Modal, Tabs, Table, Space, Button, Popconfirm, message } from 'antd';
 import { EyeOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { map } from 'jquery';
-const { confirm } = Modal;
 import '../setting/axiosSetting';
+const { confirm } = Modal;
+
 
 class Diets extends Component {
     state = {
@@ -103,7 +104,7 @@ class Diets extends Component {
         axios.get("http://localhost:8081/user/get_diet_user/")
             .then(resJson => {
                 console.log(resJson)
-                resJson.data.map((diet) => { diet.key = diet.dietId })
+                resJson.data.data.map((diet) => { diet.key = diet.dietId })
                 this.setState({
                     diets: resJson.data.data,
                     resultCode: resJson.data.resultCode,

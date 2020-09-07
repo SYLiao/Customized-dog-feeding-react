@@ -37,7 +37,7 @@ class Sidebar extends Component {
                         </Menu.Item>
 
                         <Menu.Item key="/dietpage" icon={<PieChartOutlined />}>
-                            <span>Dies</span>
+                            <span>Diets</span>
                             <Link to="/dietpage" />
                         </Menu.Item>
 
