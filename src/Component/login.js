@@ -10,7 +10,8 @@ class Login extends Component{
 
     state = {
         username: "",
-        password: ""
+        password: "",
+        redirect: 0,
     }
 
     frontLogin = (type, action) => {
@@ -56,6 +57,9 @@ class Login extends Component{
               console.log(resJson)
               const decoded = jwt_decode(resJson.data.token)
               login(decoded.sub, resJson.data.token);
+              this.setState({
+                redirect: 1
+              })
             })
             .catch(error => {
                 console.log(error)
@@ -73,6 +77,11 @@ class Login extends Component{
         // if(localStorage.getItem("user") != ""){
         //     return <Redirect to="/home"></Redirect>
         // }
+        if(localStorage.getItem("user") != null){
+          return(
+            <Redirect to="/home"></Redirect>
+          );
+        }
 
         return(
             <div class="container">

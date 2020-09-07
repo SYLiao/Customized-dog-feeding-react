@@ -6,7 +6,7 @@ import * as Action from "./store/Actions";
 class Topbar extends Component{
 
     handleClick = () => {
-        this.props.dispatch(Action.login("1",  "2"))
+        localStorage.clear();
     }
 
     render(){
@@ -67,10 +67,4 @@ class Topbar extends Component{
     }
 }
 
-const mapStateToProps = state => ({
-    isAuth: state.AuthReducer.isAuthenticated,
-    user: state.AuthReducer.user,
-    token: state.AuthReducer.token,
-  });
-
-export default connect(mapStateToProps,Action)(Topbar);
+export default Topbar;
