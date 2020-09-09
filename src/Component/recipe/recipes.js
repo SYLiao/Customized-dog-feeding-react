@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Tabs, Table, Space, Button } from 'antd';
+import { Tabs, Table, Space, Button, Spin } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
@@ -55,12 +55,13 @@ class Recipes extends Component {
     state = {
         recipes: {},
         recipeTypes: [],
+        flag: 0
     }
 
     async componentDidMount() {
         try {
             await this.getRecipeTypes();
-            await this.getRecipes();
+            this.getRecipes();
         } catch (err) {
             alert(err);
         }
@@ -89,7 +90,8 @@ class Recipes extends Component {
                 .then(resJson => {
                     console.log(resJson.data.data);
                     this.setState({
-                        recipes: resJson.data.data
+                        recipes: resJson.data.data,
+                        flag: 1
                     })
                     resolve(resJson.data.data);
                 })
@@ -102,27 +104,54 @@ class Recipes extends Component {
     render() {
         let recipeTypes = this.state.recipeTypes;
         let recipes = this.state.recipes;
-        return (
-            <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">All recipes</h1>
-                <p class="mb-4">Here are all recipes in database.</p>
+        if (this.state.flag === 0) {
+            return (
+                <div class="container-fluid">
+                    <h1 class="h3 mb-2 text-gray-800">All recipes</h1>
+                    <p class="mb-4">Here are all recipes in database.</p>
 
-                <Tabs onChange={() => { }} type="card">
-                    {recipeTypes.map((type, index) => {
-                        var recipesData = recipes[type.name];
-                        return (
-                            <TabPane tab={type.name} key={index}>
-                                <Table
-                                    columns={columns}
-                                    dataSource={recipesData}
-                                    pagination={{ position: ["bottomCenter"] }}
-                                />
-                            </TabPane>)
-                    }
-                    )}
-                </Tabs>
-            </div>
-        )
+                    <Tabs onChange={() => { }} type="card">
+                        {recipeTypes.map((type, index) => {
+                            var recipesData = recipes[type.name];
+                            return (
+                                <TabPane tab={type.name} key={index}>
+                                    <Spin tip="Loading...">
+                                        <Table
+                                            columns={columns}
+                                            dataSource={recipesData}
+                                            pagination={{ position: ["bottomCenter"] }}
+                                        />
+                                    </Spin>
+                                </TabPane>
+                            )
+                        }
+                        )}
+                    </Tabs>
+                </div>
+            )
+        } else {
+            return (
+                <div class="container-fluid">
+                    <h1 class="h3 mb-2 text-gray-800">All recipes</h1>
+                    <p class="mb-4">Here are all recipes in database.</p>
+
+                    <Tabs onChange={() => { }} type="card">
+                        {recipeTypes.map((type, index) => {
+                            var recipesData = recipes[type.name];
+                            return (
+                                <TabPane tab={type.name} key={index}>
+                                    <Table
+                                        columns={columns}
+                                        dataSource={recipesData}
+                                        pagination={{ position: ["bottomCenter"] }}
+                                    />
+                                </TabPane>)
+                        }
+                        )}
+                    </Tabs>
+                </div>
+            )
+        }
     }
 
 }

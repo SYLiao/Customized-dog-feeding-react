@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Sidebar from '../sidebar';
 import Topbar from '../topbar';
-import { Form, Input, Button, Col, Row, Space, Divider, PageHeader, Option, Select, Alert } from 'antd';
+import { Form, Input, Button, Col, Row, Space, Divider, PageHeader, Option, Select, Alert, Card, InputNumber } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
 import $ from 'jquery';
 import OverlapComponent from './OverLap';
 import axios from 'axios';
-// import '../setting/axiosSetting';
+import '../setting/axiosSetting';
 
 const formItemLayout = {
   labelCol: {
@@ -26,149 +26,156 @@ const formItemLayoutWithOutLabel = {
 };
 
 class DietUpdate extends Component {
-    state = {
-        diet: {},
-        recipes: {},
-        dietId: this.props.match.params.id,
-        recipesByType: {},
-        dietName: "",
-        recipeTypes: [],
-        currentRecipe: {},
-        num: 3,
-    }
+  state = {
+    diet: {},
+    recipes: {},
+    dietId: this.props.match.params.id,
+    recipesByType: {},
+    dietName: "",
+    recipeTypes: [],
+    currentRecipe: {},
+    num: 3,
+  }
 
-    async componentDidMount(){
-      try{
-        let res = await this.getRecipes();
-        let res3 = await this.getDiet();
-        let res2 = await this.getRecipeTypes();
-      } catch(err){
-        alert(err);
+  async componentDidMount() {
+    try {
+      let res = await this.getRecipes();
+      let res3 = await this.getDiet();
+      let res2 = await this.getRecipeTypes();
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  handleInputChange = event => {
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  submitDiet = (event) => {
+    console.log(this.state.name);
+    console.log('Received values of form:', event);
+
+    let IDs = [];
+    let ratios = [];
+    for (let i = 0; i < this.state.recipeTypes.length; i++) {
+      let typeName = this.state.recipeTypes[i].name;
+      if (event[typeName] != undefined && event[typeName].length != 0) {
+        for (let j = 0; j < event[typeName].length; j++) {
+          console.log(event[typeName][j].recipe)
+          console.log(event[typeName][j].recipe)
+          IDs.push(this.state.recipes[typeName][event[typeName][j].recipe].recipe.id);
+          ratios.push(event[typeName][j]['ratio']);
+        }
       }
     }
 
-    handleInputChange = event => {
+    fetch("http://localhost:8081/formula/update/diet/" + this.state.dietId, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        dietName: this.state.dietName,
+        recipeIDs: IDs,
+        recipeRatios: ratios,
+      })
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then(
+        resJson => {
+          console.log(resJson)
+          if (resJson.resultCode >= 300) {
+            return (
+              <Alert
+                message="Error"
+                description="This is an error message about copywriting."
+                type="error"
+                showIcon
+                closable
+              />
+            )
+          }
+        })
+      .catch(error => {
+        console.log(error)
         this.setState({
           ...this.state,
-          [event.target.name]: event.target.value
+          isSubmitting: false,
+          errorMessage: error.message || error.statusText
         });
-      };
-    
-      submitDiet = event => {
-        console.log(this.state.name);
-        console.log('Received values of form:', event);
-        let IDs = [];
-        let ratios = [];
-        for (let i = 0; i < this.state.recipeTypes.length; i++) {
-          let typeName = this.state.recipeTypes[i].name;
-          if (event[typeName] != undefined && event[typeName].length != 0) {
-            for (let j = 0; j < event[typeName].length; j++) {
-              IDs.push(this.state.recipes[typeName][event[typeName][j]['recipe']].recipe.id);
-              ratios.push(event[typeName][j]['ratio']);
-            }
-          }
-        }
+      });
+  };
 
-        fetch("http://localhost:8081/formula/update/diet/" + this.state.dietId, {
-          method: "put",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            dietName: this.state.dietName,
-            recipeIDs: IDs,
-            recipeRatios: ratios,
+  getDiet() {
+    return new Promise((resolve, reject) => {
+      axios.get("http://localhost:8081/formula/get/all_recipe_by_diet/" + this.state.dietId)
+        .then(resJson => {
+          console.log(resJson)
+          let recipesByType = resJson.data.data.recipesByType;
+          this.state.recipeTypes.map(type => {
+            if (recipesByType[type.name] === undefined)
+              recipesByType[type.name] = [];
           })
-        })
-          .then(res => {
-            if (res.ok) {
-              return res.json();
-            }
-            throw res;
-          })  
-          .then(
-            resJson => {
-              console.log(resJson)
-              if (resJson.resultCode >= 300) {
-                return (
-                  <Alert
-                    message="Error"
-                    description="This is an error message about copywriting."
-                    type="error"
-                    showIcon
-                    closable
-                  />
-                )
-              }
-          })
-          .catch(error => {
-              console.log(error)
-            this.setState({
-              ...this.state,
-              isSubmitting: false,
-              errorMessage: error.message || error.statusText
-            });
+          this.setState({
+            dietName: resJson.data.data.dietName,
+            recipesByType: recipesByType,
           });
-      };
-    
-      getDiet() {
-        return new Promise((resolve, reject) => {
-        axios.get("http://localhost:8081/formula/get/all_recipe_by_diet/" + this.state.dietId)
-            .then(resJson => {
-            let recipesByType = resJson.data.data.recipesByType;
-            this.state.recipeTypes.map(type => {
-              if (recipesByType[type.name] === undefined)
-                recipesByType[type.name] = [];
-            })
-            this.setState({
-              dietName: resJson.data.data.dietName,
-              recipesByType: recipesByType,
-            });
-            resolve(resJson.data.data);
-            })
-            .catch(error => {
-                console.log(error);
-                reject(error);
-            });
-          })
-      };
-    
-      getRecipeTypes() {
-        return new Promise((resolve, reject) => {
-        axios.get("http://localhost:8081/formula/get/all_recipe_type")
-            .then(resJson => {
-              this.setState({
-                recipeTypes: resJson.data.data
-              })
-              this.initDiet();
-              resolve(resJson.data.data)
-            })
-            .catch(error => {
-              reject(error);
-            });
-          })
-      }
-    
-      getRecipes() {
-        return new Promise((resolve, reject) => {
-          axios.get("http://localhost:8081/formula/get/all_recipe_by_type")
-            .then(resJson => {
-                this.setState({
-                  recipes: resJson.data.data
-                })
-                resolve(resJson.data.data);
-            })
-            .catch(error => {
-                reject(error);
-            });
+          resolve(resJson.data.data);
         })
-    }
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    })
+  };
 
-  handleRecipeChange = (type, event, index) => {
-    if(event.target.value != "") {
-      let i = event.target.value;
+  getRecipeTypes() {
+    return new Promise((resolve, reject) => {
+      axios.get("http://localhost:8081/formula/get/all_recipe_type")
+        .then(resJson => {
+          this.setState({
+            recipeTypes: resJson.data.data
+          })
+          this.initDiet();
+          resolve(resJson.data.data)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    })
+  }
+
+  getRecipes() {
+    return new Promise((resolve, reject) => {
+      axios.get("http://localhost:8081/formula/get/all_recipe_by_type")
+        .then(resJson => {
+          this.setState({
+            recipes: resJson.data.data
+          })
+          resolve(resJson.data.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    })
+  }
+
+  handleRecipeChange = (type, value, index) => {
+    console.log(value == "");
+    if (value == 0 || value != "") {
+      let i = value;
+      console.log(i);
       let diet = this.state.diet;
       diet[type][index].recipe = this.state.recipes[type][i].recipe;
+      console.log(this.state.recipes[type][i].recipe)
       this.setState({
         ...this.state,
         currentRecipe: this.state.recipes[type][i].recipe,
@@ -177,9 +184,9 @@ class DietUpdate extends Component {
     }
   }
 
-  handleRatioChange = (type, event, index) => {
-    if (event.target.value != "") {
-      let ratio = event.target.value;
+  handleRatioChange = (type, value, index) => {
+    if (value != "") {
+      let ratio = value;
       let diet = this.state.diet;
       diet[type][index].recipeRatio = ratio;
       this.setState({
@@ -215,26 +222,17 @@ class DietUpdate extends Component {
       console.log(this.state.name);
       console.log('Received values of form:', values);
     };
-    let leftWindow = <OverlapComponent topDistance={140} diet={this.state.diet} types={this.state.recipeTypes}>
-            <div>
-              <div>
-                <span>{this.state.currentRecipe.name}</span>
-              </div>
-              <div>
-                <span>{this.state.currentRecipe.moisture}</span>
-              </div>
-              <div>
-              <span>{this.state.currentRecipe.price}</span>
-              </div>
-            </div>
-          </OverlapComponent>;
+    let resultDisplay =
+      (<OverlapComponent
+
+        currentRecipe={this.state.currentRecipe}
+        topDistance={300}
+        diet={this.state.diet}
+        types={this.state.recipeTypes}>
+
+      </OverlapComponent>)
 
     const { Option } = Select;
-
-    const children = [];
-    for (let i = 10; i < 36; i++) {
-      children.push(<Option key={"dog" + i}>{"dog" + i}</Option>);
-    }
 
     return (
       <div id="wrapper">
@@ -242,47 +240,25 @@ class DietUpdate extends Component {
         <div id="content-wrapper" class="d-flex flex-column">
           <Topbar></Topbar>
           <div class="container-fluid">
-            <div className="site-page-header-ghost-wrapper">
+            <Form name="dynamic_form_item" onFinish={this.submitDiet}>
+
               <PageHeader
                 ghost={false}
                 onBack={() => window.history.back()}
-                title="Update Recipe"
+                title="Update Diet"
                 subTitle="view and edit saved recipe"
-                extra={[
-                  <Button>Edit</Button>,
-                  <Button type="primary"> Submit</Button>,
-                ]}
               >
-              </PageHeader>
-            </div>
-
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-              <h1 class="h3 mb-0 text-gray-800"></h1>
-            </div>
-
-            <Form name="dynamic_form_item" onFinish={this.submitDiet}>
-
-              <Row gutter={[8, 16]}>
                 <div style={{ marginBottom: 8, marginLeft: 8, width: "100%" }}>
-
-                  <Space direction="vertical" span={24}>
+                  <Space direction="horizontal" span={24}>
                     <Input addonBefore="Your diet's name:" defaultValue="diet's name" type="text" name="dietName"
-                      value={this.state.dietName} onChange={this.handleInputChange} style={{ width: '345%' }} span={24} />
-                    <Select
-                      addonbefore="Your diet's name:"
-                      mode="multiple"
-                      style={{ width: '345%' }}
-                      placeholder="Please select"
-                      defaultValue={['dog1', 'dog12']}
-                      onChange={() => {
-
-                      }}
-                    >
-                      {children}
-                    </Select>
+                      value={this.state.dietName} onChange={this.handleInputChange} span={20} />
+                    <Button>Edit</Button>
+                    <Button type="primary"> Submit</Button>
                   </Space>
                 </div>
+              </PageHeader>
 
+              <Row gutter={[8, 16]}>
                 {/* <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Your diet's name:</span>
@@ -300,63 +276,88 @@ class DietUpdate extends Component {
                         if (index % 2 === count) {
                           return (
                             <Col span={24}>
-                              <div class="card">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                  <h5 class="m-0 font-weight-bold text-primary">{typeName} recipes</h5>
-                                  <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                  </div>
-                                </div>
+                              <Card title={`${typeName} recipes`} type="inner" span={24} style={{ marginTop: 8 }}>
                                 <Form.List name={typeName}>
                                   {(fields, { add, remove }) => {
                                     var i = 0;
                                     if (Object.keys(this.state.recipesByType).length != 0 && this.state.recipesByType[typeName] != undefined && fields.length < this.state.recipesByType[typeName].length) {
                                       var currentTypeRecipes = this.state.recipesByType[typeName];
+                                      console.log(currentTypeRecipes)
                                       currentTypeRecipes.map((recipe) => {
                                         add({ "recipe": recipe.index, "ratio": recipe.recipeRatio }, 0);
                                       })
                                     }
                                     return (
                                       <div class="card-body">
-                                        {fields.map((field, index) => (
-                                          <Row span={11} gutter={[8, 0]}>
+                                        {fields.map((field, fieldindex) => (
+                                          <Row span={24} gutter={[10, 0]}>
                                             <Col span={11}>
                                               <Form.Item
                                                 {...field} name={[field.name, 'recipe']} fieldKey={[field.fieldKey, 'recipe']} required={true} rules={[{ required: true, message: 'Missing recipe' }]}
                                               >
-                                                <select class="custom-select" name="recipe" id={typeName} style={{ width: '100%' }} onChange={(event) => {this.handleRecipeChange(typeName, event, index)}}>
-                                                  <option value=""></option>
+                                                <Select name="recipe" id={typeName} style={{ width: '100%' }} onChange={(value) => { this.handleRecipeChange(typeName, value, fieldindex) }}>                                                  <Option value=""></Option>
                                                   {this.state.recipes[typeName].map((recipe) => {
+                                                    console.log(recipe)
                                                     return (
-                                                      <option value={recipe.index}>{recipe.recipe.name}</option>
+                                                      <Option value={recipe.index}> {recipe.recipe.name}</Option>
                                                     );
                                                   })}
-                                                </select>
+                                                </Select>
+
                                               </Form.Item>
                                             </Col>
-                                            <Col span={10}>
+                                            <Col span={11}>
                                               <Form.Item
-                                                {...field} name={[field.name, "ratio"]} fieldKey={[field.fieldKey, "ratio"]} rules={[{ required: true, message: 'Missing ratio' }]}
+                                                {...field} name={[field.name, "ratio"]} fieldKey={[field.fieldKey, "ratio"]} required={true}
+                                                rules={[
+                                                  { required: true, message: 'Missing ratio' },
+                                                  ({ getFieldValue }) => ({
+                                                    validator(rule, value) {
+                                                      var ratioSum  = 0;
+                                                      console.log(getFieldValue()[typeName]);
+                                                      getFieldValue()[typeName].forEach(element => {
+                                                        if (element != undefined) {
+                                                          ratioSum += element.ratio;
+                                                          console.log(element);
+                                                          console.log(element.ratio);
+                                                          console.log(ratioSum);
+                                                        }
+                                                      });
+
+                                                      if (ratioSum == 100) {
+                                                        return Promise.resolve();
+                                                      }
+                                                      return Promise.reject('Sum not equal to 100%'); 
+                                                    },
+                                                  }),]}
+                                                validateFirst={true}
+                                                validateTrigger={"onFinish"}
                                                 required={true}
                                               >
-                                                <input type="text" class="form-control" placeholder="ratio" aria-label="ratio" aria-describedby="basic-addon1"
-                                                  name="ratio" style={{ width: '100%' }} onChange={(event) => {this.handleRatioChange(typeName, event, index)}}/>
+                                                <InputNumber
+                                                  type="text"
+                                                  min={0}
+                                                  max={100}
+                                                  formatter={value => `${value}%`}
+                                                  parser={value => value.replace('%', '')}
+                                                  name="ratio"
+                                                  style={{ width: '100%' }}
+                                                  onChange={(value) => { this.handleRatioChange(typeName, value, fieldindex) }} />
+
                                               </Form.Item>
                                             </Col>
-                                            <Col span={1}>
+                                            <Col span={2}>
                                               <MinusCircleOutlined
-                                                className="dynamic-delete-button" style={{ margin: '0 8px' }}
+                                                className="dynamic-delete-button"
                                                 onClick={() => {
                                                   remove(field.name);
-                                                    if (field.name < this.state.recipesByType[typeName].length) {
-                                                      let newRecipes = this.state.recipesByType;
-                                                      newRecipes[typeName].splice(field.name, 1);
-                                                      this.setState({
-                                                        recipesByType: newRecipes
-                                                      });
-                                                    }
+                                                  if (field.name < this.state.recipesByType[typeName].length) {
+                                                    let newRecipes = this.state.recipesByType;
+                                                    newRecipes[typeName].splice(field.name, 1);
+                                                    this.setState({
+                                                      recipesByType: newRecipes
+                                                    });
+                                                  }
                                                   if (field.name < this.state.diet[typeName].length) {
                                                     let newDiet = this.state.diet;
                                                     newDiet[typeName].splice(field.name, 1);
@@ -368,21 +369,21 @@ class DietUpdate extends Component {
                                                 }
                                               />
                                             </Col>
-                                            <Col span={1}>
+                                            {/* <Col span={1}>
                                               <EyeOutlined style={{ margin: '0 8px' }}
                                                 onClick={() => {
                                                   alert(Object.entries(field));
                                                   var newRecipes = this.state.recipesByType;
                                                   let targetId = newRecipes[typeName].splice(field.name)[0].recipe.id;
                                                   //window.location.replace("/recipeupdate/" + targetId);
-                                                  }
+                                                }
                                                 }
                                               />
-                                            </Col>
+                                            </Col> */}
                                           </Row>
                                         ))}
                                         <Form.Item>
-                                          <Button type="dashed" onClick={() => { 
+                                          <Button type="dashed" onClick={() => {
                                             add();
                                             let diet = this.state.diet;
                                             diet[typeName].push({
@@ -401,7 +402,7 @@ class DietUpdate extends Component {
                                     );
                                   }}
                                 </Form.List>
-                              </div>
+                              </Card>
                             </Col>
                           );
                         }
@@ -410,15 +411,15 @@ class DietUpdate extends Component {
                   )
                 })
                 }
-                <Col span={8}>
-                  <Divider orientation="left">Preview</Divider>
+                <Col span={8} style={{ marginTop: 16 }}>
+                  {/* <Divider orientation="left">Preview</Divider> */}
+                  {resultDisplay}
                 </Col>
               </Row>
               <Form.Item>
                 <Button type="primary" htmlType="submit" plain="true">Submit</Button>
               </Form.Item>
             </Form>
-            {leftWindow}
           </div>
         </div>
       </div>
