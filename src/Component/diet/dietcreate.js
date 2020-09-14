@@ -6,6 +6,8 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import $ from 'jquery';
 import OverlapComponent from './OverLap';
 import axios from 'axios';
+import '../setting/axiosSetting';
+import { Redirect } from 'react-router';
 
 const formItemLayout = {
   labelCol: {
@@ -68,27 +70,20 @@ class DietCreate extends Component{
           recipeIDs: IDs,
           recipeRatios: ratios,
         });
-        fetch("http://localhost:8081/formula/create/diet", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
+        axios.post("http://localhost:8081/formula/create/diet", 
+          {
             dietName: this.state.name,
             recipeIDs: this.state.recipeIDs,
             recipeRatios: this.state.recipeRatios,
           })
-        })
-          .then(res => {
-            if (res.ok) {
-              return res.json();
-            }
-            throw res;
-          })  
           .then(
             resJson => {
-              console.log(resJson)
-              this.updateDietToDog(resJson.data.id);
+              if(this.state.dogId != 0){
+                this.updateDietToDog(resJson.data.id);
+              }
+              else{
+                window.location.replace("/dietpage");
+              }
           })
           .catch(error => {
               console.log(error)
@@ -97,15 +92,13 @@ class DietCreate extends Component{
               isSubmitting: false,
               errorMessage: error.message || error.statusText
             });
-          });
-      };
+          })
+      }
 
       updateDietToDog(dietId){
         axios.put("http://localhost:8081/mer/customer/update/dogDiet/" + this.state.dogId + '/' + dietId)
         .then(resJson => {
-            this.setState({
-                flag: 1,
-            })
+          window.location.replace("/dogupdate/" + this.state.dogId);
         })
         .catch(error => {
             console.log(error)
@@ -197,6 +190,7 @@ class DietCreate extends Component{
   }
 
     render(){
+      
         const onFinish = values => {
           console.log(this.state.name);
           for(let i = 0; i < this.state.recipeTypes.length; i++){
