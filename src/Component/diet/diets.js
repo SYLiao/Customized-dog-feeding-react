@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Modal, Tabs, Table, Space, Button, Popconfirm, message } from 'antd';
+import { Modal, Tabs, Table, Space, Button, Popconfirm, message, Skeleton, Spin } from 'antd';
 import { EyeOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { map } from 'jquery';
@@ -137,14 +137,14 @@ class Diets extends Component {
                         })
                     })
                 },
-                onCancel() {},
+                onCancel() { },
             })
         } else {
             confirm({
                 title: `请选择要删除的食谱`,
                 icon: <ExclamationCircleOutlined />,
                 content: ``,
-                onCancel() {},
+                onCancel() { },
             })
         }
 
@@ -169,8 +169,31 @@ class Diets extends Component {
         };
 
         if (this.state.flag === 0) {
+            /*             return (
+                            <Skeleton active />
+                        ) */
             return (
-                <h1>test</h1>
+                <div class="container-fluid">
+                    <h1 class="h3 mb-2 text-gray-800">All diets</h1>
+                    <p class="mb-4">Here are all diets in database.</p>
+                    <div style={{ marginBottom: 16 }}>
+                        <Space>
+                            <Button type="primary" href="/dietcreate/0">
+                                Create new diet
+                        </Button>
+                            <Button type="primary" onClick={this.multipleDeletion} danger>
+                                Delete selected
+                        </Button>
+                        </Space>
+                    </div>
+                    <Spin tip="Loading...">
+                        <Table
+                            columns={this.columns}
+                            pagination={{ position: ["bottomCenter"] }}
+                            rowSelection={rowSelection}
+                        />
+                    </Spin>
+                </div>
             )
         }
         else {
@@ -180,7 +203,8 @@ class Diets extends Component {
                     <p class="mb-4">Here are all diets in database.</p>
                     <div style={{ marginBottom: 16 }}>
                         <Space>
-                            <Button type="primary" href={"/dietcreate/" + "0"}>
+                            <Button type="primary" href="/dietcreate/0">
+              
                                 Create new diet
                         </Button>
                             <Button type="primary" onClick={this.multipleDeletion} danger>
