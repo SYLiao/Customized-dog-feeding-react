@@ -8,6 +8,7 @@ import DogCreate from './Component/dog/dogcreate';
 import DogUpdate from './Component/dog/dogupdate';
 
 import DietChoose from './Component/diet/dietChoose';
+import DietChooseCustomer from './Component/diet/dietChooseCustomer';
 import DietPage from './Component/diet/dietpage';
 import DietCreate from './Component/diet/dietcreate';
 import DietUpdate from './Component/diet/dietupdate';
@@ -15,6 +16,7 @@ import RecipePage from './Component/recipe/recipepage';
 import RecipeUpdate from './Component/recipe/recipeupdate';
 import IngredientPage from './Component/ingredient/ingredientpage';
 import DietDiagram from './Component/diet/dietdiagram';
+import DietCreateCustomer from './Component/diet/dietChooseCustomer';
 import NotFound from './Component/notFound';
 
 // import test2 from './Component/tagComponent';
@@ -37,11 +39,15 @@ class App extends Component{
             <Route path="/diet_choose/:id" exact component={DietChoose}></Route>
             <Route path="/dietpage" exact component={DietPage}></Route>
             <Route path="/dietcreate/:id" exact component={DietCreate}></Route>
+            <Route path="/dietcreateCustomer/:id" exact component={DietCreateCustomer}></Route>
             <Route path="/dietupdate/:id" exact component={DietUpdate}></Route>
             <Route path="/recipepage" exact component={RecipePage}></Route>
             <Route path="/recipeupdate/:id" exact component={RecipeUpdate}></Route>
             <Route path="/ingredientpage" exact component={IngredientPage}></Route>
             <Route path="/not-found" exact component={NotFound}></Route>
+
+            <Route path="/test" exact component={DietChooseCustomer}></Route>
+
             <Redirect to ="/not-found" />
           </Switch>
       </React.Fragment>

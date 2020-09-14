@@ -204,6 +204,7 @@ class Diets extends Component {
                     <div style={{ marginBottom: 16 }}>
                         <Space>
                             <Button type="primary" href="/dietcreate/0">
+              
                                 Create new diet
                         </Button>
                             <Button type="primary" onClick={this.multipleDeletion} danger>

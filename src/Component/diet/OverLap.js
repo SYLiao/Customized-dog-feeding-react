@@ -1,19 +1,29 @@
-
 import React from "react"
 import { Link } from 'react-router-dom';
-import { Card, Descriptions, Button, Empty } from "antd"
+import { Card, Descriptions, Button, Empty } from "antd";
+import DietDiagram from './dietdiagram';
 
 class OverLap extends React.Component {
+
+	state = {
+		dietRatio: {},
+		currentRecipe: this.props.currentRecipe,
+		diet: this.props.diet,
+		types: this.props.types
+	}
+
 	render() {
 		const { currentRecipe, diet, types } = this.props
 		let price = 0, moisture = 0, protein = 0, fat = 0, fiber = 0, ash = 0;
+
 		if (types.length != 0) {
 			for (let i = 0; i < types.length; i++) {
 				let type = types[i].name;
 				let recipes = diet[type];
 				if (recipes != undefined) {
-					for (let j = 0; j < recipes.length; j++) {
-						let recipe = recipes[j];
+					for(let i = 0; i < recipes.length; i+=1){
+						let recipe = recipes[i];
+
 						if (Object.keys(recipe.recipe).length != 0) {
 							protein += recipe.recipe.crudeProtein * recipe.recipeRatio / 100;
 							moisture += recipe.recipe.moisture * recipe.recipeRatio / 100;
@@ -22,7 +32,7 @@ class OverLap extends React.Component {
 							fiber += recipe.recipe.crudeFiber * recipe.recipeRatio / 100;
 							ash += recipe.recipe.ash * recipe.recipeRatio / 100;
 						}
-					}
+					}	
 				}
 			}
 		}
@@ -50,6 +60,13 @@ class OverLap extends React.Component {
 					<Card type="inner" title="Current Recipe" extra={<Link to={`/recipeupdate/${currentRecipe.id}`}>More</Link>}>
 						{recipeView}
 					</Card>
+
+					{/* <Card type="inner" title="营养需求参考">
+						<DietDiagram data={{
+							protein: protein,
+							fat: fat
+						}}></DietDiagram>
+					</Card> */}
 
 					<Descriptions
 						bordered

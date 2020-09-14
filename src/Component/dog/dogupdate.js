@@ -108,7 +108,7 @@ class DogUpdate extends Component{
                 this.setState({
                     diets: resJson.data.data
                 })
-                console.log(this.state.diets);
+                console.log(resJson);
             })
             .catch(error => {
                 console.log(error)
@@ -233,13 +233,13 @@ class DogUpdate extends Component{
                                 subTitle="当前食谱"
                                 extra={[
                                     <Button key="2">
-                                        <Link to={'/diet_choose/' + this.state.dogId}>
+                                        <Link to={'/dietcreateCustomer/' + this.state.dogId}>
                                         选择其他食谱
                                         </Link>
                                     </Button>,
-                                    <Button key="1" type="primary">
-                                        <Link to={'/dietcreate/' + this.state.dogId}>创建你自己的食谱</Link>
-                                    </Button>,
+                                    // <Button key="1" type="primary">
+                                    //     <Link to={'/dietcreate/' + this.state.dogId}>创建你自己的食谱</Link>
+                                    // </Button>,
                                 ]}
                                 >
                                     {Object.keys(this.state.diets).length != 0 ? 

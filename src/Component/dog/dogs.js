@@ -248,7 +248,6 @@ class Dogs extends Component {
         <div class="container-fluid"> 
             <h1 class="h3 mb-2 text-gray-800">All dogs</h1>
             <p class="mb-4">Here are all dogs in database.</p>
-
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
@@ -295,10 +294,4 @@ class Dogs extends Component {
     ) */
     }
 }
-const mapStateToProps = state => ({
-    isAuth: state.AuthReducer.isAuthenticated,
-    user: state.AuthReducer.user,
-    token: state.AuthReducer.token,
-});
-
-export default connect(mapStateToProps, Action)(Dogs);
+export default Dogs;
