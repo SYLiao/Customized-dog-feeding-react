@@ -197,11 +197,13 @@ class DietUpdateCustomer extends React.Component{
             priceIndex = this.state.ratioMap[this.state.recipesByType['Protein'][0].recipeRatio];
         }
 
-        let init = {};
+        let init = {
+        };
         for(let i = 0; i < this.state.recipeTypes.length; i++){
             let type = this.state.recipeTypes[i].name;
             if(Object.keys(this.state.recipesByType).length != 0 && this.state.recipesByType[type] != undefined){
-                init[type] = this.state.recipesByType[type][0].index;
+                init["recipe" + type] = {};
+                init["recipe" + type][type] = this.state.recipesByType[type][0].index;
             }
         }
         console.log(this.state.recipeTypes);
@@ -249,22 +251,15 @@ class DietUpdateCustomer extends React.Component{
                                             <Col span={11}>
                                                 {typeName}
                                                 <Form.Item
-                                                name={typeName} required={true} rules={[{ required: true, message: 'Missing recipe' }]} 
+                                                name={"recipe" + typeName} required={true} rules={[{ required: true, message: 'Missing recipe' }]} 
                                               >
                                                 {this.state.ratios[priceIndex][index] == 0 ? <p>N/A</p> : 
-                                                <Select name="recipe" id={typeName} style={{ width: '100%' }} onChange={(value) => {this.handleRecipeChange(typeName, value, index)}} required={true}>
+                                                <Select name={typeName} id={typeName} style={{ width: '100%' }} onChange={(value) => {this.handleRecipeChange(typeName, value, index)}} required={true} 
+                                                defaultValue={this.state.recipesByType[typeName].length != 0 ? this.state.recipesByType[typeName][0].index : 0}>
                                                   {this.state.recipes[typeName].map((recipe, recipeIndex) => {
-                                                      if(this.state.recipesByType[typeName].length != 0 && this.state.recipesByType[typeName][0].index == recipeIndex){
-                                                        return (
-                                                            <Option value={recipe.index} selected={true}> {recipe.recipe.name} </Option>
-                                                          );
-                                                      }
-                                                      else{
                                                           return(
                                                             <Option value={recipe.index}> {recipe.recipe.name}</Option>
                                                           );
-                                                      }
-                                                    
                                                   })}
                                                 </Select>}
                                                 </Form.Item>
