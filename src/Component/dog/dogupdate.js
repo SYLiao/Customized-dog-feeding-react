@@ -71,6 +71,25 @@ class DogUpdate extends Component{
             });
     }
 
+    // chooseDiet(){
+    //     axios.put("http://localhost:8081/mer/customer/update/dog/" + this.state.dogId, {
+    //       name: this.state.name,
+    //       breedName: this.state.breedName,
+    //       age: this.state.age,
+    //       gender: this.state.gender,
+    //       lifePhaseId: this.state.lifePhase,
+    //       activeLevelId: this.state.activeLevel,
+    //       bodyConditionId: this.state.bodyCondition,
+    //       weight: this.state.weight
+          
+    //     })
+    //       .then(res => {
+    //         console.log(res);
+    //         window.location.replace('/dietcreateCustomer/' + this.state.dogId);
+    //       })  
+        
+    // }
+
       submitDog = event => {
         event.preventDefault();
         axios.put("http://localhost:8081/mer/customer/update/dog/" + this.state.dogId, {
@@ -118,11 +137,13 @@ class DogUpdate extends Component{
     render(){
         let name = "No diet."
         let text = "No diet."
+        let dietId = 0;
         if(Object.keys(this.state.diets).length != 0){
             name = this.state.diets[0].name;
             text = ` kcalPerCup: ${this.state.diets[0].kcalPerCup}
                      kcalPerKg: ${this.state.diets[0].kcalPerKg}
                      compositePrice: ${this.state.diets[0].compositePrice} `;
+            dietId = this.state.diets[0].id;
         }
         return(
             <div id="wrapper">
@@ -237,9 +258,9 @@ class DogUpdate extends Component{
                                         选择其他食谱
                                         </Link>
                                     </Button>,
-                                    // <Button key="1" type="primary">
-                                    //     <Link to={'/dietcreate/' + this.state.dogId}>创建你自己的食谱</Link>
-                                    // </Button>,
+                                    <Button key="1" type="primary">
+                                        <Link to={'/dietupdateCustomer/' + this.state.dogId + '/' + dietId}>修改当前食谱</Link>
+                                    </Button>,
                                 ]}
                                 >
                                     {Object.keys(this.state.diets).length != 0 ? 

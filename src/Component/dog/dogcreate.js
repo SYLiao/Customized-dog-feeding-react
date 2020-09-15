@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import Sidebar from '../sidebar';
 import Topbar from '../topbar';
-import * as Action from "../store/Actions";
-import { connect } from "react-redux";
 import axios from 'axios';
 import '../setting/axiosSetting';
+import { Collapse, Button, PageHeader, Descriptions } from 'antd';
+import { Link } from 'react-router-dom';
+const { Panel } = Collapse;
 
 class DogCreate extends Component{
     state = {

@@ -8,9 +8,10 @@ import Topbar from '../topbar';
 import axios from 'axios';
 import '../setting/axiosSetting';
 
-class DietCreateCustomer extends React.Component{
+class DietUpdateCustomer extends React.Component{
     state = {
         dietName: "",
+        recipesByType: {},
         recipeTypes: [],
         currentRecipe: {},
         recipes: {},
@@ -19,33 +20,47 @@ class DietCreateCustomer extends React.Component{
             [60, 10, 0, 5, 4, 1],
             [40, 15, 0, 5, 4, 1],
         ],
+        ratioMap: {
+            75: 0,
+            60: 1,
+            40: 2,
+        },
         diet: {},
-        dogId: this.props.id,
+        dogId: this.props.match.params.id,
+        dietId: this.props.match.params.dietId,
     }
 
     async componentDidMount() {
         try {
-          let res = await this.getRecipes();
-          let res2 = await this.getRecipeTypes();
+            await this.getRecipes();
+            await this.getRecipeTypes();
         } catch (err) {
           alert(err);
         }
       }
 
-    getRecipes() {
+      getRecipes() {
         return new Promise((resolve, reject) => {
-          axios.get("http://localhost:8081/formula/get/all_recipe_by_type")
+          axios.get("http://localhost:8081/formula/get/all_recipes_and_diet/" + this.state.dietId)
             .then(resJson => {
-              this.setState({
-                recipes: resJson.data.data
+              let recipesByType = resJson.data.data.dietRecipeByType.recipesByType;
+              this.state.recipeTypes.map(type => {
+                if (recipesByType[type.name] === undefined)
+                  recipesByType[type.name] = [];
               })
-              resolve(resJson.data.data);
+              console.log(resJson);
+              this.setState({
+                dietName: resJson.data.data.dietRecipeByType.dietName,
+                recipesByType: recipesByType,
+                recipes: resJson.data.data.recipesByType
+              });
+                resolve(resJson.data.data);
             })
             .catch(error => {
-              reject(error);
+                reject(error);
             });
         })
-      }
+    }
 
     getRecipeTypes = () => {
         fetch("http://localhost:8081/formula/get/all_recipe_type", {
@@ -85,7 +100,7 @@ class DietCreateCustomer extends React.Component{
           diet[recipeType.name] = [];
           diet[recipeType.name].push({
             recipe: {},
-            recipeRatio: this.state.ratios[this.props.index][i],
+            recipeRatio: this.state.ratios[1][i],
           });
         }
         this.setState({
@@ -176,11 +191,25 @@ class DietCreateCustomer extends React.Component{
           </OverlapComponent>);
 
         const { Option } = Select;
-        let priceIndex = this.props.index;
+
+        let priceIndex = 1;
+        if(Object.keys(this.state.recipesByType).length != 0){
+            priceIndex = this.state.ratioMap[this.state.recipesByType['Protein'][0].recipeRatio];
+        }
+
+        let init = {};
+        for(let i = 0; i < this.state.recipeTypes.length; i++){
+            let type = this.state.recipeTypes[i].name;
+            if(Object.keys(this.state.recipesByType).length != 0 && this.state.recipesByType[type] != undefined){
+                init[type] = this.state.recipesByType[type][0].index;
+            }
+        }
+        console.log(this.state.recipeTypes);
+        console.log(init);
         
           return(
 <           div class="container-fluid">
-          <Form name="dynamic_form_item" onFinish={this.submitDiet}>
+          <Form name="dynamic_form_item" onFinish={this.submitDiet} initialValues={init}>
           <PageHeader
                 ghost={false}
                 onBack={() => window.history.back()}
@@ -219,14 +248,26 @@ class DietCreateCustomer extends React.Component{
                                 <Row span={24} gutter={[10, 0]}>
                                             <Col span={11}>
                                                 {typeName}
+                                                <Form.Item
+                                                name={typeName} required={true} rules={[{ required: true, message: 'Missing recipe' }]} 
+                                              >
                                                 {this.state.ratios[priceIndex][index] == 0 ? <p>N/A</p> : 
                                                 <Select name="recipe" id={typeName} style={{ width: '100%' }} onChange={(value) => {this.handleRecipeChange(typeName, value, index)}} required={true}>
-                                                  {this.state.recipes[typeName].map((recipe) => {
-                                                    return (
-                                                      <Option value={recipe.index}> {recipe.recipe.name} </Option>
-                                                    );
+                                                  {this.state.recipes[typeName].map((recipe, recipeIndex) => {
+                                                      if(this.state.recipesByType[typeName].length != 0 && this.state.recipesByType[typeName][0].index == recipeIndex){
+                                                        return (
+                                                            <Option value={recipe.index} selected={true}> {recipe.recipe.name} </Option>
+                                                          );
+                                                      }
+                                                      else{
+                                                          return(
+                                                            <Option value={recipe.index}> {recipe.recipe.name}</Option>
+                                                          );
+                                                      }
+                                                    
                                                   })}
                                                 </Select>}
+                                                </Form.Item>
                                             </Col>
                                             <Col span={11}>
                                             <Statistic title="Ratio" value={this.state.ratios[priceIndex][index] + "%"} />
@@ -266,4 +307,4 @@ class DietCreateCustomer extends React.Component{
     }
 
 }
-export default DietCreateCustomer;
+export default DietUpdateCustomer;

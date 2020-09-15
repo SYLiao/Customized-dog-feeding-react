@@ -17,6 +17,7 @@ import RecipeUpdate from './Component/recipe/recipeupdate';
 import IngredientPage from './Component/ingredient/ingredientpage';
 import DietDiagram from './Component/diet/dietdiagram';
 import DietCreateCustomer from './Component/diet/dietChooseCustomer';
+import DietUpdateCustomer from './Component/diet/dietupdateCustomer';
 import NotFound from './Component/notFound';
 
 // import test2 from './Component/tagComponent';
@@ -40,6 +41,7 @@ class App extends Component{
             <Route path="/dietpage" exact component={DietPage}></Route>
             <Route path="/dietcreate/:id" exact component={DietCreate}></Route>
             <Route path="/dietcreateCustomer/:id" exact component={DietCreateCustomer}></Route>
+            <Route path="/dietupdateCustomer/:id/:dietId" exact component={DietUpdateCustomer}></Route>
             <Route path="/dietupdate/:id" exact component={DietUpdate}></Route>
             <Route path="/recipepage" exact component={RecipePage}></Route>
             <Route path="/recipeupdate/:id" exact component={RecipeUpdate}></Route>

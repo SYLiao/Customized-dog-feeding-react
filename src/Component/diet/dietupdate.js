@@ -216,7 +216,6 @@ class DietUpdate extends Component {
 
         </OverlapComponent>);
 
-    console.log(this.state.diet);
 
     const { Option } = Select;
 

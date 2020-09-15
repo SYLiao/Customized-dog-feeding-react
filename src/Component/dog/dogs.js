@@ -106,7 +106,7 @@ class Dogs extends Component {
                                     onOk() {
                                         return new Promise((resolve, reject) => {
                                             setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                                            axios.delete("http://localhost:8081/mer/customer/delete/dog/" + record.dietId)
+                                            axios.delete("http://localhost:8081/mer/customer/delete/dog/" + record.dogId)
                                                 .then(resJson => {
                                                     console.log(resJson.data.data);
                                                     window.location.reload();

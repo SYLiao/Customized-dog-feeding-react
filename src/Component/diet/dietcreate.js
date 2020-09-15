@@ -6,9 +6,9 @@ import { MinusCircleOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icon
 import $ from 'jquery';
 import OverlapComponent from './OverLap';
 import axios from 'axios';
-const { Option } = Select;
 import '../setting/axiosSetting';
 import { Redirect } from 'react-router';
+const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
