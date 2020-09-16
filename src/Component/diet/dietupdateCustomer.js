@@ -16,10 +16,15 @@ class DietUpdateCustomer extends React.Component{
         currentRecipe: {},
         recipes: {},
         ratios: [
-            [75, 10, 5, 5, 4, 1],
-            [60, 10, 0, 5, 4, 1],
-            [40, 15, 0, 5, 4, 1],
+            [75, 5, 10, 5, 4, 1],
+            [60, 0, 10, 5, 4, 1],
+            [40, 0, 15, 5, 4, 1],
         ],
+        ratioSubmit: [
+          [75, 5, 20, 5, 4, 1],
+          [60, 10, 5, 4, 1],
+          [40, 15, 5, 4, 1],
+      ],
         ratioMap: {
             75: 0,
             60: 1,
@@ -107,6 +112,12 @@ class DietUpdateCustomer extends React.Component{
               });
             }
           }
+          else{
+            diet[recipeType.name].push({
+              recipe: {},
+              recipeRatio: 0,
+            });
+          }
         }
         this.setState({
           ...this.state,
@@ -137,7 +148,7 @@ class DietUpdateCustomer extends React.Component{
         }
         this.setState({
           recipeIDs: IDs,
-          recipeRatios: this.state.ratios[this.props.index],
+          recipeRatios: this.state.ratioSubmit[this.props.index],
         });
         axios.put("http://localhost:8081/formula/update/diet/" + this.state.dietId, 
           {
@@ -195,6 +206,7 @@ class DietUpdateCustomer extends React.Component{
 
         let priceIndex = 1;
         if(Object.keys(this.state.recipesByType).length != 0){
+          console.log(this.state.recipesByType);
             priceIndex = this.state.ratioMap[this.state.recipesByType['Protein'][0].recipeRatio];
         }
         
@@ -250,7 +262,7 @@ class DietUpdateCustomer extends React.Component{
                                               >
                                                 {this.state.ratios[priceIndex][index] == 0 ? <p>N/A</p> : 
                                                 <Select name={typeName} id={typeName} style={{ width: '100%' }} onChange={(value) => {this.handleRecipeChange(typeName, value, index)}} required={true} 
-                                                defaultValue={this.state.recipesByType[typeName].length != 0 ? this.state.recipesByType[typeName][0].index : 0}>
+                                                defaultValue={this.state.recipesByType[typeName] != undefined ? this.state.recipesByType[typeName][0].index : 0}>
                                                   {this.state.recipes[typeName].map((recipe, recipeIndex) => {
                                                           return(
                                                             <Option value={recipe.index}> {recipe.recipe.name}</Option>

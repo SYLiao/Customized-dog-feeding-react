@@ -6,6 +6,7 @@ import Register from './Component/register';
 import DogPage from './Component/dog/dogpage';
 import DogCreate from './Component/dog/dogcreate';
 import DogUpdate from './Component/dog/dogupdate';
+import BreedPage from './Component/dog/breedpage';
 
 import DietChoose from './Component/diet/dietChoose';
 import DietChooseCustomer from './Component/diet/dietChooseCustomer';
@@ -35,6 +36,7 @@ class App extends Component{
             <Route path="/login" exact render={props => <Login {...props}/>}></Route>
             <Route path="/register" exact render={props => <Register {...props}/>}></Route>
             <Route path="/dogpage" exact component={DogPage}></Route>
+            <Route path="/breedpage" exact component={BreedPage}></Route>
             <Route path="/dogcreate" exact component={DogCreate}></Route>
             <Route path="/dogupdate/:id" exact component={DogUpdate}></Route>
             <Route path="/diet_choose/:id" exact component={DietChoose}></Route>

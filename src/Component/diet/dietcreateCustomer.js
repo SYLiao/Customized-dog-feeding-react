@@ -15,10 +15,15 @@ class DietCreateCustomer extends React.Component{
         currentRecipe: {},
         recipes: {},
         ratios: [
-            [75, 10, 5, 5, 4, 1],
-            [60, 10, 0, 5, 4, 1],
-            [40, 15, 0, 5, 4, 1],
+            [75, 5, 20, 5, 4, 1],
+            [60, 0, 10, 5, 4, 1],
+            [40, 0, 15, 5, 4, 1],
         ],
+        ratioSubmit: [
+          [75, 5, 20, 5, 4, 1],
+          [60, 10, 5, 4, 1],
+          [40, 15, 5, 4, 1],
+      ],
         diet: {},
         dogId: this.props.id,
     }
@@ -116,8 +121,9 @@ class DietCreateCustomer extends React.Component{
         }
         this.setState({
           recipeIDs: IDs,
-          recipeRatios: this.state.ratios[this.props.index],
+          recipeRatios: this.state.ratioSubmit[this.props.index],
         });
+        console.log(this.state);
         axios.post("http://localhost:8081/formula/create/diet", 
           {
             dietName: this.state.dietName,
