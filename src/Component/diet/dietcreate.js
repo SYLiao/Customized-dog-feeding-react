@@ -6,9 +6,9 @@ import { MinusCircleOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icon
 import $ from 'jquery';
 import OverlapComponent from './OverLap';
 import axios from 'axios';
-const { Option } = Select;
 import '../setting/axiosSetting';
 import { Redirect } from 'react-router';
+const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
@@ -210,7 +210,6 @@ class DietCreate extends Component {
           types={this.state.recipeTypes}>
   
         </OverlapComponent>)
-      
       return (
         <div id="wrapper">
           <Sidebar></Sidebar>
@@ -241,6 +240,7 @@ class DietCreate extends Component {
                           {
                             this.state.recipeTypes.map((type, index1) => {
                               let typeName = type.name;
+                              let types = this.state.recipeTypes;
                               if (index1 % 2 === count) {
                                 return (
                                   <div key={index1}>
@@ -275,16 +275,15 @@ class DietCreate extends Component {
                                                         ({ getFieldValue }) => ({
                                                           validator(rule, value) {
                                                             var ratioSum  = 0;
-                                                            console.log(getFieldValue()[typeName]);
-                                                            getFieldValue()[typeName].forEach(element => {
-                                                              if (element != undefined) {
-                                                                ratioSum += element.ratio;
-                                                                console.log(element);
-                                                                console.log(element.ratio);
-                                                                console.log(ratioSum);
+                                                            types.map(tpname =>{
+                                                              if (getFieldValue()[tpname.name] != undefined) {
+                                                                getFieldValue()[tpname.name].forEach(element => {
+                                                                  if (element != undefined) {
+                                                                    ratioSum += element.ratio;
+                                                                  }
+                                                              })
                                                               }
                                                             });
-      
                                                             if (ratioSum == 100) {
                                                               return Promise.resolve();
                                                             }

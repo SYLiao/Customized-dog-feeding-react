@@ -216,7 +216,6 @@ class DietUpdate extends Component {
 
         </OverlapComponent>);
 
-    console.log(this.state.diet);
 
     const { Option } = Select;
 
@@ -258,6 +257,7 @@ class DietUpdate extends Component {
                     <Col span={8}>
                       {recipeTypes.map((type, index) => {
                         let typeName = type.name;
+                        let types = this.state.recipeTypes;
                         if (index % 2 === count) {
                           return (
                             <Col span={24}>
@@ -296,16 +296,15 @@ class DietUpdate extends Component {
                                                   ({ getFieldValue }) => ({
                                                     validator(rule, value) {
                                                       var ratioSum  = 0;
-                                                      console.log(getFieldValue()[typeName]);
-                                                      getFieldValue()[typeName].forEach(element => {
-                                                        if (element != undefined) {
-                                                          ratioSum += element.ratio;
-                                                          console.log(element);
-                                                          console.log(element.ratio);
-                                                          console.log(ratioSum);
+                                                      types.map(tpname =>{
+                                                        if (getFieldValue()[tpname.name] != undefined) {
+                                                          getFieldValue()[tpname.name].forEach(element => {
+                                                            if (element != undefined) {
+                                                              ratioSum += element.ratio;
+                                                            }
+                                                        })
                                                         }
                                                       });
-
                                                       if (ratioSum == 100) {
                                                         return Promise.resolve();
                                                       }
