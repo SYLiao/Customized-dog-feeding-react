@@ -98,12 +98,18 @@ class DietUpdateCustomer extends React.Component{
         for (let i = 0; i < this.state.recipeTypes.length; i++) {
           let recipeType = this.state.recipeTypes[i];
           diet[recipeType.name] = [];
-          diet[recipeType.name].push({
-            recipe: {},
-            recipeRatio: this.state.ratios[1][i],
-          });
+          let recipeInType = this.state.recipesByType[recipeType.name];
+          if (recipeInType != undefined) {
+            for (let j = 0; j < recipeInType.length; j++) {
+              diet[recipeType.name].push({
+                recipe: recipeInType[j].recipe,
+                recipeRatio: recipeInType[j].recipeRatio,
+              });
+            }
+          }
         }
         this.setState({
+          ...this.state,
           diet: diet,
         })
       }
@@ -133,7 +139,7 @@ class DietUpdateCustomer extends React.Component{
           recipeIDs: IDs,
           recipeRatios: this.state.ratios[this.props.index],
         });
-        axios.post("http://localhost:8081/formula/create/diet", 
+        axios.put("http://localhost:8081/formula/update/diet/" + this.state.dietId, 
           {
             dietName: this.state.dietName,
             recipeIDs: this.state.recipeIDs,
@@ -141,12 +147,7 @@ class DietUpdateCustomer extends React.Component{
           })
           .then(
             resJson => {
-              if(this.state.dogId != 0){
-                this.updateDietToDog(resJson.data.data.id);
-              }
-              else{
-                window.location.replace("/dietpage");
-              }
+                window.location.replace("/dogupdate/" + this.state.dogId);
           })
           .catch(error => {
               console.log(error)
@@ -196,22 +197,14 @@ class DietUpdateCustomer extends React.Component{
         if(Object.keys(this.state.recipesByType).length != 0){
             priceIndex = this.state.ratioMap[this.state.recipesByType['Protein'][0].recipeRatio];
         }
-
-        let init = {
-        };
-        for(let i = 0; i < this.state.recipeTypes.length; i++){
-            let type = this.state.recipeTypes[i].name;
-            if(Object.keys(this.state.recipesByType).length != 0 && this.state.recipesByType[type] != undefined){
-                init["recipe" + type] = {};
-                init["recipe" + type][type] = this.state.recipesByType[type][0].index;
-            }
-        }
-        console.log(this.state.recipeTypes);
-        console.log(init);
         
           return(
+            <div id="wrapper">
+                    <Sidebar></Sidebar>
+                    <div id="content-wrapper" class="d-flex flex-column">
+                        <Topbar></Topbar>
 <           div class="container-fluid">
-          <Form name="dynamic_form_item" onFinish={this.submitDiet} initialValues={init}>
+          <Form name="dynamic_form_item" onFinish={this.submitDiet}>
           <PageHeader
                 ghost={false}
                 onBack={() => window.history.back()}
@@ -220,10 +213,12 @@ class DietUpdateCustomer extends React.Component{
               >
                 <div style={{ marginBottom: 8, marginLeft: 8, width: "100%" }}>
                   <Space direction="horizontal" span={24}>
+                  <Form.Item name="name" rules={[{ required: true }]}>
                     <Input addonBefore="Your diet's name:" defaultValue="diet's name" type="text" name="dietName"
                       value={this.state.dietName} onChange={this.handleInputChange} span={20} required={true}/>
                     {/* <Button>Edit</Button>
                     <Button type="primary"> Submit</Button> */}
+                    </Form.Item>
                   </Space>
                 </div>
               </PageHeader>
@@ -297,6 +292,8 @@ class DietUpdateCustomer extends React.Component{
                 <Button type="primary" htmlType="submit" plain="true">Submit</Button>
               </Form.Item>
             </Form>
+          </div>
+          </div>
           </div>
           );
     }

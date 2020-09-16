@@ -189,8 +189,10 @@ class DietCreateCustomer extends React.Component{
               >
                 <div style={{ marginBottom: 8, marginLeft: 8, width: "100%" }}>
                   <Space direction="horizontal" span={24}>
+                  <Form.Item name="name" rules={[{ required: true }]}>
                     <Input addonBefore="Your diet's name:" defaultValue="diet's name" type="text" name="dietName"
-                      value={this.state.dietName} onChange={this.handleInputChange} span={20} required={true}/>
+                      value={this.state.dietName} onChange={this.handleInputChange} span={20} />
+                      </Form.Item>
                     {/* <Button>Edit</Button>
                     <Button type="primary"> Submit</Button> */}
                   </Space>
@@ -220,13 +222,16 @@ class DietCreateCustomer extends React.Component{
                                             <Col span={11}>
                                                 {typeName}
                                                 {this.state.ratios[priceIndex][index] == 0 ? <p>N/A</p> : 
+                                                <Form.Item name={typeName} rules={[{ required: true }]}>
                                                 <Select name="recipe" id={typeName} style={{ width: '100%' }} onChange={(value) => {this.handleRecipeChange(typeName, value, index)}} required={true}>
                                                   {this.state.recipes[typeName].map((recipe) => {
                                                     return (
                                                       <Option value={recipe.index}> {recipe.recipe.name} </Option>
                                                     );
                                                   })}
-                                                </Select>}
+                                                </Select>
+                                                </Form.Item>
+                                                  }
                                             </Col>
                                             <Col span={11}>
                                             <Statistic title="Ratio" value={this.state.ratios[priceIndex][index] + "%"} />
