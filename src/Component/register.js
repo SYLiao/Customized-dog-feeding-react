@@ -79,9 +79,7 @@ class Register extends Component{
               throw res;
             })  
             .then(resJson => {
-              this.setState({
-                  registered: 1
-              })
+              window.location.reload("/home");
             })
             .catch(error => {
                 console.log(error)

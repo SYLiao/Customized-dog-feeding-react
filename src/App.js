@@ -21,7 +21,7 @@ import DietCreateCustomer from './Component/diet/dietChooseCustomer';
 import DietUpdateCustomer from './Component/diet/dietupdateCustomer';
 import NotFound from './Component/notFound';
 
-// import test2 from './Component/tagComponent';
+import test2 from './Component/test2';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 
@@ -50,7 +50,7 @@ class App extends Component{
             <Route path="/ingredientpage" exact component={IngredientPage}></Route>
             <Route path="/not-found" exact component={NotFound}></Route>
 
-            <Route path="/test" exact component={DietChooseCustomer}></Route>
+            <Route path="/test" exact component={test2}></Route>
 
             <Redirect to ="/not-found" />
           </Switch>

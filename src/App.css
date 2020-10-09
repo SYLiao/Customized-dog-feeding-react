@@ -30,6 +30,58 @@
   color: #61dafb;
 }
 
+.Question {
+  color: #282c34;
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+  font-size: x-large;
+  margin-top: 30px;
+}
+
+/* .title {
+  color: darkblue;
+  font-family: 'Times New Roman', Times, serif;
+  margin-top: 80px;
+  text-align: center;
+  font-size: xx-large;
+  font-weight: bold;
+} */
+
+.questionInput {
+  /* background-color: darkgrey;
+  border-width: 0px; */
+  margin-top: 10px;
+  border-radius:30px;
+  align-self: center;
+  height:50px;
+  width: 400px;
+  position:relative; 
+  background-position: initial initial;
+  font-size: 25px;
+}
+
+.header-top {
+  margin: auto;
+  justify-content: center;
+}
+
+.ul-nav {
+  width: 600px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+}
+
+.a-navi{
+  font-size: large;
+  color: white;
+}
+
+.navbar-feeding {
+  background-color: cornflowerblue;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -41,17 +41,21 @@ class OverLap extends React.Component {
 			var recipeView = <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
 		} else {
 			var recipeView = (
-				<div>
-					<div>
-						<span>{currentRecipe.name}</span>
-					</div>
-					<div>
-						<span>{currentRecipe.moisture}</span>
-					</div>
-					<div>
-						<span>{currentRecipe.price}</span>
-					</div>
-				</div>
+                  <Descriptions
+				  	title="营养成分"
+                    size="small"
+                    span={24}
+                  >
+                    {
+                      Object.entries(currentRecipe).map(([field, value]) => {
+                        if (!["name", "price", "id", "recipeType", "imageURL"].includes(field)) {
+                          return (
+                            <Descriptions.Item label={field}>{value}</Descriptions.Item>
+                          )
+                        }
+                      }
+                      )}
+                  </Descriptions>
 			);
 		}
 		return (

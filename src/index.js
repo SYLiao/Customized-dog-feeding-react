@@ -8,6 +8,12 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 import './css/sb-admin-2.css';
 import './css/sb-admin-2.min.css';
 import './css/air-panel.css';
+import './css/component.css';
+import './css/cs-select.css';
+import './css/demo.css';
+import './css/cs-skin-boxes.css';
+import './css/normalize.css';
+import './css/header.css';
 
 import 'jquery';
 

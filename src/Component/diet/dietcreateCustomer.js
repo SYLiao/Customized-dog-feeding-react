@@ -132,7 +132,7 @@ class DietCreateCustomer extends React.Component{
           })
           .then(
             resJson => {
-              if(this.state.dogId != 0){
+              if(this.state.dogId !== 0){
                 this.updateDietToDog(resJson.data.data.id);
               }
               else{
@@ -165,7 +165,7 @@ class DietCreateCustomer extends React.Component{
             for(let i = 0; i < this.state.recipeTypes.length; i++){
               let typeName = this.state.recipeTypes[i].name;
               console.log(this.state.diet);
-              if(values[typeName] != undefined && values[typeName].length != 0){
+              if(values[typeName] != undefined && values[typeName].length !== 0){
                 console.log(this.state.recipes[typeName][values[typeName][0]['recipe']].recipe.id);
               }
             }

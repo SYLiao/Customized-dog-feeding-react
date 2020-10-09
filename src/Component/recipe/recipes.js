@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Tabs, Table, Space, Button, Spin } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+import { Modal, Tabs, Table, Space, Spin, Button, Popconfirm, message } from 'antd';
+import { EyeOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
+import '../setting/axiosSetting';
 
+const { confirm } = Modal;
 const { TabPane } = Tabs;
 
 const columns = [
@@ -44,6 +46,33 @@ const columns = [
                     }
                     }
                 />
+
+                <DeleteOutlined style={{ margin: '0 8px' }, { color: 'red' }}
+                        onClick={
+                            () => {
+                                confirm({
+                                    title: 'Do you want to delete these items?',
+                                    icon: <ExclamationCircleOutlined />,
+                                    content: 'When clicked the OK button, this dialog will be closed after 1 second',
+                                    onOk() {
+                                        return new Promise((resolve, reject) => {
+                                            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                                            axios.delete("http://localhost:8081/" + record.breedId)
+                                                .then(resJson => {
+                                                    console.log(resJson.data.data);
+                                                    window.location.reload();
+                                                })
+                                                .catch(error => {
+                                                    console.log(error);
+                                                });
+                                        }).catch(() => console.log('Oops errors!'));
+                                    },
+                                    onCancel() { },
+                                });
+                            }
+
+                        }
+                    />  
             </Space>
         ),
     },
