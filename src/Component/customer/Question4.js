@@ -5,8 +5,9 @@ import { FForm } from '../../js/fullscreenForm';
 import { Modernizr } from '../../js/modernizr.customer';
 import Header from './mealplan/header';
 import axios from 'axios';
+import { withRouter } from 'react-router';
 
-class CustomerPage extends React.Component {
+class Question4 extends React.Component {
 	state = {
 		q1: "",
 		q2: "",
@@ -20,7 +21,7 @@ class CustomerPage extends React.Component {
 			}
 		},
 		breeds: [],
-		progressNumber: 2,
+		progressNumber: 4,
 	}
 
 	getBreeds = () => {
@@ -41,6 +42,12 @@ class CustomerPage extends React.Component {
             [event.target.name]: event.target.value,
 		});
     }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    let page = this.state.progressNumber + 1;
+    this.props.history.push('/question' + page);
+  }
 
 	componentDidMount(){
 		// this.getBreeds();
@@ -63,32 +70,19 @@ class CustomerPage extends React.Component {
     render(){
         return(
 			<div>
-			<Header progressNumber={this.state.progressNumber}></Header>
+			<Header progressNumber={3}></Header>
 			<div class="fs-form-wrap" id="fs-form-wrap">
 				<form id="myform" class="fs-form fs-form-full" autocomplete="off">
 					<ol class="fs-fields">
-						<li>
-							<label class="fs-field-label fs-anim-upper" for="q1">What is your dog's name?</label>
-							<input class="fs-anim-lower" id="q1" name="q1" type="text" placeholder="Your dog's name" 
-							value={this.state.q1} onChange={this.handleNameChange} required/>
-						</li>
 						<li data-input-trigger>
-							{/* <div className="fs-anim-upper">Let's talk about {this.state.q1}</div> */}
-							<label class="fs-field-label fs-anim-upper" for="q2" data-info="We won't send you spam, we promise...">Is {this.state.q1} a boy or a girl?</label>
-							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower">
-								<span><input id="q2b" name="q2" type="radio" value="boy" onClick={this.handleNameChange}/><label for="q2b" class="radio-boy">boy</label></span>
-								<span><input id="q2a" name="q2" type="radio" value="girl" onClick={this.handleNameChange}/><label for="q2a" class="radio-girl">girl</label></span>
-							</div>
-						</li>
-						<li data-input-trigger>
-							<label class="fs-field-label fs-anim-upper" for="q3">{this.state.q1}绝育了吗？</label>
+							<label class="fs-field-label fs-anim-upper" for="q3">Select the main protein for Mookey's blend</label>
 							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower">
 								<span><input id="q3b" name="q3" type="radio" value="yes" onClick={this.handleNameChange}/><label for="q3b" class="radio-yes">YES</label></span>
 								<span><input id="q3a" name="q3" type="radio" value="no" onClick={this.handleNameChange}/><label for="q3a" class="radio-no">NO</label></span>
 							</div>
 						</li>
 						<li data-input-trigger>
-							<label class="fs-field-label fs-anim-upper" data-info="We'll make sure to use it all over">What breed is {this.state.q1}?</label>
+							<label class="fs-field-label fs-anim-upper" data-info="We'll make sure to use it all over">What brand of dry food does Mookey primarily eat??</label>
 							<select class="cs-select cs-skin-boxes fs-anim-lower">
 								<option value="" disabled selected>Pick a breed</option>
 								<option value="#588c75" data-class="color-588c75">#588c75</option>
@@ -113,39 +107,13 @@ class CustomerPage extends React.Component {
 								<option value="#f1c1bd" data-class="color-f1c1bd">#f1c1bd</option>
 							</select>
 						</li>
-						<li>
-							<label class="fs-field-label fs-anim-upper" for="q5">When is {this.state.q1}'s birthday?</label>
-							<div className="fs-radio-group fs-radio-custom clearfix fs-anim-lower">
-							<span>
-							<select class="fs-select" id="q5" name="q5">
-								<option value="#588c75" >January</option>
-								<option value="#b0c47f" >Feburary</option>
-								<option value="#f3e395" >March</option>
-								<option value="#f3ae73" >April</option>
-								<option value="#da645a" >May</option>
-							</select>
-							</span>
-							<span>
-							<select class="fs-select" id="q5" name="q5">
-								<option value="#588c75" >2020</option>
-								<option value="#b0c47f" >2019</option>
-								<option value="#f3e395" >2018</option>
-								<option value="#f3ae73" >2017</option>
-								<option value="#da645a" >2016</option>
-							</select>
-							</span>
-							</div>
-						</li>
-						<li>
-							<label class="fs-field-label fs-anim-upper" for="q6">How much does {this.state.q1} weigh?</label>
-							<input class="fs-mark fs-anim-lower" id="q5" name="q5" type="number" placeholder="1000" step="100" min="100"/>
-						</li>
 					</ol>
-					<button class="fs-submit" type="submit">提交问卷</button>
+					<button class="fs-submit" type="submit" onClick={this.handleSubmit}>提交问卷</button>
 				</form>
 			</div>
 			</div>
         );
     }
 }
-export default CustomerPage;
+const question4 = withRouter(Question4);
+export default question4;

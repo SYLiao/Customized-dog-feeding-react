@@ -14,6 +14,7 @@ import './css/demo.css';
 import './css/cs-skin-boxes.css';
 import './css/normalize.css';
 import './css/header.css';
+import './css/page.css';
 
 import 'jquery';
 

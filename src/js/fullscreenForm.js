@@ -47,7 +47,7 @@ import { classie } from './classie';
 		this.options = extend( {}, this.options );
   		extend( this.options, options );
 		this._init();
-		console.log(this);
+		// console.log(this);
 		support = { animations : this.Modernizr.cssanimations }
 		animEndEventNames = { 'WebkitAnimation' : 'webkitAnimationEnd', 'OAnimation' : 'oAnimationEnd', 'msAnimation' : 'MSAnimationEnd', 'animation' : 'animationend' }
 		// animation end event name
@@ -65,7 +65,8 @@ import { classie } from './classie';
 		// show [current field]/[total fields] status
 		ctrlNavPosition : true,
 		// reached the review and submit step
-		onReview : function() { return false; }
+		onReview : function() { return false; },
+		skipReview : () => { return false; }
 	};
 
 	/**
@@ -73,7 +74,7 @@ import { classie } from './classie';
 	 * initialize and cache some vars
 	 */
 	FForm.prototype._init = function() {
-		console.log(this);
+		// console.log(this);
 		// the form element
 		this.formEl = this.el.querySelector( 'form' );
 
@@ -113,6 +114,9 @@ import { classie } from './classie';
 		// continue button (jump to next field)
 		this.ctrlContinue = createElement( 'button', { cName : 'fs-continue', inner : 'Continue', appendTo : this.ctrls } );
 		this._showCtrl( this.ctrlContinue );
+
+		this.ctrlBack = createElement( 'div', { cName : 'fs-arrow', appendTo : this.ctrls } );
+		this._showCtrl( this.ctrlBack );
 
 		// navigation dots
 		if( this.options.ctrlNavDots ) {
@@ -165,6 +169,11 @@ import { classie } from './classie';
 		// show next field
 		this.ctrlContinue.addEventListener( 'click', function() {
 			self._nextField(); 
+		} );
+
+		// show previous field
+		this.ctrlBack.addEventListener( 'click', () => {
+			self._showField( this.current - 1 );
 		} );
 
 		// navigation dots
@@ -222,6 +231,7 @@ import { classie } from './classie';
 	 * jumps to the next field
 	 */
 	FForm.prototype._nextField = function( backto ) {
+		
 		if( this.isLastStep || !this._validade() || this.isAnimating ) {
 			return false;
 		}
@@ -229,6 +239,11 @@ import { classie } from './classie';
 
 		// check if on last step
 		this.isLastStep = this.current === this.fieldsCount - 1 && backto === undefined ? true : false;
+
+		this.beforeLast = this.fieldsCount - 1;
+		if(this.beforeLast === this.current){
+			console.log(this);
+		}
 		
 		// clear any previous error messages
 		this._clearError();
@@ -292,6 +307,7 @@ import { classie } from './classie';
 					classie.add( self.formEl, 'fs-show' );
 					// callback
 					self.options.onReview();
+					self.options.skipReview();
 				}
 				else {
 					classie.remove( nextField, 'fs-show' );

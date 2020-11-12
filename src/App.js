@@ -21,6 +21,11 @@ import DietCreateCustomer from './Component/diet/dietChooseCustomer';
 import DietUpdateCustomer from './Component/diet/dietupdateCustomer';
 import NotFound from './Component/notFound';
 
+import Question1 from './Component/customer/Question1';
+import Question2 from './Component/customer/Question2';
+import Question3 from './Component/customer/Question3';
+import Question4 from './Component/customer/Question4';
+
 import test2 from './Component/test2';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
@@ -48,6 +53,10 @@ class App extends Component{
             <Route path="/recipepage" exact component={RecipePage}></Route>
             <Route path="/recipeupdate/:id" exact component={RecipeUpdate}></Route>
             <Route path="/ingredientpage" exact component={IngredientPage}></Route>
+            <Route path="/question1" exact component={Question1}></Route>
+            <Route path="/question2" exact component={Question2}></Route>
+            <Route path="/question3" exact component={Question3}></Route>
+            <Route path="/question4" exact component={Question4}></Route>
             <Route path="/not-found" exact component={NotFound}></Route>
 
             <Route path="/test" exact component={test2}></Route>
