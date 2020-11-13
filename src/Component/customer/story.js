@@ -10,58 +10,204 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 
 class Story extends React.Component {
+  state = {
+    name: localStorage.getItem("name"),
+    progress: 2,
+    age: "",
+    breed: "",
+    Weight: 0,
+    activeLevel: "",
+    sensitive: "",
+    progressNumber: 0,
+    show1: ["is-incomplete", "", "icon"],
+    show2: ["is-incomplete", "", "icon"],
+    show3: ["is-incomplete", "", "icon"],
+    show4: ["is-incomplete", "", "icon"],
+    show5: ["is-incomplete", "", "icon"],
+		profile:JSON.parse(localStorage.getItem("profile")),
+	}
 
-  componentDidMount() {
+	componentDidMount(){
+    if(this.state.profile == null){
+			let newProfile = {
+				q1:{
+					name:"",
+					email: "",
+				},
+				q2:{
+					name:"",
+					gender:"",
+					age:"",
+					spay: false,
+					breed1:"",
+					breed2:"",
+					bodyType:0,
+					weight:0,
+					activeLevel:"",
+				},
+				q3:{
+					FrequentlyChewsPaws: false,
+					LooseStool: false,
+					HotSpots: false,
+					Vomiting: false,
+					FrequentSkinInfections: false,
+					ExcessiveGas: false,
+					progressNumber: 2,
+					Grains: false,
+					Eggs: false,
+					Chicken: false,
+					Gluten: false,
+					RedMeat: false,
+					Flax: false,
+					Potatoes: false,
+					None: false,
+				},
+				q4:{
+					choose:0,
+					costomize:{
 
-  }
+					},
+					recommand:{
 
-  render() {
-    return (
-      <div class="pz-slide__pet-overview-card pz-pet-overview-card pet-overview-card offset-lg-1 d-none d-lg-block">
-        <div class="pet-overview-card__header text-center text-uppercase bg-sun">
-          <div class="pet-overview-card__eyebrow">
-            <div class="badge--tailored">
-              <svg t="1605161081188" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="19112" width="200" height="200"><path d="M802.413714 414.464c27.574857-12.068571 48.493714-32.512 68.114286-53.028571 22.363429-23.387429 22.656-52.699429 22.656-68.041143 0-24.393143-22.912-43.629714-60.16-44.525715-19.730286-0.475429-31.780571 4.443429-48.219429 16.420572-11.776 8.557714-39.369143 36.571429-27.062857 59.483428 0.64 1.188571 1.682286 2.633143 3.163429 4.333715a9.490286 9.490286 0 0 1 0.146286 12.214857 8.594286 8.594286 0 0 1-11.904 1.334857l-1.938286-1.499429c-24.32-18.578286-37.558857-25.490286-37.558857-53.010285 0-51.785143 68.333714-101.540571 134.326857-99.949715 65.92 1.590857 117.248 49.188571 117.248 104.685715 0 30.354286-19.346286 73.417143-50.980572 106.514285a210.450286 210.450286 0 0 1-71.698285 49.078858c1.718857 2.834286 3.492571 5.888 5.302857 9.197714 17.92 32.658286 15.579429 36.626286 17.865143 77.421714 2.267429 40.813714-9.801143 113.773714-5.174857 149.723429 4.644571 35.931429 27.849143 39.936 32.950857 65.828571 3.236571 16.402286 11.264 87.606857 24.082285 213.577143a18.304 18.304 0 0 1-18.212571 20.187429h-37.613714a18.249143 18.249143 0 0 1-18.249143-18.249143v-9.088c0-5.76 2.706286-11.190857 7.314286-14.628572l5.814857-4.370285c5.577143-4.187429 8.301714-11.172571 7.003428-18.029715-10.002286-53.248-18.797714-85.302857-26.368-96.164571-5.595429-8.045714-30.866286-21.156571-63.451428-46.573714-5.833143-4.571429-16.329143-14.262857-31.451429-29.110858a9.142857 9.142857 0 0 0-15.506286 5.412572c-2.742857 21.997714-6.180571 40.539429-10.258285 55.625143-4.937143 18.176-20.114286 65.590857-45.513143 142.208-2.486857 7.497143-9.490286 12.544-17.371429 12.544h-47.872a16.365714 16.365714 0 0 1-16.347428-16.347429v-1.097143c0-8.850286 6.308571-16.420571 15.012571-18.011428l20.534857-3.766857c14.738286-53.833143 21.156571-93.257143 19.291429-118.290286-1.316571-17.700571-13.275429-38.290286-25.325714-74.130286-2.505143-7.460571-6.034286-22.674286-10.569143-45.714286a9.142857 9.142857 0 0 0-11.282286-7.076571l-121.837714 31.561143a9.142857 9.142857 0 0 0-5.778286 13.165714l2.870857 5.412572c5.485714 10.276571 8.338286 21.76 8.338286 33.408v171.154285c0 5.686857-2.651429 11.062857-7.168 14.537143l-25.545143 19.565714a18.304 18.304 0 0 1-11.154286 3.785143H414.537143a18.304 18.304 0 0 1-18.285714-18.304v-9.325714c0-6.637714 3.565714-12.763429 9.362285-16l13.165715-7.350857c6.290286-3.492571 9.929143-10.349714 9.325714-17.517714-2.084571-24.704-4.644571-43.501714-7.716572-56.374858-3.145143-13.275429-10.788571-36.973714-22.912-71.058285a9.142857 9.142857 0 0 0-14.610285-3.84l-3.565715 3.072c-8.941714 7.734857-19.858286 12.8-31.524571 14.683428l-114.322286 18.285715a9.142857 9.142857 0 0 0-5.321143 15.177142l12.16 13.385143c3.072 3.364571 4.754286 7.753143 4.754286 12.306286v11.958857a18.304 18.304 0 0 1-18.834286 18.285714l-14.994285-0.438857a18.304 18.304 0 0 1-14.025143-7.204571L178.285714 847.122286a18.304 18.304 0 0 1-3.748571-11.099429v-36.352c0-6.345143 3.291429-12.251429 8.685714-15.579428 78.098286-48.274286 120.448-74.953143 127.049143-80.091429 6.838857-5.302857 9.691429-14.171429 8.557714-26.587429-12.726857-37.796571-33.115429-51.181714-42.276571-73.563428-9.142857-22.363429-26.148571-91.977143-34.56-118.710857-16.914286-53.76-31.762286-82.194286-35.766857-90.697143-8.996571-19.090286-24.868571-21.796571-41.636572-28.379429-16.768-6.601143-48.64-5.595429-69.376-23.789714-20.717714-18.212571-18.816-37.229714-23.643428-57.929143v-25.325714c0-10.112 8.210286-18.304 18.322285-18.304h49.664c6.710857 0 12.873143-3.657143 16.091429-9.563429 5.668571-10.404571 14.72-20.352 27.172571-29.824a157.787429 157.787429 0 0 1 55.570286-26.861714c-4.571429-56.941714-4.571429-89.106286 0-96.493714 4.571429-7.387429 17.28 4.169143 38.162286 34.669714 2.980571-35.913143 8.795429-49.078857 17.462857-39.497143 8.082286 8.96 22.034286 41.508571 41.837714 97.645714 2.596571 7.314286 6.345143 14.226286 11.099429 20.388572 8.32 10.752 15.817143 23.625143 22.528 38.582857 12.745143 28.452571 27.629714 102.765714 53.979428 139.318857 26.331429 36.553143 41.709714 39.552 79.744 46.317714 25.270857 4.498286 112.402286-9.874286 183.771429-12.653714 54.966857-2.157714 99.181714 7.094857 107.154286 9.142857 2.870857 0.749714 5.613714 1.572571 8.283428 2.56z" p-id="19113"></path></svg>
-            </div>
-          </div>
-          <h2 class="pet-overview-card__title font-ginto-nord-black">Mookey</h2></div>
-        <div class="pet-overview-card__body">
-          <div class="pet-overview-card__list">
-            <div class="pet-overview-card__list-item is-incomplete">
-              <div class="pet-overview-card__list-item-icon"></div>
-              <div class="pet-overview-card__list-item-text ml-4">
-                <div class="pet-overview-card__list-item-label">Age</div>
-                <div class="pet-overview-card__list-item-value">Value</div></div>
-            </div>
-            <div class="pet-overview-card__list-item is-incomplete">
-              <div class="pet-overview-card__list-item-icon"></div>
-              <div class="pet-overview-card__list-item-text ml-4">
-                <div class="pet-overview-card__list-item-label">Size</div>
-                <div class="pet-overview-card__list-item-value">Value</div></div>
-            </div>
-            <div class="pet-overview-card__list-item is-incomplete">
-              <div class="pet-overview-card__list-item-icon"></div>
-              <div class="pet-overview-card__list-item-text ml-4">
-                <div class="pet-overview-card__list-item-label">Activity Level</div>
-                <div class="pet-overview-card__list-item-value">Value</div></div>
-            </div>
-            <div class="pet-overview-card__list-item is-incomplete">
-              <div class="pet-overview-card__list-item-icon"></div>
-              <div class="pet-overview-card__list-item-text ml-4">
-                <div class="pet-overview-card__list-item-label">Has Sensitivities</div>
-                <div class="pet-overview-card__list-item-value">Value</div></div>
-            </div>
-            <div class="pet-overview-card__list-item is-incomplete">
-              <div class="pet-overview-card__list-item-icon"></div>
-              <div class="pet-overview-card__list-item-text ml-4">
-                <div class="pet-overview-card__list-item-label">Wellness Goals</div>
-                <div class="pet-overview-card__list-item-value">Value</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+					},
+				},
+			};
+			this.setState({
+				profile : newProfile
+			});
+			localStorage.setItem("profile", JSON.stringify(newProfile));
+    }
+    switch(this.state.progress) {
+      case 1:
+        this.setState({
+          breed: this.state.profile.q2.breed,
+          show1: ["", "label-color", "icon-story"],
+        })
+        break;
+      case 2:
+        this.setState({
+          breed: this.state.profile.q2.breed,
+          age: this.state.profile.q2.age,
+          show1: ["", "label-color", "icon-story"],
+          show2: ["", "label-color", "icon-story"],
+        })
+        break;
+        case 3:
+          this.setState({
+            breed: this.state.profile.q2.breed,
+            age: this.state.profile.q2.age,
+            weight: this.state.profile.q2.weight,
+            show1: ["", "label-color", "icon-story"],
+            show2: ["", "label-color", "icon-story"],
+            show3: ["", "label-color", "icon-story"],
+          })
+          break;
+          case 4:
+            this.setState({
+              breed: this.state.profile.q2.breed,
+              age: this.state.profile.q2.age,
+              weight: this.state.profile.q2.weight,
+              activeLevel: this.state.profile.q2.activeLevel,
+              show1: ["", "label-color", "icon-story"],
+              show2: ["", "label-color", "icon-story"],
+              show3: ["", "label-color", "icon-story"],
+              show4: ["", "label-color", "icon-story"],
+            })
+            break;
+            case 5:
+              let sensitive = "";
+              if(this.state.profile.q3.None){
+                sensitive += "None";
+              }
+              else{
+                if(this.state.profile.q3.Grains){
+                  sensitive += "Grains, ";
+                }
+                if(this.state.profile.q3.Eggs){
+                  sensitive += "Eggs, ";
+                }
+                if(this.state.profile.q3.Chickens){
+                  sensitive += "Chicken, ";
+                }
+                if(this.state.profile.q3.Grains){
+                  sensitive += "Gluten, ";
+                }
+                if(this.state.profile.q3.Grains){
+                  sensitive += "Red Meat, ";
+                }
+                if(this.state.profile.q3.Grains){
+                  sensitive += "Flax, ";
+                }
+                if(this.state.profile.q3.Grains){
+                  sensitive += "potatoes, ";
+                }
+                sensitive = sensitive.substr(0, sensitive.length - 2);
+              }
+              this.setState({
+                breed: this.state.profile.q2.breed,
+                age: this.state.profile.q2.age,
+                weight: this.state.profile.q2.weight,
+                activeLevel: this.state.profile.q2.activeLevel,
+                sensitive: sensitive,
+                show1: ["", "label-color", "icon-story"],
+                show2: ["", "label-color", "icon-story"],
+                show3: ["", "label-color", "icon-story"],
+                show4: ["", "label-color", "icon-story"],
+                show5: ["", "label-color", "icon-story"],
+              })
+              break;
+      default:
+        break;
+    }
+	}
+
+    render(){
+        return(
+              <div class="pz-slide__pet-overview-card pz-pet-overview-card pet-overview-card offset-lg-1 d-none d-lg-block">
+                  <div class="pet-overview-card__header text-center text-uppercase bg-sun">
+                    <div class="pet-overview-card__eyebrow">
+                      <div class="badge--tailored">
+                        <img src="https://cdn.shopify.com/s/files/1/0276/0337/0068/files/tailored-recipe-for_3x_1cb939b7-dd7d-4dae-989e-d2784b7e56b6.png" alt="Recipe Tailored For" class="icon" /></div>
+                    </div>
+                    <h2 class="pet-overview-card__title font-ginto-nord-black">Mookey</h2></div>
+                  <div class="pet-overview-card__body">
+                    <div class="pet-overview-card__list">
+                      <div class={"pet-overview-card__list-item " + this.state.show1[0]}>
+                        <div class="pet-overview-card__list-item-icon"><svg t="1605226246732" class={this.state.show1[2]} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12468" width="200" height="200"><path d="M282.966 538.902c91.744-20.227 121.052-102.374 80.805-195.151-15.893-36.74-80.083-162.643-106.399-214.138-14.242 11.97-26.006 25.695-34.262 40.969-31.373 57.792-33.541 186.069-49.33 346.235 28.586 18.989 65.326 31.682 109.186 22.085z m655.525-216.72c-0.826-21.465-19.506-37.564-40.661-35.396-35.605 3.61-90.403 3.61-137.153-20.022-76.368-38.7-43.446-94.53-106.502-153.458-63.88-59.752-227.762-66.254-337.772-19.092 43.136 87.617 106.398 218.37 121.568 260.683 43.551 122.189-23.839 221.467-127.967 252.942-60.991 18.473-109.083 8.463-145.1-10.835-3.095 24.458-6.605 49.535-10.63 75.026-11.248 70.588-26.315 129.103-41.176 175.233-7.946 11.352-12.59 25.078-12.59 39.938 0 38.598 31.27 69.867 69.867 69.867 3.61 0 7.12-0.31 10.628-0.826l0.62 0.619h488.136c1.133 0.103 2.373 0.207 3.508 0.207 23.117 0 41.9-18.783 41.9-41.9a41.896 41.896 0 0 0-4.541-18.988C693.7 828.378 652.214 770.483 596.28 732.71c2.167-45.82 12.9-87.926 39.01-115.584 54.385-57.688 191.125-14.86 265.326-112.694 36.533-48.4 39.732-132.096 37.875-182.25z m-342.728 17.956c-29.103 0-52.736-23.633-52.736-52.838s23.634-52.839 52.736-52.839c29.102 0 52.735 23.633 52.735 52.839s-23.633 52.838-52.735 52.838z" p-id="12469"></path></svg></div>
+                        <div class="pet-overview-card__list-item-text ml-4">
+                          <div class={"pet-overview-card__list-item-label " + this.state.show1[1]}>Breed</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show1[1]}>{this.state.breed}</div></div>
+                      </div>
+                      <div class={"pet-overview-card__list-item " + this.state.show2[0]}>
+                        <div class="pet-overview-card__list-item-icon"><svg t="1605225819706" class={this.state.show2[2]} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7972" width="200" height="200"><path d="M541.013333 250.88c29.866667-10.24 52.053333-38.4 55.466667-69.973333 2.133333-20.053333-2.133333-38.826667-11.946667-54.186667L529.92 32a21.589333 21.589333 0 0 0-37.12 0l-54.613333 94.72c-7.253333 12.8-11.52 27.733333-11.52 43.946667 0 56.32 55.466667 100.266667 114.346666 80.213333z m164.266667 428.373333l-42.666667-42.666666-46.08 45.653333c-55.466667 55.466667-152.746667 55.893333-208.64 0l-45.653333-45.653333-46.506667 45.653333C288 709.973333 250.88 725.333333 211.626667 725.333333c-31.146667 0-59.733333-9.813333-83.626667-26.026666V853.333333c0 46.933333 38.4 85.333333 85.333333 85.333334h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333334v-154.026666c-32 21.76-72.96 32-116.906667 22.186666-28.16-5.973333-53.333333-21.76-73.813333-42.24zM768 384h-213.333333V341.333333c0-23.466667-19.2-42.666667-42.666667-42.666666s-42.666667 19.2-42.666667 42.666666v42.666667H256c-70.826667 0-128 57.173333-128 128v62.293333c0 36.266667 21.333333 71.253333 55.893333 82.773334 31.146667 10.24 64.853333 2.56 86.613334-19.626667l91.306666-90.88 90.88 90.88c32.426667 32.426667 85.76 32.426667 118.186667 0l91.306667-90.88 90.88 90.88c18.346667 18.346667 43.946667 26.88 70.4 23.466667 42.24-5.546667 72.106667-45.226667 72.106666-87.893334v-60.586666A127.274667 127.274667 0 0 0 768 384z" p-id="7973"></path></svg></div>
+                        <div class="pet-overview-card__list-item-text ml-4">
+                          <div class={"pet-overview-card__list-item-label " + this.state.show2[1]}>Age</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show2[1]}>{this.state.age}</div></div>
+                      </div>
+                      <div class={"pet-overview-card__list-item " + this.state.show3[0]}>
+                        <div class="pet-overview-card__list-item-icon"><svg t="1605225897124" class={this.state.show3[2]} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9955" width="200" height="200"><path d="M929.194951 28.444444H95.289173A95.431111 95.431111 0 0 0 0.000284 123.733333v776.533334A95.118222 95.118222 0 0 0 95.289173 995.555556h833.422223A95.118222 95.118222 0 0 0 1024.000284 900.266667V123.733333C1025.50784 71.480889 981.959396 28.444444 929.194951 28.444444zM513.25184 787.569778a95.118222 95.118222 0 0 1-95.288889-95.288889c0-11.264 2.56-22.016 5.632-31.772445l-139.320889-119.352888a31.772444 31.772444 0 0 1-3.072-45.084445 31.772444 31.772444 0 0 1 45.084445-3.072l137.784889 118.328889a93.212444 93.212444 0 0 1 49.692444-13.824c52.252444 0 94.776889 43.036444 95.288889 94.776889a96.199111 96.199111 0 0 1-95.800889 95.288889z m350.890667-157.752889a31.943111 31.943111 0 0 1-31.772445-31.772445c0-176.213333-142.904889-320.142222-320.142222-320.142222-176.213333 0-320.142222 142.904889-320.142222 320.142222 0 16.896-13.824 31.772444-31.772445 31.772445a31.943111 31.943111 0 0 1-31.772444-31.772445c0-212.053333 172.117333-384.682667 384.682667-384.682666 212.053333 0 384.682667 171.605333 382.634666 384.682666a31.516444 31.516444 0 0 1-31.715555 31.772445z" p-id="9956"></path></svg></div>
+                        <div class="pet-overview-card__list-item-text ml-4">
+                          <div class={"pet-overview-card__list-item-label " + this.state.show3[1]}>Weight</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show3[1]}>Value</div></div>
+                      </div>
+                      <div class={"pet-overview-card__list-item " + this.state.show4[0]}>
+                        <div class="pet-overview-card__list-item-icon"><svg t="1605225997940" class={this.state.show4[2]} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10694" width="200" height="200"><path d="M950.315344 531.324162L780.190476 274.150265c-2.167196-3.250794-5.05679-6.140388-7.946384-8.668784-3.973192-9.391182-11.919577-16.976367-22.394357-20.949559-20.22716-7.223986-42.260317 3.611993-49.123104 23.477955l-133.643739 379.620458-76.935449-252.478307c-6.140388-20.58836-27.812346-32.146737-48.039506-25.64515-3.250794 1.083598-6.501587 2.528395-9.029983 4.334392-10.11358 3.973192-18.421164 11.919577-22.394356 22.755555l-55.985891 154.593298-50.567901-87.410229c0-9.752381-3.973192-19.143563-11.197178-26.728748-15.17037-15.17037-39.370723-15.17037-54.541094 0l-163.62328 163.623281c-15.17037 15.17037-15.17037 39.370723 0 54.541093 15.17037 15.17037 39.370723 15.17037 54.541093 0l124.613757-124.613756 62.487478 107.998589c6.140388 10.835979 16.976367 17.337566 28.534744 18.782363 2.889594 2.167196 6.501587 4.334392 10.113581 5.417989 19.865961 7.223986 42.260317-3.250794 49.484303-23.116754l43.343915-119.918166 77.296649 253.923104c6.140388 20.58836 27.812346 32.146737 48.039506 25.64515 2.889594-0.722399 5.417989-2.167196 7.585186-3.250794 10.47478-3.611993 19.504762-11.919577 23.477954-23.477954l143.757319-408.516402 137.97813 208.411993c11.919577 17.698765 35.75873 22.755556 53.457496 10.835979 18.059965-10.47478 22.755556-34.313933 10.835979-52.012699z" p-id="10695"></path></svg></div>
+                        <div class="pet-overview-card__list-item-text ml-4">
+                          <div class={"pet-overview-card__list-item-label " + this.state.show4[1]}>Activity Level</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show4[1]}>Value</div></div>
+                      </div>
+                      <div class={"pet-overview-card__list-item " + this.state.show5[0]}>
+                        <div class="pet-overview-card__list-item-icon"><svg t="1605226276173" class={this.state.show5[2]} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13214" width="200" height="200"><path d="M871.836 871.836c199.445-199.445 199.445-522.808 0-722.252s-522.808-199.445-722.252 0c-199.445 199.445-199.445 522.808 0 722.252s522.808 199.445 722.252 0z m-586.83-135.423c-24.93-24.93-24.572-65.709-0.208-90.073L646.34 284.798c24.816-24.816 64.969-24.897 90.074 0.208 24.93 24.93 24.572 65.71 0.208 90.074L375.08 736.622c-24.816 24.816-64.969 24.897-90.073-0.208z" p-id="13215"></path></svg></div>
+                        <div class="pet-overview-card__list-item-text ml-4">
+                          <div class={"pet-overview-card__list-item-label " + this.state.show5[1]}>Has Sensitivities</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show5[1]}>Value</div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        )
+    }
+
 }
 const story = withRouter(Story);
 export default story;

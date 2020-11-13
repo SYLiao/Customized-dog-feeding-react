@@ -11,12 +11,86 @@ import { Card, Col, Row } from 'antd';
 import Story from './story';
 
 class YourEmail extends React.Component {
-
-	componentDidMount(){
-
+  state = {
+		name: localStorage.getItem("name"),
+		email: "",
+		progressNumber: 0,
+		continue: false,
+		profile:JSON.parse(localStorage.getItem("profile")),
 	}
 
-    render(){
+	componentDidMount(){
+    if(this.state.profile == null){
+			let newProfile = {
+        progressNumber: 1,
+				q1:{
+					name:"",
+					email: "",
+				},
+				q2:{
+					name:"",
+					gender:"",
+					age:"",
+					spay: false,
+					breed1:"",
+					breed2:"",
+					bodyType:0,
+					weight:0,
+					activeLevel:"",
+				},
+				q3:{
+					FrequentlyChewsPaws: false,
+					LooseStool: false,
+					HotSpots: false,
+					Vomiting: false,
+					FrequentSkinInfections: false,
+					ExcessiveGas: false,
+					Grains: false,
+					Eggs: false,
+					Chicken: false,
+					Gluten: false,
+					RedMeat: false,
+					Flax: false,
+					Potatoes: false,
+					None: false,
+				},
+				q4:{
+					choose:0,
+					costomize:{
+
+					},
+					recommand:{
+
+					},
+				},
+      };
+      this.setState({
+				profile : newProfile
+			});
+			localStorage.setItem("profile", JSON.stringify(newProfile));
+    }
+  }
+
+  handleChange = (event) => {
+    console.log(event);
+    let profile = this.state.profile;
+		profile.q1.email = event.target.value;
+		this.setState({
+				[event.target.name]: event.target.value,
+        profile: profile,
+		});
+		localStorage.setItem("profile", JSON.stringify(this.state.profile));
+		console.log(this.state.profile);
+  }
+
+  handleSubmit = (event) => {
+    let profile = this.state.profile;
+    profile.progressNumber += 1;
+    localStorage.setItem("profile", JSON.stringify(this.state.profile));
+    this.props.history.push("");
+  }
+
+    render() {
         return(
           <div className="">
             <Header></Header>
@@ -33,7 +107,8 @@ class YourEmail extends React.Component {
                 <div class="pz-form alternate-form container-fluid">
                   <div class="pz-form__form-group form-group">
                     <div class="pz-form__form-group form-group">
-                      <input id="quiz-input-1" type="email" required="" class="pz-control pz-control__input form-control is-invalid" aria-label="Dog name" placeholder="Your email" maxlength="30" />
+                      <input id="quiz-input-1" type="email" required="" class="pz-control pz-control__input form-control is-invalid" aria-label="Dog name" placeholder="Your email" maxlength="30" 
+                      name="email" value={this.state.email} onChange={this.handleChange}/>
                       <p class="pz-control__input-limit">0/10</p>
                       <div class="invalid-feedback text-left">This field is required</div></div>
                   </div>

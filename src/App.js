@@ -21,6 +21,8 @@ import DietCreateCustomer from './Component/diet/dietChooseCustomer';
 import DietUpdateCustomer from './Component/diet/dietupdateCustomer';
 import NotFound from './Component/notFound';
 
+import YourEmail from './Component/customer/YourEmail';
+
 import Question1 from './Component/customer/Question1';
 import Question2 from './Component/customer/Question2';
 import Question3 from './Component/customer/Question3';

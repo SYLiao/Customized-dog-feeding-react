@@ -146,6 +146,13 @@ button {
   fill: currentColor;
 }
 
+.icon-story {
+  display: inline-block;
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+}
+
 .d-lg-block {
     float: right;
     font-weight: bolder;
@@ -1661,4 +1668,14 @@ input[type="checkbox"], input[type="radio"] {
   left: 50%;
   z-index: 5;
 
+.label-color {
+  color: rgb(47, 53, 63);
+  font-size: small;
+  font-weight: normal;
+}
+
+.value-color {
+  color: rgb(47, 53, 63);
+  font-size: 5px;
+  font-weight: lighter;
 }
