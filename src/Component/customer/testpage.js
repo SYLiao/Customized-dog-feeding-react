@@ -45,7 +45,7 @@ class TestPage extends React.Component {
         return(
           <div>
             <Header></Header>
-            <ProgressBar trackBar={2} trackNum={0} questions={5} ></ProgressBar>
+            <ProgressBar trackBar={2} trackNum={3} questions={5} ></ProgressBar>
             <div class="container">
               <div class="row align-items-center">
                 <div class="pz-slide pz-slide--107">

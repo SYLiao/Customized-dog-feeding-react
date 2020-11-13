@@ -50,8 +50,8 @@ class Question1 extends React.Component {
 
 	componentDidMount(){
 		if(this.state.profile == null){
-			console.log(this.state.profile);
 			let newProfile = {
+				progressNumber: 2,
 				q1:{
 					name:"",
 					email: "",
@@ -65,7 +65,7 @@ class Question1 extends React.Component {
 					breed2:"",
 					bodyType:0,
 					weight:0,
-					activeLevel:0,
+					activeLevel:"",
 				},
 				q3:{
 					FrequentlyChewsPaws: false,
@@ -74,7 +74,6 @@ class Question1 extends React.Component {
 					Vomiting: false,
 					FrequentSkinInfections: false,
 					ExcessiveGas: false,
-					progressNumber: 2,
 					Grains: false,
 					Eggs: false,
 					Chicken: false,
