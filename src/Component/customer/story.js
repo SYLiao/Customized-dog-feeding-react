@@ -207,6 +207,7 @@ class Story extends React.Component {
                 </div>
         )
     }
+
 }
 const story = withRouter(Story);
 export default story;
