@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import tagComponent from './diet/tagComponent';
 import You from './customer/mealplan/you';
-import CustomerPage from './customer/testSlideQuestion';
+import CustomerPage from './customer/testpage';
 
 class test2 extends Component{
     render(){
