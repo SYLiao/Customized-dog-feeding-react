@@ -13,7 +13,7 @@ import Story from './story';
 class YourEmail extends React.Component {
   state = {
 		name: localStorage.getItem("name"),
-		email: "",
+    email: "",
 		progressNumber: 0,
 		continue: false,
 		profile:JSON.parse(localStorage.getItem("profile")),
@@ -31,12 +31,13 @@ class YourEmail extends React.Component {
 					name:"",
 					gender:"",
 					age:"",
-					spay: false,
+					spay: "",
 					breed1:"",
 					breed2:"",
 					bodyType:0,
 					weight:0,
 					activeLevel:"",
+					activeLevelId:0,
 				},
 				q3:{
 					FrequentlyChewsPaws: false,
@@ -87,7 +88,7 @@ class YourEmail extends React.Component {
     let profile = this.state.profile;
     profile.progressNumber += 1;
     localStorage.setItem("profile", JSON.stringify(this.state.profile));
-    this.props.history.push("");
+    this.props.history.push("/customer/page2/dog");
   }
 
     render() {
@@ -116,7 +117,7 @@ class YourEmail extends React.Component {
               </div>
             </div>
             </div>
-            <div class="footer--quiz"><button class="btn btn-solid" disabled="">下一步</button></div>
+            <div class="footer--quiz"><button class="btn btn-solid" disabled="" onClick={this.handleSubmit}>下一步</button></div>
           </div>
         )
     }

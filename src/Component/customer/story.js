@@ -11,12 +11,9 @@ import { Card, Col, Row } from 'antd';
 
 class Story extends React.Component {
   state = {
+    profile: this.props.profile,
     name: localStorage.getItem("name"),
-    progress: 5,
-    age: "",
-    breed: "",
-    Weight: 0,
-    activeLevel: "",
+    progress: 4,
     sensitive: "",
     progressNumber: 0,
     show1: ["is-incomplete", "", "icon"],
@@ -24,79 +21,24 @@ class Story extends React.Component {
     show3: ["is-incomplete", "", "icon"],
     show4: ["is-incomplete", "", "icon"],
     show5: ["is-incomplete", "", "icon"],
-		profile:JSON.parse(localStorage.getItem("profile")),
 	}
 
 	componentDidMount(){
-    if(this.state.profile == null){
-			let newProfile = {
-				q1:{
-					name:"",
-					email: "",
-				},
-				q2:{
-					name:"",
-					gender:"",
-					age:"",
-					spay: false,
-					breed1:"",
-					breed2:"",
-					bodyType:0,
-					weight:0,
-					activeLevel:"",
-				},
-				q3:{
-					FrequentlyChewsPaws: false,
-					LooseStool: false,
-					HotSpots: false,
-					Vomiting: false,
-					FrequentSkinInfections: false,
-					ExcessiveGas: false,
-					progressNumber: 2,
-					Grains: false,
-					Eggs: false,
-					Chicken: false,
-					Gluten: false,
-					RedMeat: false,
-					Flax: false,
-					Potatoes: false,
-					None: false,
-				},
-				q4:{
-					choose:0,
-					costomize:{
-
-					},
-					recommand:{
-
-					},
-				},
-			};
-			this.setState({
-				profile : newProfile
-			});
-			localStorage.setItem("profile", JSON.stringify(newProfile));
-    }
+    
     switch(this.state.progress) {
       case 1:
         this.setState({
-          breed: this.state.profile.q2.breed,
           show1: ["", "label-color", "icon-story"],
         })
         break;
       case 2:
         this.setState({
-          breed: this.state.profile.q2.breed,
-          age: this.state.profile.q2.age,
           show1: ["", "label-color", "icon-story"],
           show2: ["", "label-color", "icon-story"],
         })
         break;
         case 3:
           this.setState({
-            breed: this.state.profile.q2.breed,
-            age: this.state.profile.q2.age,
-            weight: this.state.profile.q2.weight,
             show1: ["", "label-color", "icon-story"],
             show2: ["", "label-color", "icon-story"],
             show3: ["", "label-color", "icon-story"],
@@ -104,10 +46,6 @@ class Story extends React.Component {
           break;
           case 4:
             this.setState({
-              breed: this.state.profile.q2.breed,
-              age: this.state.profile.q2.age,
-              weight: this.state.profile.q2.weight,
-              activeLevel: this.state.profile.q2.activeLevel,
               show1: ["", "label-color", "icon-story"],
               show2: ["", "label-color", "icon-story"],
               show3: ["", "label-color", "icon-story"],
@@ -159,7 +97,11 @@ class Story extends React.Component {
       default:
         break;
     }
-	}
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({update: nextProps.progress});
+  }
 
     render(){
         return(
@@ -179,16 +121,16 @@ class Story extends React.Component {
                           <svg t="1605431874427" class={this.state.show1[2]} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="102163" width="200" height="200"><path d="M667.2 1024H364.8C203.2 1024 70.4 891.2 70.4 729.6l-4.8-414.4c0-60.8 49.6-110.4 110.4-110.4h670.4c60.8 0 110.4 49.6 110.4 110.4l6.4 414.4C961.6 891.2 828.8 1024 667.2 1024z" fill="#D7CCC8" p-id="102164"></path><path d="M196.8 667.2m-14.4 0a14.4 14.4 0 1 0 28.8 0 14.4 14.4 0 1 0-28.8 0Z" fill="#805F4C" p-id="102165"></path><path d="M252.8 729.6m-14.4 0a14.4 14.4 0 1 0 28.8 0 14.4 14.4 0 1 0-28.8 0Z" fill="#805F4C" p-id="102166"></path><path d="M308.8 667.2m-14.4 0a14.4 14.4 0 1 0 28.8 0 14.4 14.4 0 1 0-28.8 0Z" fill="#805F4C" p-id="102167"></path><path d="M692.8 667.2m-14.4 0a14.4 14.4 0 1 0 28.8 0 14.4 14.4 0 1 0-28.8 0Z" fill="#805F4C" p-id="102168"></path><path d="M748.8 729.6m-14.4 0a14.4 14.4 0 1 0 28.8 0 14.4 14.4 0 1 0-28.8 0Z" fill="#805F4C" p-id="102169"></path><path d="M804.8 667.2m-14.4 0a14.4 14.4 0 1 0 28.8 0 14.4 14.4 0 1 0-28.8 0Z" fill="#805F4C" p-id="102170"></path><path d="M740.8 801.6l-41.6-70.4c-25.6-44.8-83.2-60.8-128-33.6l-32 19.2c-11.2 6.4-20.8 16-28.8 25.6-8-9.6-17.6-19.2-28.8-25.6l-32-19.2c-44.8-25.6-102.4-11.2-128 33.6l-41.6 70.4c-25.6 44.8-11.2 102.4 33.6 128l32 19.2c44.8 25.6 102.4 11.2 128-33.6l35.2-62.4 35.2 62.4c25.6 44.8 83.2 60.8 128 33.6l32-19.2c46.4-25.6 62.4-83.2 36.8-128z" fill="#A3897A" p-id="102171"></path><path d="M166.4 134.4C57.6 134.4 0 227.2 0 419.2s196.8 152 196.8-36.8 108.8-172.8 108.8-172.8-30.4-75.2-139.2-75.2zM857.6 134.4c-108.8 0-140.8 75.2-140.8 75.2s108.8-17.6 108.8 172.8S1024 611.2 1024 419.2 966.4 134.4 857.6 134.4zM592 652.8l-20.8-6.4c-40-11.2-83.2-11.2-121.6 0l-19.2 6.4c-9.6 3.2-16 9.6-16 17.6v28.8c0 6.4 6.4 11.2 14.4 11.2s14.4 4.8 14.4 11.2c0 11.2 11.2 20.8 25.6 20.8h83.2c14.4 0 25.6-9.6 25.6-20.8 0-6.4 6.4-11.2 14.4-11.2s14.4-4.8 14.4-11.2v-28.8c1.6-8-4.8-14.4-14.4-17.6z" fill="#212121" p-id="102172"></path><path d="M414.4 571.2c-12.8 0-22.4-8-22.4-19.2 0-4.8 3.2-9.6 6.4-12.8-4.8-3.2-11.2-6.4-17.6-6.4-19.2 0-36.8 17.6-36.8 40s16 40 36.8 40c19.2 0 36.8-17.6 36.8-40v-3.2c-1.6 1.6-3.2 1.6-3.2 1.6zM688 569.6h-1.6c-12.8 0-22.4-8-22.4-19.2 0-4.8 3.2-9.6 6.4-12.8-4.8-3.2-11.2-6.4-17.6-6.4-19.2 0-36.8 17.6-36.8 40s16 40 36.8 40c19.2 0 36.8-17.6 36.8-40-1.6 1.6-1.6 0-1.6-1.6z" fill="#212121" p-id="102173"></path></svg>
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
-                          <div class={"pet-overview-card__list-item-label " + this.state.show1[1]}>Breed</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show1[1]}>{this.state.breed}</div></div>
+                          <div class={"pet-overview-card__list-item-label " + this.state.show1[1]}>Age</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show1[1]}>{this.state.profile.q2.age}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show2[0]}>
                         <div class="pet-overview-card__list-item-icon">
                           <svg t="1605430500518" class={this.state.show2[2]} viewBox="0 0 1051 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="26660" width="200" height="200"><path d="M83.027027 664.216216h885.621622v276.756757H83.027027z" fill="#FF5722" p-id="26661"></path><path d="M1051.675676 913.297297H0a110.702703 110.702703 0 0 0 110.702703 110.702703h830.27027a110.702703 110.702703 0 0 0 110.702703-110.702703z" fill="#BF360C" p-id="26662"></path><path d="M885.621622 498.162162H166.054054a110.702703 110.702703 0 0 0-110.702703 110.702703v22.444973a54.299676 54.299676 0 0 0 37.223784 52.583784A110.702703 110.702703 0 0 0 193.72973 664.216216a155.537297 155.537297 0 0 0 110.702702 41.513514 155.537297 155.537297 0 0 0 110.702703-41.513514 138.378378 138.378378 0 0 0 221.405406 0 146.847135 146.847135 0 0 0 110.702702 41.513514 146.847135 146.847135 0 0 0 110.702703-41.513514 110.702703 110.702703 0 0 0 101.154595 19.566703A54.299676 54.299676 0 0 0 996.324324 631.309838V608.864865a110.702703 110.702703 0 0 0-110.702702-110.702703z" fill="#FFAB91" p-id="26663"></path><path d="M442.810811 304.432432h166.054054v193.72973h-166.054054z" fill="#00BCD4" p-id="26664"></path><path d="M608.864865 332.108108h-166.054054a27.675676 27.675676 0 0 1-27.675676-27.675676 27.675676 27.675676 0 0 1 27.675676-27.675675h166.054054a27.675676 27.675676 0 0 1 27.675676 27.675675 27.675676 27.675676 0 0 1-27.675676 27.675676z" fill="#00BCD4" p-id="26665"></path><path d="M608.864865 166.054054a83.027027 83.027027 0 0 1-166.054054 0c0-45.858595 83.027027-166.054054 83.027027-166.054054s83.027027 120.195459 83.027027 166.054054z" fill="#FF9800" p-id="26666"></path><path d="M567.351351 207.567568a41.513514 41.513514 0 0 1-83.027027 0c0-22.915459 41.513514-83.027027 41.513514-83.027027s41.513514 60.111568 41.513513 83.027027z" fill="#FFE0B2" p-id="26667"></path></svg>
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
-                          <div class={"pet-overview-card__list-item-label " + this.state.show2[1]}>Age</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show2[1]}>{this.state.age}</div></div>
+                          <div class={"pet-overview-card__list-item-label " + this.state.show2[1]}>Breed</div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show2[1]}>{this.state.profile.q2.breed1}, {this.state.profile.q2.breed2}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show3[0]}>
                         <div class="pet-overview-card__list-item-icon">
@@ -196,7 +138,7 @@ class Story extends React.Component {
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
                           <div class={"pet-overview-card__list-item-label " + this.state.show3[1]}>Weight</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show3[1]}>Value</div></div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show3[1]}>{this.state.profile.q2.weight}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show4[0]}>
                         <div class="pet-overview-card__list-item-icon">
@@ -204,7 +146,7 @@ class Story extends React.Component {
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
                           <div class={"pet-overview-card__list-item-label " + this.state.show4[1]}>Activity Level</div>
-                        <div class={"pet-overview-card__list-item-value " + this.state.show4[1]}>Value</div></div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show4[1]}>{this.state.profile.q2.activeLevel}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show5[0]}>
                         <div class="pet-overview-card__list-item-icon">

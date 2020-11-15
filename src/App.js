@@ -23,10 +23,13 @@ import NotFound from './Component/notFound';
 
 import YourEmail from './Component/customer/YourEmail';
 
-import Question1 from './Component/customer/Question1';
-import Question2 from './Component/customer/Question2';
-import Question3 from './Component/customer/Question3';
-import Question4 from './Component/customer/Question4';
+import DogName from "./Component/customer/DogName";
+import Gender from './Component/customer/gender';
+import Birthday from './Component/customer/Birthday';
+import Spayed from './Component/customer/Spayed';
+import Breed from './Component/customer/Breed';
+import Weight from './Component/customer/Weight';
+import ActiveLevel from './Component/customer/ActiveLevel';
 
 import test2 from './Component/test2';
 
@@ -55,10 +58,17 @@ class App extends Component{
             <Route path="/recipepage" exact component={RecipePage}></Route>
             <Route path="/recipeupdate/:id" exact component={RecipeUpdate}></Route>
             <Route path="/ingredientpage" exact component={IngredientPage}></Route>
-            <Route path="/question1" exact component={Question1}></Route>
-            <Route path="/question2" exact component={Question2}></Route>
-            <Route path="/question3" exact component={Question3}></Route>
-            <Route path="/question4" exact component={Question4}></Route>
+
+            <Route path="/customer/page1" exact component={YourEmail}></Route>
+
+            <Route path="/customer/page2/dog" exact component={DogName}></Route>
+            <Route path="/customer/page2/gender" exact component={Gender}></Route>
+            <Route path="/customer/page2/birthday" exact component={Birthday}></Route>
+            <Route path="/customer/page2/spayed" exact component={Spayed}></Route>
+            <Route path="/customer/page2/breed" exact component={Breed}></Route>
+            <Route path="/customer/page2/weight" exact component={Weight}></Route>
+            <Route path="/customer/page2/activeLevel" exact component={ActiveLevel}></Route>
+
             <Route path="/not-found" exact component={NotFound}></Route>
 
             <Route path="/test" exact component={test2}></Route>

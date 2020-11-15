@@ -10,7 +10,7 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 import Story from './story';
 
-class Birthday extends React.Component {
+class Breed extends React.Component {
   state = {
     menu1: "display-menu",
     menu2: "display-menu",
@@ -18,10 +18,8 @@ class Birthday extends React.Component {
 		progressNumber: 1,
 		continue: false,
     profile:JSON.parse(localStorage.getItem("profile")),
-    month: "",
-    year: "",
-    birthYear: 0,
-    birthMonth: 12,
+    breed1: "",
+    breed2: "",
   }
 
   handleMenu = (event) => {
@@ -47,62 +45,36 @@ class Birthday extends React.Component {
 
 	componentDidMount(){
     document.addEventListener('click', this.handleHide);
-    if(this.state.profile === null || this.state.profile.progressNumber < 4) {
+    if(this.state.profile === null || this.state.profile.progressNumber < 6) {
       this.props.history.push("/customer/page1");
     }
   }
   
-  handleMonth = (event) => {
-    this.setState({
-      month: event.currentTarget.innerHTML,
-      birthMonth: parseInt(event.currentTarget.innerHTML) - 1,
-		})
-		if(this.state.birthYear !== 0){
-			let date = new Date();
-			let year = date.getFullYear() - this.state.birthYear;
-			let month = date.getMonth() - parseInt(event.currentTarget.innerHTML);
-			if(month < 0){
-				year -= 1;
-				month = 11 + month;
-			}
-			let age = year + " year " + month + " month";
-			let profile = this.state.profile;
-			profile.q2.age = age;
-			localStorage.setItem("profile", JSON.stringify(profile));
-			this.setState({
-				profile: profile,
-			})
-		}
+  handleBreed1 = (event) => {
+    let profile = this.state.profile;
+		profile.q2.breed1 = event.currentTarget.innerHTML;
+		this.setState({
+				breed1: event.currentTarget.innerHTML,
+        profile: profile,
+		});
+		localStorage.setItem("profile", JSON.stringify(this.state.profile));
   }
 
-  handleYear = (event) => {
+  handleBreed2 = (event) => {
+    let profile = this.state.profile;
+		profile.q2.breed2 = event.currentTarget.innerHTML;
 		this.setState({
-      year: event.currentTarget.innerHTML,
-      birthYear: parseInt(event.currentTarget.innerHTML) ,
-		})
-		if(this.state.birthMonth !== 12){
-			let date = new Date();
-			let year = date.getFullYear() - parseInt(event.currentTarget.innerHTML);
-			let month = date.getMonth() - this.state.birthMonth;
-			if(month < 0){
-				year -= 1;
-				month = 11 + month;
-			}
-			let age = year + " year " + month + " month";
-			let profile = this.state.profile;
-			profile.q2.age = age;
-			localStorage.setItem("profile", JSON.stringify(profile));
-			this.setState({
-				profile: profile,
-			})
-		}
+				breed2: event.currentTarget.innerHTML,
+        profile: profile,
+		});
+		localStorage.setItem("profile", JSON.stringify(this.state.profile));
   }
   
   handleSubmit = (event) => {
     let profile = this.state.profile;
     profile.progressNumber += 1;
     localStorage.setItem("profile", JSON.stringify(this.state.profile));
-    this.props.history.push("/customer/page2/spayed");
+    this.props.history.push("/customer/page2/weight");
   }
 
     render(){
@@ -117,9 +89,9 @@ class Birthday extends React.Component {
                     <div class="pz-slide__content-header">
                       <div class="pz-content-header text-left">
                         <div class="content-header__eyebrow-container">
-                          <div class="content-header__eyebrow text-rust">AGE</div></div>
+                          <div class="content-header__eyebrow text-rust">Breed</div></div>
                         <div class="content-header__title-2">
-                          <h1>Mookey的出生日期?</h1>
+                          <h1>{this.state.dogName}的血统是什么？（如有混血请填写第二个）</h1>
                         </div>
                       </div>
                       <div class="pz-form__form-group form-group">
@@ -127,7 +99,7 @@ class Birthday extends React.Component {
                           <div class="pz-select pz-select-1 css-2b097c-container" id="1">
                             <div class="pz-select__control css-u41ve3-control">
                               <div class="pz-select__value-container pz-select__value-container--has-value css-1hwfws3">
-                                <div class="pz-select__single-value css-nztp7a-singleValue">{this.state.month}</div>
+                                <div class="pz-select__single-value css-nztp7a-singleValue">{this.state.breed1}</div>
                                 <div class="css-1v9zfle">
                                   <div class="pz-select__input" style={{display: 'inline-block'}}>
                                     <input class="pz-select__input" autocapitalize="none" autocomplete="off" autocorrect="off" id="react-select-2-input" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" style={{boxSizing: 'content-box', width: '2px', background: '0px center', border: '0px', fontSize: 'inherit', opacity: '0', outline: '0px', padding: '0px', color: 'inherit'}} />
@@ -146,8 +118,8 @@ class Birthday extends React.Component {
                             <div class={"pz-select__menu css-i0syzg-menu " + this.state.menu1}>
                                 <div class="pz-select__menu-list css-11unzgr">
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
-                                        id="1" tabindex="-1" onClick={this.handleMonth}>1</div>
-                                    <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
+                                        id="1" tabindex="-1" onClick={this.handleBreed1}>breed1</div>
+                                    {/* <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
                                      id="2" tabindex="-1" onClick={this.handleMonth}>2</div>
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="3"
                                         tabindex="-1" onClick={this.handleMonth}>3</div>
@@ -168,14 +140,14 @@ class Birthday extends React.Component {
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="react-select-2-option-10"
                                         tabindex="-1" onClick={this.handleMonth}>11</div>
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="react-select-2-option-11"
-                                        tabindex="-1" onClick={this.handleMonth}>12</div>
+                                        tabindex="-1" onClick={this.handleMonth}>12</div> */}
                                 </div>
                             </div>
                           </div>
                           <div class="pz-select pz-select-1 css-2b097c-container" id="1">
                           <div class="pz-select__control css-u41ve3-control">
                               <div class="pz-select__value-container pz-select__value-container--has-value css-1hwfws3">
-                              <div class="pz-select__single-value css-nztp7a-singleValue">{this.state.year}</div>
+                              <div class="pz-select__single-value css-nztp7a-singleValue">{this.state.breed2}</div>
                                 <div class="css-1v9zfle">
                                   <div class="pz-select__input" style={{display: 'inline-block'}}>
                                     <input class="pz-select__input" autocapitalize="none" autocomplete="off" autocorrect="off" id="react-select-4-input" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" style={{boxSizing: 'content-box', width: '2px', background: '0px center', border: '0px', fontSize: 'inherit', opacity: '0', outline: '0px', padding: '0px', color: 'inherit'}}/>
@@ -195,8 +167,8 @@ class Birthday extends React.Component {
                             <div class={"pz-select__menu css-i0syzg-menu " + this.state.menu2}>
                                 <div class="pz-select__menu-list css-11unzgr">
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
-                                        id="react-select-2-option-0" tabindex="-1" onClick={this.handleYear}>2020</div>
-                                    <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="react-select-2-option-1"
+                                        id="react-select-2-option-0" tabindex="-1" onClick={this.handleBreed2}>breed2</div>
+                                    {/* <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="react-select-2-option-1"
                                         tabindex="-1" onClick={this.handleYear}>2019</div>
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="react-select-2-option-2"
                                         tabindex="-1" onClick={this.handleYear}>2018</div>
@@ -225,7 +197,7 @@ class Birthday extends React.Component {
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
                                         id="react-select-2-option-0" tabindex="-1" onClick={this.handleYear}>2006</div>
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
-                                        id="react-select-2-option-0" tabindex="-1" onClick={this.handleYear}>2005</div>
+                                        id="react-select-2-option-0" tabindex="-1" onClick={this.handleYear}>2005</div> */}
                                 </div>
                             </div>
                           </div>
@@ -246,5 +218,5 @@ class Birthday extends React.Component {
         )
     }
 }
-const birthday = withRouter(Birthday);
-export default birthday;
+const breed = withRouter(Breed);
+export default breed;

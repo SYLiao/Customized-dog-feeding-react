@@ -1680,3 +1680,36 @@ input[type="checkbox"], input[type="radio"] {
   font-size: 5px;
   font-weight: lighter;
 }
+
+.alternate-form .custom-checkbox .custom-control-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 20px 25px 20px 60px;
+  transition: all .4s cubic-bezier(.42,0,.13,1.04);
+  cursor: pointer;
+}
+
+.custom-control-label {
+  border-bottom: 1px solid rgba(31,44,66,.1);
+}
+
+.spayed-input {
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.line {
+  height: 40px;
+}
+
+.disable-div {
+  display: none;
+}
+
+.weight-form {
+  margin-top: 20px;
+  height:20%;
+}

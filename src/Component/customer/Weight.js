@@ -10,42 +10,29 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 import Story from './story';
 
-class Gender extends React.Component {
+class Weight extends React.Component {
 
   state = {
     petName: localStorage.getItem("petName"),
     progressNumber: 1,
-    show1: "",
-    show2: "",
 		continue: false,
-		profile:JSON.parse(localStorage.getItem("profile")),
+    profile:JSON.parse(localStorage.getItem("profile")),
+    weight: 0,
 	}
 
 	componentDidMount(){
-    if(this.state.profile === null || this.state.profile.progressNumber < 3) {
+    if(this.state.profile === null || this.state.profile.progressNumber < 7) {
       this.props.history.push("/customer/page1");
     }
   }
   
   handleChange = (event) => {
-    console.log(event.currentTarget.id);
     let profile = this.state.profile;
-    if(event.currentTarget.id === "boy"){
-      profile.q2.gender = "boy";
+      profile.q2.weight = event.target.value;
       this.setState({
-        show1: "selected",
-        show2: "",
+        weight: event.target.value,
         profile: profile,
 		});
-    }
-		else{
-      profile.q2.gender = "girl";
-      this.setState({
-        show1: "",
-        show2: "selected",
-        profile: profile,
-		});
-    }
 		localStorage.setItem("profile", JSON.stringify(this.state.profile));
   }
 
@@ -53,7 +40,7 @@ class Gender extends React.Component {
     let profile = this.state.profile;
     profile.progressNumber += 1;
     localStorage.setItem("profile", JSON.stringify(this.state.profile));
-    this.props.history.push("/customer/page2/birthday");
+    this.props.history.push("/customer/page2/activeLevel");
   }
 
     render(){
@@ -70,24 +57,21 @@ class Gender extends React.Component {
                         <div class="content-header__eyebrow-container">
                           <div class="content-header__eyebrow text-rust">Gender</div></div>
                         <div class="content-header__title">
-                          <h1>Mookey是男孩还是女孩?</h1>
+                          <h1>{this.state.petName}的体重是?</h1>
                         </div>
                       </div>
                     </div>
-                      <div class="options options--images genders__options">
-                        <div class={"option option--image " + this.state.show1} id="boy" onClick={this.handleChange}>
-                          <img src="/static/media/boy.65fc14b6.jpg" width="100%" alt="" />
-                          <div class="option__text">
-                            <div class="option__text__label with-margin">Boy</div></div>
-                        </div>
-                        <div class={"option option--image " + this.state.show2} id="girl" onClick={this.handleChange}>
-                          <img src="/static/media/girl.fbaf4093.jpg" width="100%" alt="" />
-                          <div class="option__text">
-                            <div class="option__text__label with-margin">Girl</div></div>
-                        </div>
+                    <div style={{height:"40px"}}></div>
+                    <div class="pz-form alternate-form container-fluid">
+                      <div class="pz-form__form-group form-group">
+                        <div class="pz-form__form-group form-group">
+                          <input id="quiz-input-1" type="number" required="" class="pz-control pz-control__input form-control is-invalid" aria-label="Weight in KGS" placeholder="Weight in KGS" 
+                          name="weight" onChange={this.handleChange}/>
+                          <div class="invalid-feedback text-left">This field is required</div></div>
+                      </div>
                     </div>
                   </div>
-                {/* <Story></Story> */}
+                <Story profile={this.state.profile}></Story>
                 </div>
               </div>
             </div>
@@ -96,5 +80,5 @@ class Gender extends React.Component {
         )
     }
 }
-const gender = withRouter(Gender);
-export default gender;
+const weight = withRouter(Weight);
+export default weight;
