@@ -24,7 +24,7 @@ class Header extends React.Component {
                     <button class="header-nav__menu-back">
                       <div class="arrow--left mr-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="18" viewBox="0 0 23 18" class="icon-arrow-right">
-                          <path fill="#dd4f00" fill-rule="nonzero" d="M19.806 7.739L14.547 1.68A1.015 1.015 0 1 1 16.081.35l6.68 7.696c.33.378.332.94.009 1.322l-6.681 7.885a1.015 1.015 0 0 1-1.55-1.312l5.23-6.172H1.014a1.015 1.015 0 0 1 0-2.03h18.791z"></path>
+                          <path fill-rule="nonzero" d="M19.806 7.739L14.547 1.68A1.015 1.015 0 1 1 16.081.35l6.68 7.696c.33.378.332.94.009 1.322l-6.681 7.885a1.015 1.015 0 0 1-1.55-1.312l5.23-6.172H1.014a1.015 1.015 0 0 1 0-2.03h18.791z"></path>
                         </svg>
                       </div>
                       <div class="d-none d-lg-block">返回上一步</div>
