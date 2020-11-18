@@ -33,7 +33,7 @@ import ActiveLevel from './Component/customer/ActiveLevel';
 import HealthCondition from './Component/customer/HealthCondition'
 import Allergen from './Component/customer/Allergen'
 
-import test2 from './Component/test2';
+// import test2 from './Component/customer/testMultipleChoice';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import allergen from './Component/customer/Allergen';
@@ -76,7 +76,7 @@ class App extends Component{
 
             <Route path="/not-found" exact component={NotFound}></Route>
 
-            <Route path="/test" exact component={test2}></Route>
+            {/* <Route path="/test" exact component={test2}></Route> */}
 
             <Redirect to ="/not-found" />
           </Switch>

@@ -10,20 +10,63 @@ import { Card, Col, Row } from 'antd';
 
 class ProgressBar extends React.Component {
   state = {
-    tracks: [-1.0101, 19.1919, 39.3939, 59.596, 79.798, 100],
-    track: '0%',
+    progress: this.props.trackBar,
+    show1: ["", ""],
+    show2: ["", ""],
+    show3: ["", ""],
+    show4: ["", ""],
+    show5: ["", ""],
   }
 
   componentDidMount() {
-    let trackBar = this.props.trackBar;
-    let trackNum = this.props.trackNum;
-    let questions = this.props.questions;
-    let track = this.state.tracks[trackBar] + (this.state.tracks[trackBar + 1] - this.state.tracks[trackBar]) / questions * trackNum;
-    let trackPecentage = track + '%';
-    console.log(trackPecentage);
-    this.setState({
-      track: trackPecentage,
-    })
+    switch(this.state.progress){
+      case 1:
+        this.setState({
+          show1: ["selected", ""],
+        });
+        break;
+      case 2:
+        this.setState({
+          show1: ["previous", "selected"],
+          show2: ["selected", ""],
+        });
+        break;
+      case 3:
+        this.setState({
+          show1: ["previous", "selected"],
+          show2: ["previous", "selected"],
+          show3: ["selected", ""],
+        });
+        break;
+      case 4:
+        this.setState({
+          show1: ["previous", "selected"],
+          show2: ["previous", "selected"],
+          show3: ["previous", "selected"],
+          show4: ["selected", ""],
+        });
+        break;
+        case 5:
+          this.setState({
+            show1: ["previous", "selected"],
+            show2: ["previous", "selected"],
+            show3: ["previous", "selected"],
+            show4: ["previous", "selected"],
+            show5: ["selected", ""],
+          });
+          break;
+      default:
+        break;
+    }
+  }
+
+  handleRedirect = (event) => {
+    if(event.currentTarget.id == 1){
+        this.props.history.push("/customer/page1");
+    }
+    else if(event.currentTarget.id == 2){
+      this.props.history.push("/customer/page2/dog");
+    }
   }
 
   render() {
@@ -33,54 +76,28 @@ class ProgressBar extends React.Component {
           <div class="pz-progress-bar__track">
             <div class="header__breadcrumbs">
               <div class="header__breadcrumbs__breadcrumb">
-                <div class="header__breadcrumbs__breadcrumb__text  previous">You</div>
-                <div class="header__breadcrumbs__breadcrumb__separator selected"></div>
+                <div id={1} class={"header__breadcrumbs__breadcrumb__text " + this.state.show1[0]} onClick={this.handleRedirect}>关于您</div>
+                <div class={"header__breadcrumbs__breadcrumb__separator " + this.state.show1[1]}></div>
               </div>
               <div class="header__breadcrumbs__breadcrumb">
-                <div class="header__breadcrumbs__breadcrumb__text selected ">Your dog</div>
-                <div class="header__breadcrumbs__breadcrumb__separator "></div>
+                <div id={2} class={"header__breadcrumbs__breadcrumb__text " + this.state.show2[0]} onClick={this.handleRedirect}>您的狗狗</div>
+                <div class={"header__breadcrumbs__breadcrumb__separator " + this.state.show2[1]}></div>
               </div>
               <div class="header__breadcrumbs__breadcrumb">
-                <div class="header__breadcrumbs__breadcrumb__text  ">Recipes</div>
-                <div class="header__breadcrumbs__breadcrumb__separator "></div>
+                <div id={3} class={"header__breadcrumbs__breadcrumb__text " + this.state.show3[0]}>健康与忌口</div>
+                <div class={"header__breadcrumbs__breadcrumb__separator " + this.state.show3[1]}></div>
               </div>
               <div class="header__breadcrumbs__breadcrumb">
-                <div class="header__breadcrumbs__breadcrumb__text  ">Meal plan</div>
-                <div class="header__breadcrumbs__breadcrumb__separator "></div>
+                <div id={4} class={"header__breadcrumbs__breadcrumb__text " + this.state.show4[0]}>配方计划</div>
+                <div class={"header__breadcrumbs__breadcrumb__separator " + this.state.show4[1]}></div>
               </div>
               <div class="header__breadcrumbs__breadcrumb">
-                <div class="header__breadcrumbs__breadcrumb__text  ">Checkout</div>
+                <div id={5} class={"header__breadcrumbs__breadcrumb__text " + this.state.show5[0]}>Checkout</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      // <div className="">
-      //   <div class="pz-progress-bar">
-      //     <div class="pz-progress-bar__track">
-      //       <div class="navigation-slider__container">
-      //         <span class="MuiSlider-root navigation-slider MuiSlider-colorSecondary MuiSlider-marked">
-      //           <span class="MuiSlider-rail navigation-slider-rail"></span>
-      //           <span class="MuiSlider-track navigation-slider-track" style={{left: '0%', width:this.state.track}} ></span>
-      //           <input type="hidden" value="33.8" />
-      //           <span class="MuiSlider-mark navigation-slider-mark MuiSlider-markActive navigation-slider-mark--active pos2" ></span>
-      //           <span aria-hidden="true" class="MuiSlider-markLabel navigation-slider-mark-label MuiSlider-markLabelActive navigation-slider-mark-label--active info" >Your Info</span>
-      //           <span class="MuiSlider-mark navigation-slider-mark MuiSlider-markActive navigation-slider-mark--active dog-info" ></span>
-      //           <span aria-hidden="true" class="MuiSlider-markLabel navigation-slider-mark-label MuiSlider-markLabelActive navigation-slider-mark-label--active dog-info" >Dog's Info</span>
-      //           <span class="MuiSlider-mark navigation-slider-mark sensitive" ></span>
-      //           <span aria-hidden="true" class="sensitive MuiSlider-markLabel navigation-slider-mark-label" >Sensitivities</span>
-      //           <span class="MuiSlider-mark navigation-slider-mark health" ></span>
-      //           <span aria-hidden="true" class="MuiSlider-markLabel navigation-slider-mark-label health" >Health &amp; Wellness</span>
-      //           <span class="MuiSlider-mark navigation-slider-mark food" ></span>
-      //           <span aria-hidden="true" class="MuiSlider-markLabel navigation-slider-mark-label food" >Current Food</span>
-      //           <span class="MuiSlider-mark navigation-slider-mark result" ></span>
-      //           <span aria-hidden="true" class="MuiSlider-markLabel navigation-slider-mark-label result" >Results</span>
-      //           <span class="MuiSlider-thumb navigation-slider-thumb MuiSlider-thumbColorSecondary" tabindex="0" role="slider" data-index="0" aria-orientation="horizontal" aria-valuemax="100" aria-valuemin="1" aria-valuenow="33.8" ></span>
-      //         </span>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
     )
   }
 }

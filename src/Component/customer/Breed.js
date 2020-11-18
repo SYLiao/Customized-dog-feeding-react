@@ -48,6 +48,11 @@ class Breed extends React.Component {
     if(this.state.profile === null || this.state.profile.progressNumber < 6) {
       this.props.history.push("/customer/page1");
     }
+    let profile = this.state.profile;
+    this.setState({
+      breed1: profile.q2.breed1,
+      breed2: profile.q2.breed2,
+    });
   }
   
   handleBreed1 = (event) => {
@@ -81,7 +86,7 @@ class Breed extends React.Component {
         return(
           <div>
             <Header></Header>
-            <ProgressBar trackBar={2} trackNum={3} questions={5} ></ProgressBar>
+            <ProgressBar trackBar={2}></ProgressBar>
             <div class="container">
               <div class="row align-items-center">
                 <div class="pz-slide pz-slide--107">
@@ -209,7 +214,7 @@ class Breed extends React.Component {
                       </div>
                     </div>
                   </div>
-                <Story profile={this.state.profile}></Story>
+                <Story profile={this.state.profile} progress={2}></Story>
                 </div>
               </div>
             </div>

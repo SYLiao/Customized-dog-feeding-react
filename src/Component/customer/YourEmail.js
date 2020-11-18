@@ -31,12 +31,14 @@ class YourEmail extends React.Component {
 					name:"",
 					gender:"",
 					age:"",
+					month: 1,
+					year: 2020,
 					spay: "",
 					breed1:"",
 					breed2:"",
 					bodyType:0,
 					weight:0,
-					activeLevel:"",
+					activeLevel: "Inactive/Lethargic",
 					activeLevelId:0,
 				},
 				q3:{
@@ -69,7 +71,19 @@ class YourEmail extends React.Component {
 				profile : newProfile
 			});
 			localStorage.setItem("profile", JSON.stringify(newProfile));
-    }
+		}
+		else {
+			let profile = this.state.profile;
+			profile.progressNumber = 1;
+			this.setState({
+				profile: profile,
+			})
+			localStorage.setItem("profile", JSON.stringify(profile));
+		}
+		let profile = this.state.profile;
+		this.setState({
+			email: profile.q1.email,
+		})
   }
 
   handleChange = (event) => {
@@ -100,7 +114,7 @@ class YourEmail extends React.Component {
         return(
           <div className="">
             <Header></Header>
-            <ProgressBar trackBar={2} trackNum={0} questions={5} ></ProgressBar>
+            <ProgressBar trackBar={1}></ProgressBar>
             <div class="container">
               <div class="pz-slide__content-mid col-lg-6">
               <div class="pz-slide__content-header">

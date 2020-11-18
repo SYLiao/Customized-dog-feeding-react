@@ -29,6 +29,10 @@ class ActiveLevel extends React.Component {
     if(this.state.profile === null || this.state.profile.progressNumber < 8) {
       this.props.history.push("/customer/page1");
     }
+    let profile = this.state.profile;
+    this.setState({
+      select: profile.q2.activeLevelId,
+		});
   }
 
   handleChange = (event) => {
@@ -49,12 +53,19 @@ class ActiveLevel extends React.Component {
     this.props.history.push("/customer/page2/healthCondition");
   }
 
+handleSubmit = (event) => {
+  let profile = this.state.profile;
+  profile.progressNumber += 1;
+  localStorage.setItem("profile", JSON.stringify(this.state.profile));
+  this.props.history.push("/customer/page2/health");
+}
+
   render() {
     let partition = 97.5 / (this.state.choiceMap.length-1);
     return (
       <div>
         <Header></Header>
-        <ProgressBar trackBar={2} trackNum={0} questions={5} ></ProgressBar>
+        <ProgressBar trackBar={2}></ProgressBar>
         <div class="container">
           <div class="row align-items-center">
             <div class="pz-slide pz-slide--107">
@@ -70,7 +81,7 @@ class ActiveLevel extends React.Component {
                   <div class="pz-form__form-group form-group">
                   <div id="radios" class="r-radio-slider__container">
                     <div class="r-radio-slider__rail">
-                      <div id={0} onClick={this.handleChange}>
+                                <div id={0} onClick={this.handleChange}>
                                     <input name="options" type="radio" tabindex="0" id={`radio-slider-option-${0}`}></input>
                                     <label for={`radio-slider-option-${0}`} class="r-radio-slider__label" style={{left: `2.5%`, right: "auto", maxWidth: "20%"}}>
                                         <p class="radio-slider__title">Inactive/Lethargic</p><p class="radio-slider__subtitle">smaller than 1 h/day Walking</p>
@@ -108,7 +119,7 @@ class ActiveLevel extends React.Component {
                   </div>
                 </div>
               </div>
-              <Story profile={this.state.profile}></Story>
+              <Story profile={this.state.profile} progress={4}></Story>
             </div>
           </div>
         </div>
