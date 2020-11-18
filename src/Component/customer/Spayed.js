@@ -5,6 +5,7 @@ import { FForm } from '../../js/fullscreenForm';
 import { Modernizr } from '../../js/modernizr.customer';
 import Header from './Header';
 import ProgressBar from './ProgressBar';
+import SingleChoice from './SingleChoice'
 import axios from 'axios';
 import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
@@ -67,7 +68,9 @@ class Spayed extends React.Component {
                       </div>
                     </div>
                     <div class="pz-form__form-group form-group">
-                      <div className="line"></div>
+                    <SingleChoice choices={["绝育了", "没绝育", "怀孕"]} ></SingleChoice>
+
+                      {/* <div className="line"></div>
                       <div class="input-4 pz-control custom-control text-left pz-control__custom-checkbox custom-checkbox custom-checkbox--transparent-bg">
                           <input type="checkbox" id="input-checkbox-4" name="4" class="pz-control__input custom-control-input" value="spayed" onClick={this.handleChange}/>
                           <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-4">绝育了</label>
@@ -79,7 +82,7 @@ class Spayed extends React.Component {
                       <div class={"input-4 pz-control custom-control text-left pz-control__custom-checkbox custom-checkbox custom-checkbox--transparent-bg " + this.state.show}>
                           <input type="checkbox" id="input-checkbox-4" name="4" class="pz-control__input custom-control-input" value="pregnancy" onClick={this.handleChange}/>
                           <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-4">怀孕</label>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 <Story profile={this.state.profile} progress={1}></Story>

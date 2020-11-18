@@ -83,18 +83,18 @@ class Gender extends React.Component {
                         <div class="content-header__eyebrow-container">
                           <div class="content-header__eyebrow text-rust">Gender</div></div>
                         <div class="content-header__title">
-                          <h1>Mookey是男孩还是女孩?</h1>
+                          <h1>{`${this.state.petName}是男孩还是女孩?`}</h1>
                         </div>
                       </div>
                     </div>
                       <div class="options options--images genders__options">
                         <div class={"option option--image " + this.state.show1} id="boy" onClick={this.handleChange}>
-                          <img src="/static/media/boy.65fc14b6.jpg" width="100%" alt="" />
+                          <img class="gender-img" src="/static/media/boy.65fc14b6.jpg" width="100%" alt="" />
                           <div class="option__text">
                             <div class="option__text__label with-margin">Boy</div></div>
                         </div>
                         <div class={"option option--image " + this.state.show2} id="girl" onClick={this.handleChange}>
-                          <img src="/static/media/girl.fbaf4093.jpg" width="100%" alt="" />
+                          <img class="gender-img" src="/static/media/girl.fbaf4093.jpg" width="100%" alt="" />
                           <div class="option__text">
                             <div class="option__text__label with-margin">Girl</div></div>
                         </div>

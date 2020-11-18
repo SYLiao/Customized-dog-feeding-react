@@ -99,10 +99,15 @@ class YourEmail extends React.Component {
   }
 
   handleSubmit = (event) => {
-    let profile = this.state.profile;
-    profile.progressNumber += 1;
-    localStorage.setItem("profile", JSON.stringify(this.state.profile));
-    this.props.history.push("/customer/page2/dog");
+	let input = document.getElementById("quiz-input-1");
+	if (input.value == "") {
+		input.classList.add("is-invalid");
+	} else {
+		let profile = this.state.profile;
+		profile.progressNumber += 1;
+		localStorage.setItem("profile", JSON.stringify(this.state.profile));
+		this.props.history.push("/customer/page2/dog");
+	}
   }
 
     render() {
@@ -122,10 +127,10 @@ class YourEmail extends React.Component {
                 <div class="pz-form alternate-form container-fluid">
                   <div class="pz-form__form-group form-group">
                     <div class="pz-form__form-group form-group">
-                      <input id="quiz-input-1" type="email" required="" class="pz-control pz-control__input form-control is-invalid" aria-label="Dog name" placeholder="Your email" maxlength="30" 
+                      <input id="quiz-input-1" type="email" required="" class="pz-control pz-control__input form-control" aria-label="Dog name" placeholder="您的邮箱" maxlength="30" 
                       name="email" value={this.state.email} onChange={this.handleChange}/>
-                      <p class="pz-control__input-limit">0/10</p>
-                      <div class="invalid-feedback text-left">This field is required</div></div>
+                      {/* <p class="pz-control__input-limit">0/10</p> */}
+                      <div class="invalid-feedback text-left">请补全你的邮箱</div></div>
                   </div>
                 </div>
               </div>

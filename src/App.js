@@ -30,11 +30,13 @@ import Spayed from './Component/customer/Spayed';
 import Breed from './Component/customer/Breed';
 import Weight from './Component/customer/Weight';
 import ActiveLevel from './Component/customer/ActiveLevel';
-import HealthConcerns from './Component/customer/HealthConcerns';
+import HealthCondition from './Component/customer/HealthCondition'
+import Allergen from './Component/customer/Allergen'
 
-import test2 from './Component/customer/testMultipleChoice';
+// import test2 from './Component/customer/testMultipleChoice';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
+import allergen from './Component/customer/Allergen';
 
 
 class App extends Component{
@@ -69,11 +71,12 @@ class App extends Component{
             <Route path="/customer/page2/breed" exact component={Breed}></Route>
             <Route path="/customer/page2/weight" exact component={Weight}></Route>
             <Route path="/customer/page2/activeLevel" exact component={ActiveLevel}></Route>
-            <Route path="/customer/page2/health" exact component={HealthConcerns}></Route>
+            <Route path="/customer/page2/healthCondition" exact component={HealthCondition}></Route>
+            <Route path="/customer/page2/allergen" exact component={Allergen}></Route>
 
             <Route path="/not-found" exact component={NotFound}></Route>
 
-            <Route path="/test" exact component={test2}></Route>
+            {/* <Route path="/test" exact component={test2}></Route> */}
 
             <Redirect to ="/not-found" />
           </Switch>

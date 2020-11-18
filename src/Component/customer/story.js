@@ -21,6 +21,7 @@ class Story extends React.Component {
     show3: ["is-incomplete", "", "icon"],
     show4: ["is-incomplete", "", "icon"],
     show5: ["is-incomplete", "", "icon"],
+    dogName: this.props.profile.q2.name,
   }
 
 	componentDidMount(){
@@ -128,7 +129,7 @@ class Story extends React.Component {
                       </svg>                        
                       </div>
                     </div>
-                    <h2 class="pet-overview-card__title font-ginto-nord-black">Mookey</h2></div>
+                <h2 class="pet-overview-card__title font-ginto-nord-black">{this.state.dogName}</h2></div>
                   <div class="pet-overview-card__body">
                     <div class="pet-overview-card__list">
                       <div class={"pet-overview-card__list-item " + this.state.show1[0]}>

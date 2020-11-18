@@ -11,7 +11,7 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 import Story from './story';
 
-class TestPage extends React.Component {
+class Allergen extends React.Component {
   state = {
     menu1: "display-menu",
     menu2: "display-menu",
@@ -40,6 +40,9 @@ class TestPage extends React.Component {
   }
 
   componentDidMount() {
+    if(this.state.profile === null || this.state.profile.progressNumber < 8) {
+      this.props.history.push("/customer/page1");
+    }
     document.addEventListener('click', this.handleHide);
   }
 
@@ -57,15 +60,11 @@ class TestPage extends React.Component {
                     <div class="content-header__eyebrow-container">
                       <div class="content-header__eyebrow text-rust">AGE</div></div>
                     <div class="content-header__title-2">
-                      <h1>Does Mookey ever experience any of the following problems? If so, he may benefit from a sensitive blend.</h1>
+                      <h1>Does {this.state.profile.q1.name} have any known sensitivities to certain ingredients that we should ensure are excluded from his recipe?</h1>
                     </div>
                   </div>
                   <div class="pz-form__form-group form-group">
-                  <MultipleChoice choices={["Frequently Chews Paws", "Loose Stool", "Hot Spots", "Vomiting", "Frequent Skin Infections", "Excessive Gas", "clearAll"]} ></MultipleChoice>
-                    {/* <div class="input-4 pz-control custom-control text-left pz-control__custom-checkbox custom-checkbox custom-checkbox--transparent-bg">
-                      <input type="checkbox" id="input-checkbox-4" name="4" class="pz-control__input custom-control-input" />
-                      <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-4">我不知道</label>
-                    </div> */}
+                  <MultipleChoice choices={["谷物", "🥚", "🍗", "麦麸", "亚麻", "🥔", "clearAll"]} ></MultipleChoice>
                   </div>
                 </div>
               </div>
@@ -78,5 +77,5 @@ class TestPage extends React.Component {
     )
   }
 }
-const testPage = withRouter(TestPage);
-export default testPage;
+const allergen = withRouter(Allergen);
+export default allergen;
