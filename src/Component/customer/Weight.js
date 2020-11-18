@@ -37,10 +37,15 @@ class Weight extends React.Component {
   }
 
   handleSubmit = (event) => {
-    let profile = this.state.profile;
-    profile.progressNumber += 1;
-    localStorage.setItem("profile", JSON.stringify(this.state.profile));
-    this.props.history.push("/customer/page2/activeLevel");
+    let input = document.getElementById("quiz-input-1");
+    if (input.value == "") {
+      input.classList.add("is-invalid");
+    } else {
+      let profile = this.state.profile;
+      profile.progressNumber += 1;
+      localStorage.setItem("profile", JSON.stringify(this.state.profile));
+      this.props.history.push("/customer/page2/activeLevel");
+    }
   }
 
     render(){
@@ -65,9 +70,9 @@ class Weight extends React.Component {
                     <div class="pz-form alternate-form container-fluid">
                       <div class="pz-form__form-group form-group">
                         <div class="pz-form__form-group form-group">
-                          <input id="quiz-input-1" type="number" required="" class="pz-control pz-control__input form-control is-invalid" aria-label="Weight in KGS" placeholder="Weight in KGS" 
+                          <input id="quiz-input-1" type="number" required="" class="pz-control pz-control__input form-control" aria-label="Weight in KGS" placeholder="Weight in KGS" 
                           name="weight" onChange={this.handleChange}/>
-                          <div class="invalid-feedback text-left">This field is required</div></div>
+                          <div class="invalid-feedback text-left">多少斤啊到底</div></div>
                       </div>
                     </div>
                   </div>

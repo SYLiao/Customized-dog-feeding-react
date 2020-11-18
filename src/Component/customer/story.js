@@ -13,6 +13,7 @@ class Story extends React.Component {
   state = {
     profile: this.props.profile,
     name: localStorage.getItem("name"),
+    dogName: localStorage.getItem("petName"),
     progress: 4,
     sensitive: "",
     progressNumber: 0,
@@ -104,6 +105,7 @@ class Story extends React.Component {
   }
 
     render(){
+      console.log(this.state)
         return(
               <div class="pz-slide__pet-overview-card pz-pet-overview-card pet-overview-card offset-lg-1 d-none d-lg-block">
                   <div class="pet-overview-card__header text-center text-uppercase bg-sun">
@@ -113,7 +115,7 @@ class Story extends React.Component {
                       </svg>                        
                       </div>
                     </div>
-                    <h2 class="pet-overview-card__title font-ginto-nord-black">Mookey</h2></div>
+                <h2 class="pet-overview-card__title font-ginto-nord-black">{this.state.dogName}</h2></div>
                   <div class="pet-overview-card__body">
                     <div class="pet-overview-card__list">
                       <div class={"pet-overview-card__list-item " + this.state.show1[0]}>

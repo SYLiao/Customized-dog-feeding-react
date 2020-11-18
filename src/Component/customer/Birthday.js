@@ -119,7 +119,7 @@ class Birthday extends React.Component {
                         <div class="content-header__eyebrow-container">
                           <div class="content-header__eyebrow text-rust">AGE</div></div>
                         <div class="content-header__title-2">
-                          <h1>Mookey的出生日期?</h1>
+                          <h1>{`${this.state.dogName}的出生日期?`}</h1>
                         </div>
                       </div>
                       <div class="pz-form__form-group form-group">

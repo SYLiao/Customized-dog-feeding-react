@@ -40,7 +40,14 @@ class ActiveLevel extends React.Component {
         profile: profile,
 		});
 		localStorage.setItem("profile", JSON.stringify(this.state.profile));
-}
+  }
+
+  handleSubmit = (event) => {
+    let profile = this.state.profile;
+    profile.progressNumber += 1;
+    localStorage.setItem("profile", JSON.stringify(this.state.profile));
+    this.props.history.push("/customer/page2/healthCondition");
+  }
 
   render() {
     let partition = 97.5 / (this.state.choiceMap.length-1);
@@ -57,7 +64,7 @@ class ActiveLevel extends React.Component {
                     <div class="content-header__eyebrow-container">
                       <div class="content-header__eyebrow text-rust">AGE</div></div>
                     <div class="content-header__title-2">
-                      <h1>Mookey的出生日期?</h1>
+                    <h1>{`${this.state.dogName}的活跃程度?`}</h1>
                     </div>
                   </div>
                   <div class="pz-form__form-group form-group">
@@ -105,7 +112,7 @@ class ActiveLevel extends React.Component {
             </div>
           </div>
         </div>
-        <div class="footer--quiz"><button class="btn btn-solid" disabled="">下一步</button></div>
+        <div class="footer--quiz"><button class="btn btn-solid" disabled="" onClick={this.handleSubmit}>下一步</button></div>
       </div>
     )
   }
