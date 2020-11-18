@@ -139,7 +139,7 @@ button {
 }
 
 .icon {
-  display: inline-block;
+  display: none;
   width: 20px;
   height: 20px;
   vertical-align: middle;

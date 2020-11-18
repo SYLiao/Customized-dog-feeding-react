@@ -21,10 +21,16 @@ class DogName extends React.Component {
 	}
 
 	componentDidMount(){
-    console.log(this.state.profile);
     if(this.state.profile === null || this.state.profile.progressNumber < 2) {
       this.props.history.push("/customer/page1");
     }
+    let profile = this.state.profile;
+		profile.progressNumber = 2;
+    this.setState({
+      dogName: profile.q2.name,
+      profile: profile,
+    })
+    localStorage.setItem("profile", JSON.stringify(profile));
   }
   
   handleChange = (event) => {
@@ -49,7 +55,7 @@ class DogName extends React.Component {
         return(
           <div className="">
             <Header></Header>
-            <ProgressBar trackBar={2} trackNum={0} questions={5} ></ProgressBar>
+            <ProgressBar trackBar={2}></ProgressBar>
             <div class="container">
               <div class="pz-slide__content-mid col-lg-6">
               <div class="pz-slide__content-header">

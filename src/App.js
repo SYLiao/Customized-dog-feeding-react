@@ -30,8 +30,9 @@ import Spayed from './Component/customer/Spayed';
 import Breed from './Component/customer/Breed';
 import Weight from './Component/customer/Weight';
 import ActiveLevel from './Component/customer/ActiveLevel';
+import HealthConcerns from './Component/customer/HealthConcerns';
 
-import test2 from './Component/test2';
+import test2 from './Component/customer/testMultipleChoice';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 
@@ -68,6 +69,7 @@ class App extends Component{
             <Route path="/customer/page2/breed" exact component={Breed}></Route>
             <Route path="/customer/page2/weight" exact component={Weight}></Route>
             <Route path="/customer/page2/activeLevel" exact component={ActiveLevel}></Route>
+            <Route path="/customer/page2/health" exact component={HealthConcerns}></Route>
 
             <Route path="/not-found" exact component={NotFound}></Route>
 

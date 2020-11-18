@@ -13,7 +13,7 @@ class Story extends React.Component {
   state = {
     profile: this.props.profile,
     name: localStorage.getItem("name"),
-    progress: 4,
+    progress: this.props.progress,
     sensitive: "",
     progressNumber: 0,
     show1: ["is-incomplete", "", "icon"],
@@ -21,10 +21,9 @@ class Story extends React.Component {
     show3: ["is-incomplete", "", "icon"],
     show4: ["is-incomplete", "", "icon"],
     show5: ["is-incomplete", "", "icon"],
-	}
+  }
 
 	componentDidMount(){
-    
     switch(this.state.progress) {
       case 1:
         this.setState({
@@ -104,6 +103,22 @@ class Story extends React.Component {
   }
 
     render(){
+        let ageShow = "";
+        let breedShow = "";
+        let weightShow = "";
+        let activeLevelShow = "";
+      if(this.state.profile === null){
+        ageShow = "";
+        breedShow = "";
+        weightShow = "";
+        activeLevelShow = "";
+      }
+      else{
+        ageShow = this.state.profile.q2.age;
+        breedShow = this.state.profile.q2.breed1 + "   " + this.state.profile.q2.breed2;
+        weightShow = this.state.profile.q2.weight;
+        activeLevelShow = this.state.profile.q2.activeLevel;
+      }
         return(
               <div class="pz-slide__pet-overview-card pz-pet-overview-card pet-overview-card offset-lg-1 d-none d-lg-block">
                   <div class="pet-overview-card__header text-center text-uppercase bg-sun">
@@ -122,7 +137,7 @@ class Story extends React.Component {
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
                           <div class={"pet-overview-card__list-item-label " + this.state.show1[1]}>Age</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show1[1]}>{this.state.profile.q2.age}</div></div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show1[1]}>{ageShow}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show2[0]}>
                         <div class="pet-overview-card__list-item-icon">
@@ -130,7 +145,7 @@ class Story extends React.Component {
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
                           <div class={"pet-overview-card__list-item-label " + this.state.show2[1]}>Breed</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show2[1]}>{this.state.profile.q2.breed1}, {this.state.profile.q2.breed2}</div></div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show2[1]}>{breedShow}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show3[0]}>
                         <div class="pet-overview-card__list-item-icon">
@@ -138,7 +153,7 @@ class Story extends React.Component {
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
                           <div class={"pet-overview-card__list-item-label " + this.state.show3[1]}>Weight</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show3[1]}>{this.state.profile.q2.weight}</div></div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show3[1]}>{weightShow}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show4[0]}>
                         <div class="pet-overview-card__list-item-icon">
@@ -146,7 +161,7 @@ class Story extends React.Component {
                         </div>
                         <div class="pet-overview-card__list-item-text ml-4">
                           <div class={"pet-overview-card__list-item-label " + this.state.show4[1]}>Activity Level</div>
-                          <div class={"pet-overview-card__list-item-value " + this.state.show4[1]}>{this.state.profile.q2.activeLevel}</div></div>
+                          <div class={"pet-overview-card__list-item-value " + this.state.show4[1]}>{activeLevelShow}</div></div>
                       </div>
                       <div class={"pet-overview-card__list-item " + this.state.show5[0]}>
                         <div class="pet-overview-card__list-item-icon">

@@ -52,7 +52,7 @@ class Spayed extends React.Component {
         return(
           <div className="">
             <Header></Header>
-            <ProgressBar trackBar={2} trackNum={0} questions={5} ></ProgressBar>
+            <ProgressBar trackBar={2}></ProgressBar>
             <div class="container">
               <div class="row align-items-center">
                 <div class="pz-slide pz-slide--107">
@@ -82,7 +82,7 @@ class Spayed extends React.Component {
                       </div>
                     </div>
                   </div>
-                <Story profile={this.state.profile}></Story>
+                <Story profile={this.state.profile} progress={1}></Story>
                 </div>
               </div>
             </div>

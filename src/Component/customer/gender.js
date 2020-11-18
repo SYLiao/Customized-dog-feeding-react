@@ -25,6 +25,19 @@ class Gender extends React.Component {
     if(this.state.profile === null || this.state.profile.progressNumber < 3) {
       this.props.history.push("/customer/page1");
     }
+    let profile = this.state.profile;
+    if(profile.q2.gender === "boy") {
+      this.setState({
+        show1: "selected",
+        show2: "",
+		  });
+    }
+    else if(profile.q2.gender === "girl") {
+      this.setState({
+        show2: "selected",
+        show1: "",
+		  });
+    }
   }
   
   handleChange = (event) => {
@@ -60,7 +73,7 @@ class Gender extends React.Component {
         return(
           <div className="">
             <Header></Header>
-            <ProgressBar trackBar={2} trackNum={0} questions={5} ></ProgressBar>
+            <ProgressBar trackBar={2} ></ProgressBar>
             <div class="container">
               <div class="row align-items-center">
                 <div class="pz-slide pz-slide--107">

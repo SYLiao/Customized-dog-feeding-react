@@ -15,7 +15,7 @@ class Birthday extends React.Component {
     menu1: "display-menu",
     menu2: "display-menu",
     dogName: localStorage.getItem("petName"),
-		progressNumber: 1,
+		progressStory: 1,
 		continue: false,
     profile:JSON.parse(localStorage.getItem("profile")),
     month: "",
@@ -50,9 +50,15 @@ class Birthday extends React.Component {
     if(this.state.profile === null || this.state.profile.progressNumber < 4) {
       this.props.history.push("/customer/page1");
     }
+    let profile = this.state.profile;
+    this.setState({
+      month: profile.q2.month,
+      year: profile.q2.year,
+    });
   }
   
   handleMonth = (event) => {
+    let profile = this.state.profile;
     this.setState({
       month: event.currentTarget.innerHTML,
       birthMonth: parseInt(event.currentTarget.innerHTML) - 1,
@@ -66,16 +72,17 @@ class Birthday extends React.Component {
 				month = 11 + month;
 			}
 			let age = year + " year " + month + " month";
-			let profile = this.state.profile;
-			profile.q2.age = age;
-			localStorage.setItem("profile", JSON.stringify(profile));
+      profile.q2.age = age;
 			this.setState({
 				profile: profile,
 			})
-		}
+    }
+    profile.q2.month = parseInt(event.currentTarget.innerHTML);
+    localStorage.setItem("profile", JSON.stringify(profile));
   }
 
   handleYear = (event) => {
+    let profile = this.state.profile;
 		this.setState({
       year: event.currentTarget.innerHTML,
       birthYear: parseInt(event.currentTarget.innerHTML) ,
@@ -89,13 +96,13 @@ class Birthday extends React.Component {
 				month = 11 + month;
 			}
 			let age = year + " year " + month + " month";
-			let profile = this.state.profile;
-			profile.q2.age = age;
-			localStorage.setItem("profile", JSON.stringify(profile));
+      profile.q2.age = age;
 			this.setState({
 				profile: profile,
 			})
-		}
+    }
+    profile.q2.year = parseInt(event.currentTarget.innerHTML);
+    localStorage.setItem("profile", JSON.stringify(profile));
   }
   
   handleSubmit = (event) => {
@@ -237,7 +244,7 @@ class Birthday extends React.Component {
                       </div>
                     </div>
                   </div>
-                <Story profile={this.state.profile}></Story>
+                <Story profile={this.state.profile} progress={1}></Story>
                 </div>
               </div>
             </div>

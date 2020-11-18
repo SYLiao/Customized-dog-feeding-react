@@ -11,36 +11,19 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 import Story from './story';
 
-class TestPage extends React.Component {
+class HealthConcerns extends React.Component {
   state = {
-    menu1: "display-menu",
-    menu2: "display-menu",
+    dogName: localStorage.getItem("petName"),
+		progressNumber: 1,
+		continue: false,
     profile:JSON.parse(localStorage.getItem("profile")),
   }
 
-  handleMenu = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.setState({
-      menu1: "",
-    })
-  }
-
-  handleHide = () => {
-    this.setState({
-      menu1: "display-menu",
-      menu2: "display-menu",
-    })
-  }
-
-  handleMenu2 = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.setState({
-      menu2: "",
-    })
-  }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleHide);
+    if(this.state.profile === null || this.state.profile.progressNumber < 9) {
+      this.props.history.push("/customer/page1");
+    }
   }
 
   render() {
@@ -69,7 +52,7 @@ class TestPage extends React.Component {
                   </div>
                 </div>
               </div>
-              <Story profile={this.state.profile}></Story>
+              <Story profile={this.state.profile} progress={4}></Story>
             </div>
           </div>
         </div>
@@ -78,5 +61,5 @@ class TestPage extends React.Component {
     )
   }
 }
-const testPage = withRouter(TestPage);
-export default testPage;
+const healthConcerns = withRouter(HealthConcerns);
+export default healthConcerns;
