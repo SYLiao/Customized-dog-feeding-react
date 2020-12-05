@@ -32,11 +32,13 @@ import Weight from './Component/customer/Weight';
 import ActiveLevel from './Component/customer/ActiveLevel';
 import HealthCondition from './Component/customer/HealthCondition'
 import Allergen from './Component/customer/Allergen'
-
-// import test2 from './Component/customer/testMultipleChoice';
+import Brand from './Component/customer/Brand'
+import ProteinOrigin from './Component/customer/ProteinOrigin'
+import Price from './Component/customer/Price'
+import Origin from './Component/customer/Origin'
+import ProductResult from './Component/customer/ProductResult';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
-import allergen from './Component/customer/Allergen';
 
 
 class App extends Component{
@@ -71,13 +73,18 @@ class App extends Component{
             <Route path="/customer/page2/breed" exact component={Breed}></Route>
             <Route path="/customer/page2/weight" exact component={Weight}></Route>
             <Route path="/customer/page2/activeLevel" exact component={ActiveLevel}></Route>
-            <Route path="/customer/page2/healthCondition" exact component={HealthCondition}></Route>
-            <Route path="/customer/page2/allergen" exact component={Allergen}></Route>
+            
+            <Route path="/customer/page3/healthCondition" exact component={HealthCondition}></Route>
+            <Route path="/customer/page3/allergen" exact component={Allergen}></Route>
+            
+            <Route path="/customer/page4/brand" exact component={Brand}></Route>
+            <Route path="/customer/page4/proteinOrigin" exact component={ProteinOrigin}></Route>
+            <Route path="/customer/page4/price" exact component={Price}></Route>            
+            <Route path="/customer/page4/origin" exact component={Origin}></Route>            
+            <Route path="/customer/product/result" exact component={ProductResult}></Route>            
 
             <Route path="/not-found" exact component={NotFound}></Route>
-
             {/* <Route path="/test" exact component={test2}></Route> */}
-
             <Redirect to ="/not-found" />
           </Switch>
       </React.Fragment>

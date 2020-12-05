@@ -50,15 +50,8 @@ class ActiveLevel extends React.Component {
     let profile = this.state.profile;
     profile.progressNumber += 1;
     localStorage.setItem("profile", JSON.stringify(this.state.profile));
-    this.props.history.push("/customer/page2/healthCondition");
+    this.props.history.push("/customer/page3/healthCondition");
   }
-
-handleSubmit = (event) => {
-  let profile = this.state.profile;
-  profile.progressNumber += 1;
-  localStorage.setItem("profile", JSON.stringify(this.state.profile));
-  this.props.history.push("/customer/page2/health");
-}
 
   render() {
     let partition = 97.5 / (this.state.choiceMap.length-1);
