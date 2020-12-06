@@ -105,6 +105,16 @@ class YourEmail extends React.Component {
 		console.log(this.state.profile);
   }
 
+  pushToQueue(data) {
+    axios.get(`/test/?url=${data}`)
+      .then(resJson => {
+		console.log(JSON.stringify(resJson.data))
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   handleSubmit = (event) => {
 	let input = document.getElementById("quiz-input-1");
 	if (input.value == "") {
@@ -112,6 +122,7 @@ class YourEmail extends React.Component {
 	} else {
 		let profile = this.state.profile;
 		profile.progressNumber += 1;
+		this.pushToQueue(this.props.location.pathname);
 		localStorage.setItem("profile", JSON.stringify(this.state.profile));
 		this.props.history.push("/customer/page2/dog");
 	}
