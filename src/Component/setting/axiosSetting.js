@@ -33,7 +33,7 @@ axios.interceptors.request.use(
         }
         const token = localStorage.getItem("token");
         // console.log(window.location.href.indexOf('/user/login') > -1)
-        if(token != ""){
+        if(token != "" && token !== null) {
             config.headers.Authorization = "Bearer " + token;
         }
         return config

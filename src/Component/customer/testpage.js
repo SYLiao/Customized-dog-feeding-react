@@ -13,38 +13,33 @@ import Diet from './dietSpec';
 
 class TestPage extends React.Component {
   state = {
-    menu1: "display-menu",
-    menu2: "display-menu",
+    fixedDiets: null,
+    index: 4,
   }
 
-  handleMenu = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
+  handleChange = (event) => {
     this.setState({
-      menu1: "",
+      index: event.target.value,
     })
-  }
-
-  handleHide = () => {
-    this.setState({
-      menu1: "display-menu",
-      menu2: "display-menu",
-    })
-  }
-
-  handleMenu2 = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.setState({
-      menu2: "",
-    })
+    console.log(event.target.value);
   }
 
 	componentDidMount(){
-    document.addEventListener('click', this.handleHide);
+    axios.get("https://localhost:8081/mer/customer/get/all_fixedDiet")
+            .then(resJson => {
+                this.setState({
+                    fixedDiets: resJson.data.data
+                })
+                console.log(this.state.fixedDiets);
+            })
+            .catch(error => {
+                console.log(error)
+            });
 	}
 
     render(){
         return(
-<div className="">
+          <div className="">
             <Header></Header>
             <ProgressBar trackBar={2}></ProgressBar>
             <div class="container">
@@ -91,8 +86,8 @@ class TestPage extends React.Component {
                         </div>
                         <div className="diet-ratio">
                           <div class="input-4 pz-control custom-control text-left pz-control__custom-checkbox custom-checkbox custom-checkbox--transparent-bg">
-                              <input type="checkbox" id="input-checkbox-4" name="4" class="pz-control__input custom-control-input" value="spayed" onClick={this.handleChange}/>
-                              <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-4">Beef Mask</label>
+                              <input type="radio" name="diet" id="input-checkbox-1" class="pz-control__input custom-control-input" value={0} onClick={this.handleChange}/>
+                              <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-1">Beef Mask</label>
                               <label className="custom-control-label-bottom">Grounf Beef, potatoes, eggs, carrots, peas and fish oil</label>
                           </div>
                         </div>
@@ -127,8 +122,8 @@ class TestPage extends React.Component {
                         </div>
                         <div className="diet-ratio">
                           <div class="input-4 pz-control custom-control text-left pz-control__custom-checkbox custom-checkbox custom-checkbox--transparent-bg">
-                              <input type="checkbox" id="input-checkbox-4" name="4" class="pz-control__input custom-control-input" value="spayed" onClick={this.handleChange}/>
-                              <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-4">Chicken Chow</label>
+                              <input type="radio" name="diet" id="input-checkbox-2" class="pz-control__input custom-control-input" value={1} onClick={this.handleChange}/>
+                              <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-2">Chicken Chow</label>
                               <label className="custom-control-label-bottom">Grounf Beef, potatoes, eggs, carrots, peas and fish oil</label>
                           </div>
                         </div>
@@ -163,15 +158,15 @@ class TestPage extends React.Component {
                         </div>
                         <div className="diet-ratio">
                           <div class="input-4 pz-control custom-control text-left pz-control__custom-checkbox custom-checkbox custom-checkbox--transparent-bg">
-                              <input type="checkbox" id="input-checkbox-4" name="4" class="pz-control__input custom-control-input" value="spayed" onClick={this.handleChange}/>
-                              <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-4">Pork Portluck</label>
+                              <input type="radio" name="diet" id="input-checkbox-3" class="pz-control__input custom-control-input" value={2} onClick={this.handleChange}/>
+                              <label class="pz-control__label custom-control-label custom-control-label--small-text" for="input-checkbox-3">Pork Portluck</label>
                               <label className="custom-control-label-bottom">Grounf Beef, potatoes, eggs, carrots, peas and fish oil</label>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                <Diet></Diet>
+                <Diet diet={this.state.fixedDiets} index={this.state.index}></Diet>
                 </div>
               </div>
             </div>

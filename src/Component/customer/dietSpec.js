@@ -14,81 +14,96 @@ class dietSpec extends React.Component {
     profile: this.props.profile,
     name: localStorage.getItem("name"),
     progress: this.props.progress,
+    diets:this.props.diet,
+    index: this.props.index,
   }
 
 	componentDidMount(){
+    if(this.state.index !== 4) {
+      this.setState({
+        diet: this.state.diets[this.state.index],
+      });
+      console.log(this.state.diet);
+    }
   }
   
   componentWillReceiveProps(nextProps) {
-    this.setState({update: nextProps.progress});
+    this.setState({
+      index: nextProps.index,
+      diets: nextProps.diet,
+    })
   }
 
     render(){
+      let diet = {}
+      if(this.state.index !== 4) {
+        diet = this.state.diets[this.state.index];
         return(
-              <div class="diet-card d-lg-block">
-                  <div class="pet-overview-card__header text-center text-uppercase bg-sun">
-                  <div class="text-smallest color-chew-toy">
-                    <div class="nutrition-section--beef">
-                      <div class="nutrition-row">
-                        <div class="nutrition-row__label">
-                          <h2>Calories (kcal/kg)</h2>
-                        </div>
-                        <div class="nutrition-row__value">
-                          <h2>1239</h2>
-                        </div>
-                      </div>
+          <div class="diet-card d-lg-block">
+              <div class="pet-overview-card__header text-center text-uppercase bg-sun">
+              <div class="text-smallest color-chew-toy">
+                <div class="nutrition-section--beef">
+                  <div class="nutrition-row">
+                    <div class="nutrition-row__label">
+                      <h2>卡路里 (kcal/kg)</h2>
                     </div>
-                    <div class="nutrition-section--beef">
-                      <div class="nutrition-row padding-bottom-small">
-                        <h2>Guaranteed Analysis</h2>
-                      </div>
-                      <div class="nutrition-row">
-                        <div class="nutrition-row__label">
-                          Crude Protein
-                        </div>
-                        <div class="nutrition-row__value">
-                          10% min
-                        </div>
-                      </div>
-                      <div class="nutrition-row">
-                        <div class="nutrition-row__label">
-                          Crude Fat
-                        </div>
-                        <div class="nutrition-row__value">
-                          5% min
-                        </div>
-                      </div>
-                      <div class="nutrition-row">
-                        <div class="nutrition-row__label">
-                          Crude Fiber
-                        </div>
-                        <div class="nutrition-row__value">
-                          1% max
-                        </div>
-                      </div>
-                      <div class="nutrition-row">
-                        <div class="nutrition-row__label">
-                          Moisture
-                        </div>
-                        <div class="nutrition-row__value">
-                          73% max
-                        </div>
-                      </div>
-                    </div>
-                    <div class="padding-top ingredient">
-                      <b>Ingredients</b>: Ground beef, russet potatoes, eggs, carrots, peas,
-                      dicalcium phosphate, calcium carbonate, salt, fish oil, sunflower oil,
-                      vinegar, citric acid (preservative), taurine, choline bitartrate, zinc
-                      gluconate, ferrous sulfate, vitamin E supplement, copper gluconate, manganese
-                      gluconate, thiamine mononitrate (vitamin B1), selenium yeast, riboflavin
-                      (vitamin B2), vitamin B12 supplement, cholecalciferol (source of vitamin D3),
-                      potassium iodide
+                    <div class="nutrition-row__value">
+                      <h2>{diet.calorie}</h2>
                     </div>
                   </div>
+                </div>
+                <div class="nutrition-section--beef">
+                  <div class="nutrition-row padding-bottom-small">
+                    <h2>营养素分析</h2>
                   </div>
-                  
+                  <div class="nutrition-row">
+                    <div class="nutrition-row__label">
+                      粗蛋白
+                    </div>
+                    <div class="nutrition-row__value">
+                      {diet.minCrudProtein}% min
+                    </div>
+                  </div>
+                  <div class="nutrition-row">
+                    <div class="nutrition-row__label">
+                      粗脂肪
+                    </div>
+                    <div class="nutrition-row__value">
+                      {diet.minCrudFat}% min
+                    </div>
+                  </div>
+                  <div class="nutrition-row">
+                    <div class="nutrition-row__label">
+                      粗纤维
+                    </div>
+                    <div class="nutrition-row__value">
+                      {diet.maxCrudFiber}% max
+                    </div>
+                  </div>
+                  <div class="nutrition-row">
+                    <div class="nutrition-row__label">
+                      水份
+                    </div>
+                    <div class="nutrition-row__value">
+                      {diet.maxMoisture}% max
+                    </div>
+                  </div>
+                </div>
+                <div class="padding-top ingredient">
+                  <b>配料</b>: {diet.ingredient}
+                </div>
               </div>
-        )
+              </div>
+              
+          </div>
+    )
+      }
+      else {
+        return (
+          <div>Please select meal plan for Mookey</div>
+        );
+      }
+        
     }
 
 }

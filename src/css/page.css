@@ -1485,6 +1485,10 @@ button {
 
 }
 
+.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+  background-color: #fff;
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
   border-color: #c8d5b9;
