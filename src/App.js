@@ -32,11 +32,14 @@ import Weight from './Component/customer/Weight';
 import ActiveLevel from './Component/customer/ActiveLevel';
 import HealthCondition from './Component/customer/HealthCondition'
 import Allergen from './Component/customer/Allergen'
+
 import Brand from './Component/customer/Brand'
 import ProteinOrigin from './Component/customer/ProteinOrigin'
 import Price from './Component/customer/Price'
 import Origin from './Component/customer/Origin'
 import ProductResult from './Component/customer/ProductResult';
+
+import test2 from './Component/customer/testpage';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 
@@ -84,7 +87,9 @@ class App extends Component{
             <Route path="/customer/product/result" exact component={ProductResult}></Route>            
 
             <Route path="/not-found" exact component={NotFound}></Route>
-            {/* <Route path="/test" exact component={test2}></Route> */}
+
+            <Route path="/test" exact component={test2}></Route>
+
             <Redirect to ="/not-found" />
           </Switch>
       </React.Fragment>

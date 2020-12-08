@@ -5,7 +5,7 @@ import { FForm } from '../../js/fullscreenForm';
 import { Modernizr } from '../../js/modernizr.customer';
 import Header from './Header';
 import ProgressBar from './ProgressBar';
-import SingleChoice from './SingleChoice'
+import SingleChoice from './SingleChoice';
 import axios from 'axios';
 import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';

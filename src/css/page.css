@@ -146,6 +146,14 @@ button {
   fill: currentColor;
 }
 
+.icon-diet {
+  display: inline-block;
+  /* width: 20px; */
+  height: 100%;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
 .icon-story {
   display: inline-block;
   vertical-align: middle;
@@ -1464,6 +1472,10 @@ button {
 
 }
 
+.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+  background-color: #fff;
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
   border-color: #c8d5b9;
@@ -1706,7 +1718,7 @@ input[type="checkbox"], input[type="radio"] {
   cursor: pointer;
 }
 
-.custom-control-label {
+.col .custom-control-label {
   border-bottom: 1px solid rgba(31,44,66,.1);
 }
 
