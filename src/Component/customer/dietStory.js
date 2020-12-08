@@ -10,7 +10,7 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 import allergen from './Allergen';
 
-class Story extends React.Component {
+class DietStory extends React.Component {
   state = {
     profile: this.props.profile,
     name: localStorage.getItem("name"),
@@ -111,7 +111,7 @@ class Story extends React.Component {
         sensitive = this.state.sensitive;
       }
         return(
-              <div class="pz-slide__pet-overview-card pz-pet-overview-card pet-overview-card offset-lg-1 d-none d-lg-block">
+              <div class="dietstory pz-slide__pet-overview-card pz-pet-overview-card pet-overview-card offset-lg-1 d-none d-lg-block">
                   <div class="pet-overview-card__header text-center text-uppercase bg-sun">
                     <div class="pet-overview-card__eyebrow">
                       <div class="badge--tailored">
@@ -169,5 +169,5 @@ class Story extends React.Component {
     }
 
 }
-const story = withRouter(Story);
-export default story;
+const dietStory = withRouter(DietStory);
+export default dietStory;

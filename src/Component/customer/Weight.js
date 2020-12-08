@@ -23,11 +23,12 @@ class Weight extends React.Component {
 	componentDidMount(){
     if(this.state.profile === null || this.state.profile.progressNumber < 7) {
       this.props.history.push("/customer/page1");
+    } else {
+      let profile = this.state.profile;
+      this.setState({
+        weight: profile.q2.weight,
+      });
     }
-    let profile = this.state.profile;
-    this.setState({
-      weight: profile.q2.weight,
-    });
   }
   
   handleChange = (event) => {
@@ -70,13 +71,16 @@ class Weight extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div style={{height:"40px"}}></div>
+                    <div style={{height:"40px"}}> </div>
                     <div class="pz-form alternate-form container-fluid">
+                    <div class="form-group-flex">
                       <div class="pz-form__form-group form-group">
                         <div class="pz-form__form-group form-group">
                           <input id="quiz-input-1" type="number" required="" class="pz-control pz-control__input form-control" aria-label="Weight in KGS" placeholder="Weight in KGS" 
-                          name="weight" onChange={this.handleChange}/>
+                          name="weight" value={this.state.weight} onChange={this.handleChange}/> 
                           <div class="invalid-feedback text-left">多少斤啊到底</div></div>
+                      </div>
+                      <h1 style={{marginTop: "0px", fontSize: "6rem", marginLeft: "30px", fontWeight: "lighter"}}>kg</h1>
                       </div>
                     </div>
                   </div>

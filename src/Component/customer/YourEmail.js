@@ -13,7 +13,7 @@ import Story from './story';
 class YourEmail extends React.Component {
   state = {
 		name: localStorage.getItem("name"),
-    email: "",
+    	email: "",
 		progressNumber: 0,
 		continue: false,
 		profile:JSON.parse(localStorage.getItem("profile")),
@@ -38,24 +38,31 @@ class YourEmail extends React.Component {
 					breed2:"",
 					bodyType:0,
 					weight:0,
-					activeLevel: "Inactive/Lethargic",
+					activeLevel: "",
 					activeLevelId:0,
 				},
 				q3:{
-					FrequentlyChewsPaws: false,
-					LooseStool: false,
-					HotSpots: false,
-					Vomiting: false,
-					FrequentSkinInfections: false,
-					ExcessiveGas: false,
-					Grains: false,
-					Eggs: false,
-					Chicken: false,
-					Gluten: false,
-					RedMeat: false,
-					Flax: false,
-					Potatoes: false,
-					None: false,
+					healthCondition:[],
+					allergen:[],
+					proteinOrigin: [],
+					brand: "",
+					lowerPrice: -1,
+					upperPrice: -1,
+					origin: "",
+					// FrequentlyChewsPaws: false,
+					// LooseStool: false,
+					// HotSpots: false,
+					// Vomiting: false,
+					// FrequentSkinInfections: false,
+					// ExcessiveGas: false,
+					// Grains: false,
+					// Eggs: false,
+					// Chicken: false,
+					// Gluten: false,
+					// RedMeat: false,
+					// Flax: false,
+					// Potatoes: false,
+					// None: false,
 				},
 				q4:{
 					choose:0,
@@ -98,6 +105,16 @@ class YourEmail extends React.Component {
 		console.log(this.state.profile);
   }
 
+  pushToQueue(data) {
+    axios.get(`/test/?url=${data}`)
+      .then(resJson => {
+		console.log(JSON.stringify(resJson.data))
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   handleSubmit = (event) => {
 	let input = document.getElementById("quiz-input-1");
 	if (input.value == "") {
@@ -105,6 +122,7 @@ class YourEmail extends React.Component {
 	} else {
 		let profile = this.state.profile;
 		profile.progressNumber += 1;
+		this.pushToQueue(this.props.location.pathname);
 		localStorage.setItem("profile", JSON.stringify(this.state.profile));
 		this.props.history.push("/customer/page2/dog");
 	}
