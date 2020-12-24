@@ -1,13 +1,8 @@
 import React from 'react';
-import { classie } from '../../js/classie';
-import { SelectFx } from '../../js/selectFx';
-import { FForm } from '../../js/fullscreenForm';
-import { Modernizr } from '../../js/modernizr.customer';
 import Header from './Header';
 import ProgressBar from './ProgressBar';
 import axios from 'axios';
 import { withRouter, Redirect } from 'react-router';
-import { Card, Col, Row } from 'antd';
 import Story from './story';
 
 class Birthday extends React.Component {
@@ -47,7 +42,7 @@ class Birthday extends React.Component {
 
 	componentDidMount(){
     document.addEventListener('click', this.handleHide);
-    if(this.state.profile === null || this.state.profile.progressNumber < 4) {
+    if(this.state.profile === null || this.state.profile === undefined ||this.state.profile.progressNumber < 4) {
       this.props.history.push("/customer/page1");
     }
     let profile = this.state.profile;

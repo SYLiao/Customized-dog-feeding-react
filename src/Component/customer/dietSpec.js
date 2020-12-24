@@ -39,7 +39,7 @@ class dietSpec extends React.Component {
       if(this.state.index !== 4) {
         diet = this.state.diets[this.state.index];
         return(
-          <div class="diet-card d-lg-block">
+          <div class="diet-card d-lg-block choose-diet">
               <div class="pet-overview-card__header text-center text-uppercase bg-sun">
               <div class="text-smallest color-chew-toy">
                 <div class="nutrition-section--beef">

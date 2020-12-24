@@ -123,7 +123,7 @@ class Breed extends React.Component {
                             <div class={"pz-select__menu css-i0syzg-menu " + this.state.menu1}>
                                 <div class="pz-select__menu-list css-11unzgr">
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
-                                        id="1" tabindex="-1" onClick={this.handleBreed1}>breed1</div>
+                                        id="1" tabindex="-1" onClick={this.handleBreed1}>Akita</div>
                                     {/* <div class="pz-select__option pz-select__option--is-focused css-152efi3-option"
                                      id="2" tabindex="-1" onClick={this.handleMonth}>2</div>
                                     <div class="pz-select__option pz-select__option--is-focused css-152efi3-option" id="3"

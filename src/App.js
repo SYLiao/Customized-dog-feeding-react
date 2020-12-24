@@ -39,7 +39,10 @@ import Price from './Component/customer/Price'
 import Origin from './Component/customer/Origin'
 import ProductResult from './Component/customer/ProductResult';
 
-import test2 from './Component/customer/testpage';
+import ChooseDiet from './Component/customer/ChooseDiet';
+import DietResult from './Component/customer/Result';
+
+import test2 from './Component/customer/Result';
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 
@@ -84,7 +87,10 @@ class App extends Component{
             <Route path="/customer/page4/proteinOrigin" exact component={ProteinOrigin}></Route>
             <Route path="/customer/page4/price" exact component={Price}></Route>            
             <Route path="/customer/page4/origin" exact component={Origin}></Route>            
-            <Route path="/customer/product/result" exact component={ProductResult}></Route>            
+            <Route path="/customer/product/result" exact component={ProductResult}></Route>  
+
+            <Route path="/customer/page4/choose_diet" exact component={ChooseDiet}></Route>
+            <Route path="/customer/page4/diet_result" exact component={DietResult}></Route>          
 
             <Route path="/not-found" exact component={NotFound}></Route>
 

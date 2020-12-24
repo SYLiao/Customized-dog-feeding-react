@@ -16,7 +16,7 @@ class YourEmail extends React.Component {
     	email: "",
 		progressNumber: 0,
 		continue: false,
-		profile:JSON.parse(localStorage.getItem("profile")),
+		profile:(localStorage.getItem("profile") === undefined) ? null : JSON.parse(localStorage.getItem("profile")),
 	}
 
 	componentDidMount(){
@@ -88,6 +88,7 @@ class YourEmail extends React.Component {
 			localStorage.setItem("profile", JSON.stringify(profile));
 		}
 		let profile = this.state.profile;
+		console.log(profile);
 		this.setState({
 			email: profile.q1.email,
 		})

@@ -11,7 +11,7 @@ import { withRouter, Redirect } from 'react-router';
 import { Card, Col, Row } from 'antd';
 import Diet from './dietSpec';
 
-class TestPage extends React.Component {
+class ChooseDiet extends React.Component {
   state = {
     fixedDiets: null,
     index: 4,
@@ -24,8 +24,13 @@ class TestPage extends React.Component {
     console.log(event.target.value);
   }
 
+  handleSubmit = (event) => {
+    // localStorage.setItem("profile", JSON.stringify(this.state.profile));
+    this.props.history.push("/customer/page4/diet_result");
+  }
+
 	componentDidMount(){
-    axios.get("https://localhost:8081/mer/customer/get/all_fixedDiet")
+    axios.get("http://localhost:8081/mer/customer/get/all_fixedDiet")
             .then(resJson => {
                 this.setState({
                     fixedDiets: resJson.data.data
@@ -49,7 +54,7 @@ class TestPage extends React.Component {
                     <div class="pz-slide__content-header">
                       <div class="pz-content-header text-left">
                         <div class="content-header__eyebrow-container">
-                          <div class="content-header__eyebrow text-rust">Gender</div></div>
+                          <div class="content-header__eyebrow text-rust">食谱</div></div>
                         <div class="content-header__title">
                           <h1>为Mookey选择食谱</h1>
                         </div>
@@ -175,5 +180,5 @@ class TestPage extends React.Component {
         )
     }
 }
-const testPage = withRouter(TestPage);
-export default testPage;
+const chooseDiet = withRouter(ChooseDiet);
+export default chooseDiet;
